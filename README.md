@@ -1,1 +1,31 @@
-# G1_L9-lab-integrato
+# G1 · L9 — Laboratorio Integrato
+
+Gioco di carte collezionabili digitale (nome in definizione).
+ITS ICT Piemonte · Laboratorio Integrato 2026 · **Gruppo 01 · Team L9**
+
+## Team
+
+| Nome | Corso | GitHub |
+|---|---|---|
+| Raffaella Pia Angelino (Team Leader) | Digital Strategist | @raffaellaangelino |
+| Giordano Zorzi | Digital Strategist | @giordanozorzi-byte |
+| Alessandro Lazzaro | Digital Strategist | @alessandrolazzaro-sudo |
+| Alessia Cantelli | Software Developer | @alessiacantelli |
+| Samuele Querio | Software Developer | @samueleq-its |
+| Nicole Girardi | Software Developer | @nGirardi3068 |
+| Alex Pulerà | Web Developer | @alexpulera-stack |
+| Luca Varesio | Web Developer | @lucavaresio |
+| Micheal Alibrando | Web Developer | @micheal-alibrando |
+
+## Milestone
+
+| Milestone | Data |
+|---|---|
+| M0 · Setup | 23/10/2026 |
+| M1 · Primo incontro col cliente | 02/11/2026 |
+| M2 · SAL | 23/11/2026 |
+| M3 · Presentazione finale | 10/12/2026 |
+
+## Stack (da brief)
+
+Java + Spring Boot · MySQL · Frontend HTML/SCSS/TS o React · GitHub Projects · README, Swagger, JSDoc · motore di gioco Java isolato con test JUnit.
