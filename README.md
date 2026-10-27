@@ -1,6 +1,6 @@
-# G1 · L9 — Laboratorio Integrato
+# ZodiaxArena · Gruppo 01 · L9
 
-Gioco di carte collezionabili digitale (nome in definizione).
+Gioco di carte collezionabili digitale ambientato tra segni zodiacali e miti greci.
 ITS ICT Piemonte · Laboratorio Integrato 2026 · **Gruppo 01 · Team L9**
 
 ## Team
