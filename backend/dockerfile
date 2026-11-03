@@ -1,0 +1,32 @@
+# --- Stage 1: Build Stage ---
+FROM mcr.microsoft.com/openjdk/jdk:21-ubuntu AS builder
+WORKDIR /backend
+
+# Copy Maven wrapper and POM first for layer caching
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+
+# Fix potential Windows CRLF issues and set execution permissions
+RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
+
+# Download dependencies (cached unless pom.xml changes)
+RUN --mount=type=cache,target=/root/.m2 ./mvnw dependency:go-offline -B
+
+# Copy source code and build executable jar
+COPY src src
+RUN --mount=type=cache,target=/root/.m2 ./mvnw package -DskipTests
+
+# --- Stage 2: Runtime Stage ---
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /backend
+
+# Run as non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+COPY --from=builder /backend/target/app.jar app.jar
+
+EXPOSE 8081
+
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]
