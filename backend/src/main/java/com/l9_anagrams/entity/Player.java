@@ -12,7 +12,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "player")
 @Getter
-@Setter 
+@Setter
 public class Player {
 
     @Id
@@ -21,9 +21,9 @@ public class Player {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
+    private AppUser appUser;
 
-    @Column(nullable= false, unique = true)
+    @Column(nullable = false, unique = true)
     private String nickName;
 
     @Column(nullable = false)
@@ -42,18 +42,18 @@ public class Player {
 
     private LocalDate birthDate;
 
-    @OneToMany (mappedBy = "player")
+    @OneToMany(mappedBy = "player")
     private List<PlayerCard> playerCards = new ArrayList<>();
 
-    @OneToOne (mappedBy = "player")
+    @OneToOne(mappedBy = "player")
     private Deck deck;
 
     public Player() {
 
     }
 
-    public Player(User user, String nickName) {
-        this.user = user;
+    public Player(AppUser appUser, String nickName) {
+        this.appUser = appUser;
         this.nickName = nickName;
     }
 }

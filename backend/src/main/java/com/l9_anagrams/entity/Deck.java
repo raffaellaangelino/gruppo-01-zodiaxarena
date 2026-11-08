@@ -7,26 +7,23 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table (name = "deck")
+@Table(name = "deck")
 @Data
 public class Deck {
 
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "player_id", nullable = false, unique = true)
     private Player player;
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "ascendant_id")
-    private CardDefintion ascendant;
-    
-    @ManyToMany 
-    @JoinTable (
-        name = "deck_player_card",
-        joinColumns = @JoinColumn (name = "deck_id"),
-        inverseJoinColumns = @JoinColumn (name = "player_card-id"))
-        private List<PlayerCard> playerCards = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ascendant_id")
+    private CardDefinition ascendant;
+
+    @ManyToMany
+    @JoinTable(name = "deck_player_card", joinColumns = @JoinColumn(name = "deck_id"), inverseJoinColumns = @JoinColumn(name = "player_card-id"))
+    private List<PlayerCard> playerCards = new ArrayList<>();
 }
