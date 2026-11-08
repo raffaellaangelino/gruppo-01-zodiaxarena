@@ -3,6 +3,9 @@ package com.l9_anagrams.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.l9_anagrams.dto.CardDefinitionResponseDto;
+import com.l9_anagrams.service.CardDefinitionService;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -13,14 +16,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("api/cards")
 public class CardDefinitionController {
 
-	@GetMapping("")
-	public ResponseEntity<List<Object>> getCards() {
-		return ResponseEntity.ok(null);
+	private CardDefinitionService service;
+
+	public CardDefinitionController(CardDefinitionService service) {
+		this.service = service;
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Object> getCardById(@PathVariable Long id) {
-		return ResponseEntity.ok(null);
+	// TODO dovrebbe essere pubblico?
+	@GetMapping("")
+	public ResponseEntity<List<CardDefinitionResponseDto>> getCards() {
+
+		return ResponseEntity.ok(service.getAll());
 	}
 
 }

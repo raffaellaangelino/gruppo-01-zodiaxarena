@@ -16,6 +16,7 @@ import com.l9_anagrams.dto.AuthResponse;
 import com.l9_anagrams.dto.LoginRequest;
 import com.l9_anagrams.dto.RegisterRequest;
 import com.l9_anagrams.entity.AppUser;
+import com.l9_anagrams.entity.Role;
 import com.l9_anagrams.repo.AppUserRepo;
 import com.l9_anagrams.service.JwtService;
 
@@ -59,6 +60,7 @@ public class AuthController {
 		AppUser u = new AppUser();
 		u.setEmail(req.email());
 		u.setPasswordHash(encoder.encode(req.password()));
+		u.setRole(Role.USER);
 		repo.save(u);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
