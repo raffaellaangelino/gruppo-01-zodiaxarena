@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,13 +29,7 @@ public class SecurityConfig {
 				.csrf(ahc -> ahc.disable())
 				.authorizeHttpRequests(authReg -> authReg
 						.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-						.requestMatchers(HttpMethod.POST, "/**")
-						.authenticated()
-						.requestMatchers(HttpMethod.PUT, "/**")
-						.authenticated()
-						.requestMatchers(HttpMethod.DELETE, "/**")
-						.authenticated()
-						.anyRequest().permitAll())
+						.anyRequest().authenticated())
 				.httpBasic(Customizer.withDefaults())
 				.sessionManagement(httpSecConfig -> httpSecConfig
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
