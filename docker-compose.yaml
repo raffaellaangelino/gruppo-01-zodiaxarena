@@ -14,10 +14,24 @@ services:
       - db:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1" ]
-      start_period: 30s
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
+
+  engine:
+    build: ./engine
+    restart: unless-stopped
+    environment:
+      - API_KEY=${API_KEY:?API_KEY mancante}
+    ports:
+      - "${ENGINE_PORT:-8082}:8082"
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8082/actuator/health" ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
 
   backend:
     build: ./backend
