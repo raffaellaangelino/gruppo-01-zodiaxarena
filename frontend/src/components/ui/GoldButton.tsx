@@ -1,94 +1,137 @@
 import { useId, useState, type ComponentPropsWithoutRef } from 'react'
+import { Link, type LinkProps } from 'react-router'
 import { useElementSize } from '@/hooks/useElementSize'
 import { buttonNotchRadius, notchPath } from '@/lib/notchPath'
 import './GoldButton.css'
 
-/** Proprietà di {@link GoldButton}. */
-export interface GoldButtonProps extends ComponentPropsWithoutRef<'button'> {
+/** Proprietà comuni a pulsante e collegamento d'oro. */
+interface GoldCommonProps {
   /**
-   * Pulsante eroico: aggiunge il fermaglio a rombo sul bordo alto.
+   * Eroico: aggiunge il fermaglio a rombo sul bordo alto.
    * Uno solo per schermata (FOUNDATIONS §4).
    */
   hero?: boolean
   /** Misura: `l` = 56 px con testo 22 (eroico), `m` = 44 px con testo 15 (primario). */
   size?: 'l' | 'm'
+}
+
+/** Proprietà di {@link GoldButton}. */
+export interface GoldButtonProps extends GoldCommonProps, ComponentPropsWithoutRef<'button'> {
   /** Azione in corso: resta d'oro ma non risponde ai clic, e lo annuncia agli screen reader. */
   busy?: boolean
 }
 
+/** Proprietà di {@link GoldLink}. */
+export type GoldLinkProps = GoldCommonProps & LinkProps
+
+const SIZE_CLASSES = { l: 'h-14 type-button-l', m: 'h-11 type-button' } as const
+
 /**
  * Pulsante d'oro del design system (Sigillo): lastra nell'oro delle carte con angoli a incavo,
  * banda di luce satinata, filo chiaro interno. Con `hero` diventa il pulsante eroico.
+ * Per andare a un'altra pagina si usa {@link GoldLink}, che ha lo stesso aspetto.
  *
- * Accetta tutte le proprietà di `<button>`; `type` è `button` se non indicato.
- *
- * @example <GoldButton hero type="submit" className="w-full">Accedi</GoldButton>
+ * @example <GoldButton hero size="l" type="submit" className="w-full">Accedi</GoldButton>
  */
 export function GoldButton({
   hero = false,
   size = 'm',
   busy = false,
   type = 'button',
-  disabled,
   className = '',
   children,
   onClick,
   ...rest
 }: GoldButtonProps) {
-  // L'elemento si salva nello stato quando React lo collega: la misura parte quando esiste davvero.
   const [element, setElement] = useState<HTMLButtonElement | null>(null)
-  const { width, height } = useElementSize(element)
-  const gradientId = useId()
-
-  const radius = buttonNotchRadius(height)
-  const outer = width > 0 ? notchPath(width, height, radius) : ''
-  const sizeClasses = size === 'l' ? 'h-14 type-button-l' : 'h-11 type-button'
-
   return (
     <button
       ref={setElement}
       type={type}
-      disabled={disabled}
       aria-busy={busy || undefined}
       aria-disabled={busy || undefined}
       onClick={(event) => (busy ? event.preventDefault() : onClick?.(event))}
-      className={`gold-button ${sizeClasses} ${className}`}
+      className={`gold-button ${SIZE_CLASSES[size]} ${className}`}
       {...rest}
     >
-      {outer && (
-        <>
-          <span
-            aria-hidden="true"
-            className="gold-button__plate"
-            style={{ clipPath: `path('${outer}')` }}
-          />
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            width={width}
-            height={height}
-            viewBox={`0 0 ${width} ${height}`}
-            className="absolute inset-0 overflow-visible"
-          >
-            <path className="gold-button__edge" d={outer} fill="none" strokeWidth={1} />
-            <path
-              className="gold-button__highlight"
-              d={notchPath(width, height, radius, 3)}
-              fill="none"
-              strokeWidth={0.8}
-            />
-            <path
-              className="gold-button__focus"
-              d={notchPath(width, height, radius, -4)}
-              fill="none"
-              strokeWidth={2}
-            />
-            {hero && <HeroClasp x={width / 2} gradientId={gradientId} disabled={!!disabled} />}
-          </svg>
-        </>
-      )}
+      <GoldOrnament element={element} hero={hero} disabled={!!rest.disabled} />
       <span className="gold-button__label">{children}</span>
     </button>
+  )
+}
+
+/**
+ * Collegamento con l'aspetto del pulsante d'oro: per le azioni che portano a un'altra pagina
+ * (es. "Nuova sfida").
+ *
+ * @example <GoldLink hero size="l" to={PATHS.newChallenge}>Nuova sfida</GoldLink>
+ */
+export function GoldLink({
+  hero = false,
+  size = 'm',
+  className = '',
+  children,
+  ...rest
+}: GoldLinkProps) {
+  const [element, setElement] = useState<HTMLAnchorElement | null>(null)
+  return (
+    <Link ref={setElement} className={`gold-button ${SIZE_CLASSES[size]} ${className}`} {...rest}>
+      <GoldOrnament element={element} hero={hero} disabled={false} />
+      <span className="gold-button__label">{children}</span>
+    </Link>
+  )
+}
+
+/** Proprietà di {@link GoldOrnament}. */
+interface GoldOrnamentProps {
+  /** Elemento che riceve l'ornamento: se ne misura la dimensione. */
+  element: HTMLElement | null
+  hero: boolean
+  disabled: boolean
+}
+
+/**
+ * Lastra d'oro e fili disegnati sulla misura reale dell'elemento: incavo agli angoli,
+ * filo chiaro interno, anello di focus a incavo e, per l'eroico, il fermaglio.
+ */
+function GoldOrnament({ element, hero, disabled }: GoldOrnamentProps) {
+  const { width, height } = useElementSize(element)
+  const gradientId = useId()
+  if (width === 0) return null
+
+  const radius = buttonNotchRadius(height)
+  const outer = notchPath(width, height, radius)
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        className="gold-button__plate"
+        style={{ clipPath: `path('${outer}')` }}
+      />
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        width={width}
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
+        className="absolute inset-0 overflow-visible"
+      >
+        <path className="gold-button__edge" d={outer} fill="none" strokeWidth={1} />
+        <path
+          className="gold-button__highlight"
+          d={notchPath(width, height, radius, 3)}
+          fill="none"
+          strokeWidth={0.8}
+        />
+        <path
+          className="gold-button__focus"
+          d={notchPath(width, height, radius, -4)}
+          fill="none"
+          strokeWidth={2}
+        />
+        {hero && <HeroClasp x={width / 2} gradientId={gradientId} disabled={disabled} />}
+      </svg>
+    </>
   )
 }
 

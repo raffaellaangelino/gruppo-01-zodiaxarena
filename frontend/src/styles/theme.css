@@ -96,6 +96,16 @@
   --color-scene-base: var(--za-scene-base);
   --color-edge-thin: var(--za-edge-thin);
 
+  /* ---------- Colore · barra di gioco e Banda ---------- */
+  --color-nav-ink: var(--za-nav-ink);
+  --color-nav-ink-active: var(--za-nav-ink-active);
+  --color-tab-ink: var(--za-tab-ink);
+  --color-text-warm: var(--za-text-warm);
+  --color-divider-gold: var(--za-divider-gold);
+  --color-divider-band: var(--za-divider-band);
+  --color-medallion-core: var(--za-medallion-core);
+  --color-card-gold-mid: var(--za-card-gold-mid);
+
   /* ---------- Colore · pulsanti ---------- */
   --color-btn-edge: var(--za-btn-edge);
   --color-btn-ink: var(--za-btn-ink);
@@ -120,12 +130,37 @@
   --shadow-panel: var(--za-shadow-panel);
   --shadow-raised: var(--za-shadow-raised);
   --shadow-overlay: var(--za-shadow-overlay);
+  --shadow-card-thumb: var(--za-card-thumb-shadow);
+  --shadow-medallion: var(--za-medallion-ring);
+  --shadow-avatar: var(--za-avatar-ring);
   --blur-glass: var(--za-blur-glass);
 
   /* ---------- Movimento (durate: duration-(--za-dur-fast)) ---------- */
   --ease-out: var(--za-ease-out);
   --ease-in: var(--za-ease-in);
   --ease-in-out: var(--za-ease-inout);
+  --animate-next: za-next 2.4s ease-in-out infinite; /* prossimo passo di una costellazione */
+  --animate-enter: za-enter var(--za-dur-slow) var(--za-ease-out) both; /* una schermata che compare */
+
+  @keyframes za-enter {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes za-next {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
   --default-transition-duration: var(--za-dur-fast);
   --default-transition-timing-function: var(--za-ease-out);
 
@@ -136,6 +171,23 @@
 /* Schermo basso (portatili con le barre del browser): le schermate desktop
    pensate per 1440 × 900 senza scroll si compattano. Uso: short:gap-4 */
 @custom-variant short (@media (max-height: 50rem));
+
+/* =====================================================================
+   Materiali: vetro dei pannelli e testo sopra la key art.
+   ===================================================================== */
+
+/* Vetro (FOUNDATIONS §4b): solo dove dietro c'è un'illustrazione */
+@utility glass {
+  background: var(--za-glass-fill);
+  -webkit-backdrop-filter: blur(var(--za-blur-glass)) saturate(var(--za-glass-saturate));
+  backdrop-filter: blur(var(--za-blur-glass)) saturate(var(--za-glass-saturate));
+}
+@utility text-shadow-hero {
+  text-shadow: var(--za-text-shadow-hero);
+}
+@utility text-shadow-scene {
+  text-shadow: var(--za-text-shadow-scene);
+}
 
 /* =====================================================================
    Aree sicure dei telefoni (notch, barra di sistema). Servono con
@@ -233,6 +285,32 @@
 @utility type-number-l {
   font: var(--za-type-number-l);
   font-variant-numeric: tabular-nums;
+}
+@utility type-badge {
+  font: var(--za-type-badge);
+  font-variant-numeric: tabular-nums;
+}
+@utility type-lore {
+  font: var(--za-type-lore);
+}
+@utility type-lore-m {
+  font: var(--za-type-lore-m);
+}
+@utility type-row {
+  font: var(--za-type-row);
+}
+@utility type-row-meta {
+  font: var(--za-type-row-meta);
+}
+@utility type-panel-title {
+  font: var(--za-type-panel-title);
+  letter-spacing: var(--za-tracking-caps);
+  text-transform: uppercase;
+}
+@utility type-panel-title-m {
+  font: var(--za-type-panel-title-m);
+  letter-spacing: var(--za-tracking-caps);
+  text-transform: uppercase;
 }
 @utility type-stat {
   font: var(--za-type-stat);
