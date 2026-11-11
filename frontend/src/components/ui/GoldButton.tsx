@@ -1,4 +1,4 @@
-import { useId, useRef, type ComponentPropsWithoutRef } from 'react'
+import { useId, useState, type ComponentPropsWithoutRef } from 'react'
 import { useElementSize } from '@/hooks/useElementSize'
 import { buttonNotchRadius, notchPath } from '@/lib/notchPath'
 import './GoldButton.css'
@@ -35,8 +35,9 @@ export function GoldButton({
   onClick,
   ...rest
 }: GoldButtonProps) {
-  const ref = useRef<HTMLButtonElement>(null)
-  const { width, height } = useElementSize(ref)
+  // L'elemento si salva nello stato quando React lo collega: la misura parte quando esiste davvero.
+  const [element, setElement] = useState<HTMLButtonElement | null>(null)
+  const { width, height } = useElementSize(element)
   const gradientId = useId()
 
   const radius = buttonNotchRadius(height)
@@ -45,7 +46,7 @@ export function GoldButton({
 
   return (
     <button
-      ref={ref}
+      ref={setElement}
       type={type}
       disabled={disabled}
       aria-busy={busy || undefined}
