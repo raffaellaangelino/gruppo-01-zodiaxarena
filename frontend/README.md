@@ -60,22 +60,68 @@ Nelle impostazioni di VS Code va aggiunto `"files.associations": { "*.css": "tai
 
 ```
 frontend/
-├── Dockerfile          build con Node, poi nginx
-├── nginx.conf          file statici, inoltro di /api, ritorno a index.html
+├── Dockerfile            build con Node, poi nginx
+├── nginx.conf            file statici, inoltro di /api, ritorno a index.html
 ├── index.html
-├── vite.config.ts      plugin React e Tailwind, alias @/, inoltro di /api in sviluppo
-├── .oxlintrc.json      regole del controllo del codice
-├── .prettierrc.json    regole di formattazione
+├── vite.config.ts        plugin React e Tailwind, alias @/, inoltro di /api in sviluppo
+├── .oxlintrc.json        regole del controllo del codice
+├── .prettierrc.json      regole di formattazione
 └── src/
-    ├── main.tsx        punto di ingresso: font, stili, App
-    ├── App.tsx
+    ├── main.tsx          punto di ingresso: font, stili, App
+    ├── app/              avvio dell'applicazione
+    │   ├── App.tsx       provider condivisi (sessione, navigazione)
+    │   ├── AppRoutes.tsx mappa delle pagine
+    │   └── paths.ts      percorsi: mai stringhe sparse nel codice
+    ├── features/         una cartella per funzione del gioco
+    │   └── auth/         accesso e sessione
+    │       ├── api.ts            chiamate al backend
+    │       ├── types.ts          tipi (allineati ai DTO del backend)
+    │       ├── validation.ts     controlli lato client
+    │       ├── messages.ts       testi degli errori
+    │       ├── tokenStorage.ts   dove si salva il token
+    │       ├── AuthContext.ts · AuthProvider.tsx · useAuth.ts   stato della sessione
+    │       ├── hooks/            logica dei moduli (useLoginForm)
+    │       ├── components/       LoginForm, RequireAuth, GuestOnly
+    │       └── pages/            LoginPage
+    ├── pages/            pagine che non appartengono a una funzione (Home provvisoria)
+    ├── components/       componenti riusabili, senza logica di gioco
+    │   ├── ui/           design system: GoldButton, TextField, PasswordField, FormAlert, Icon
+    │   ├── layout/       impaginazioni (AuthLayout)
+    │   ├── brand/        Logo
+    │   └── ornaments/    ornamenti (GoldClasp)
+    ├── hooks/            hook generici (useElementSize)
+    ├── lib/              funzioni senza React: http, jwt, validazione, geometria dell'incavo
+    ├── assets/           immagini (WebP) e sprite delle icone
     └── styles/
-        ├── index.css   ingresso degli stili: Tailwind, token, tema, stili di base
-        ├── tokens.css  design token (i valori): copia del design system
-        └── theme.css   tema Tailwind: collega le classi ai token
+        ├── index.css     ingresso degli stili: Tailwind, token, tema, stili di base
+        ├── tokens.css    design token (i valori): copia del design system
+        └── theme.css     tema Tailwind: collega le classi ai token
 ```
 
 Tailwind cerca le classi solo in `src/`.
+
+### Dove va il codice
+
+| Cosa                                            | Dove                                 | Regola                                                           |
+| ----------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------- |
+| Chiamata a un'API                               | `features/<funzione>/api.ts`         | Solo tramite `request()` di `lib/http.ts`, con percorsi relativi |
+| Stato e comportamento di un modulo              | `features/<funzione>/hooks/`         | Il componente disegna, l'hook decide                             |
+| Testi mostrati al giocatore per errori e avvisi | `features/<funzione>/messages.ts`    | Dicono cosa è successo e cosa fare                               |
+| Componente usato da più funzioni                | `components/`                        | Non conosce il gioco: riceve tutto dalle proprietà               |
+| Funzione senza React                            | `lib/`                               | Pura e riusabile                                                 |
+| Nuovo percorso                                  | `app/paths.ts` e `app/AppRoutes.tsx` | Le pagine riservate stanno sotto `RequireAuth`                   |
+
+Un file, una responsabilità: tutto ciò che si riusa ha il suo file.
+
+### Sessione
+
+- Il token JWT dell'accesso sta in `localStorage` (`features/auth/tokenStorage.ts`): si resta connessi anche chiudendo il browser, finché il token non scade.
+- La sessione si chiude da sola alla scadenza del token, quando il backend risponde 401 e quando si esce da un'altra scheda.
+- Le pagine riservate stanno sotto `RequireAuth`: senza sessione portano all'accesso e poi riportano alla pagina richiesta.
+
+### Copie dal design system
+
+`styles/tokens.css` e `assets/icons/zodiax-icons.svg` sono copie dei file del design system: si cambiano lì e poi si ricopiano, mai a mano qui.
 
 ## Design system e Tailwind
 
