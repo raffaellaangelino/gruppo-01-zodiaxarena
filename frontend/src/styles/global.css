@@ -1,0 +1,50 @@
+/* Stili di base dell'applicazione. Usa solo i token di tokens.css. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--za-bg);
+  color: var(--za-text);
+  font: var(--za-type-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--za-gold);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--za-focus-ring);
+}
