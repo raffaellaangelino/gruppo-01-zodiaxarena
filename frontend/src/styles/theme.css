@@ -43,6 +43,7 @@
   /* ---------- Colore · testo ---------- */
   --color-text: var(--za-text);
   --color-text-muted: var(--za-text-muted);
+  --color-text-soft: var(--za-text-soft);
   --color-text-disabled: var(--za-text-disabled);
   --color-text-on-gold: var(--za-text-on-gold);
 
@@ -57,6 +58,7 @@
   /* ---------- Colore · stato ---------- */
   --color-success: var(--za-success);
   --color-danger: var(--za-danger);
+  --color-danger-soft: var(--za-danger-soft);
   --color-warning: var(--za-warning);
   --color-info: var(--za-info);
 
@@ -83,6 +85,16 @@
   --color-el-acqua: var(--za-el-acqua);
   --color-el-terra: var(--za-el-terra);
   --color-el-aria: var(--za-el-aria);
+
+  /* ---------- Colore · campi dei moduli ---------- */
+  --color-field-bg: var(--za-field-bg);
+  --color-field-border: var(--za-field-border);
+  --color-field-border-focus: var(--za-field-border-focus);
+  --color-field-border-error: var(--za-field-border-error);
+
+  /* ---------- Colore · scena e bordo di gioco ---------- */
+  --color-scene-base: var(--za-scene-base);
+  --color-edge-thin: var(--za-edge-thin);
 
   /* ---------- Colore · pulsanti ---------- */
   --color-btn-edge: var(--za-btn-edge);
@@ -207,6 +219,9 @@
 }
 @utility type-meta {
   font: var(--za-type-meta);
+}
+@utility type-meta-strong {
+  font: var(--za-type-meta-strong);
 }
 @utility type-caption {
   font: var(--za-type-caption);

@@ -24,6 +24,7 @@
   /* ---------- Colore · testo ---------- */
   --za-text: #F3EBDD;            /* 15.0:1 su bg · testo principale */
   --za-text-muted: #B7B9CE;      /*  9.2:1 su bg · testo secondario, metadati */
+  --za-text-soft: #D5D2E2;       /* 11.8:1 sulla colonna · etichette dei campi, sottotitoli dei moduli (tavole Accedi, Registrati) */
   --za-text-disabled: #7C819C;   /*  4.6:1 su bg · solo stati disabilitati, mai testo da leggere */
   --za-text-on-gold: #1A1408;    /*  9.7:1 sull'oro · testo dei pulsanti pieni */
 
@@ -86,6 +87,7 @@
   --za-type-body: 400 1rem/1.5 var(--za-font-body);           /* testo corrente: minimo 16 px (brief, #22) */
   --za-type-body-strong: 700 1rem/1.5 var(--za-font-body);
   --za-type-meta: 600 0.875rem/1.4 var(--za-font-body);           /* metadati, mai testo corrente */
+  --za-type-meta-strong: 700 0.875rem/1.4 var(--za-font-body);    /* etichette dei campi, collegamenti nei moduli (tavole Accedi, Registrati) */
   --za-type-caption: 700 0.75rem/1.3 var(--za-font-body);        /* etichette brevi sotto icone: minimo assoluto */
   --za-type-number: 800 1rem/1 var(--za-font-body);           /* numeri dell'interfaccia: tabular-nums */
   --za-type-stat: 900 1.5625rem/1 var(--za-font-display);          /* ATK/DEF sulle carte (come gli SVG approvati) */
@@ -110,7 +112,8 @@
   --za-line-inner: 1px;      /* filo interno */
 
   /* ---------- Pulsanti · set A Incavo, l'oro delle carte (D-020) ---------- */
-  --za-card-gold: linear-gradient(180deg, #FFF0B3 0%, #E8B04B 45%, #9C6A1C 100%);   /* id="gold" delle carte: anelli, medaglioni */
+  --za-card-gold-light: #FFF0B3;  --za-card-gold-mid: #E8B04B;  --za-card-gold-dark: #9C6A1C;   /* id="gold" delle carte, per gli SVG */
+  --za-card-gold: linear-gradient(180deg, var(--za-card-gold-light) 0%, var(--za-card-gold-mid) 45%, var(--za-card-gold-dark) 100%);   /* anelli, medaglioni */
   --za-btn-gold: linear-gradient(90deg, #B07A22 0%, #FFE7A0 50%, #B07A22 100%);     /* id="goldH" delle carte: Sigillo */
   --za-btn-gold-hover: linear-gradient(90deg, #C08A2E 0%, #FFF2C6 50%, #C08A2E 100%);
   --za-btn-gold-pressed: linear-gradient(90deg, #94641A 0%, #E9C77E 50%, #94641A 100%);
@@ -119,6 +122,30 @@
   --za-btn-edge: #7A5216;          /* bordo del Sigillo */
   --za-btn-ink: #2A1405;           /* testo sull'oro (come il nome delle carte) */
   --za-btn-plate: rgba(11,14,53,0.72); /* Lastra: fondo blu notte */
+  --za-btn-highlight: rgba(255,246,214,0.55); /* filo chiaro interno del Sigillo (a 3 px dal bordo), spento da premuto */
+  --za-btn-gold-disabled: linear-gradient(90deg, #55503F 0%, #7C7562 50%, #55503F 100%);
+  --za-btn-edge-disabled: #3D392D;
+  --za-btn-ink-disabled: #2F2B22;
+  --za-btn-clasp-disabled: #4A4636;  /* fermaglio e stella del pulsante eroico spento */
+  --za-btn-star: #FFD66B;            /* stella nel fermaglio del pulsante eroico */
+
+  /* ---------- Ornamenti · fermaglio della voce attiva e bordo di gioco (barra, colonna d'accesso) ---------- */
+  --za-clasp-light: #FFE7A0;  --za-clasp-shine: #FFF3C4;  --za-clasp-dark: #C8913A;   /* bordo del fermaglio a rombo; la stella è --za-clasp-light */
+  --za-edge-gold: linear-gradient(180deg, var(--za-card-gold-dark) 0%, var(--za-card-gold-mid) 25%, var(--za-clasp-light) 50%, var(--za-card-gold-mid) 75%, var(--za-card-gold-dark) 100%); /* filo spesso (2 px) */
+  --za-edge-thin: rgba(217,185,124,0.45);   /* filo sottile (1 px), 6 px più all'interno */
+
+  /* ---------- Moduli · campi (tavole Accedi, Registrati) ---------- */
+  --za-field-bg: rgba(10,15,34,0.75);
+  --za-field-border: rgba(243,235,221,0.22);       /* 1 px */
+  --za-field-border-focus: var(--za-card-gold-mid); /* 2 px */
+  --za-field-border-error: rgba(255,138,155,0.9);  /* 2 px */
+  --za-danger-soft: #FF8A9B;     /* 7.8:1 · testo e icona degli errori nei moduli */
+
+  /* ---------- Accesso · colonna laterale e scena (FOUNDATIONS §6b-decies) ---------- */
+  --za-column-w: 32.5rem;        /* 520 */
+  --za-column-fill: linear-gradient(180deg, rgba(18,24,48,0.94), rgba(10,15,34,0.92));
+  --za-scene-base: #0A0F22;      /* sotto la key art, finché si carica */
+  --za-scene-veil-auth: linear-gradient(90deg, rgba(6,9,22,0.85) 0%, rgba(6,9,22,0.55) 38%, rgba(6,9,22,0.1) 60%, rgba(6,9,22,0.35) 100%);
   --za-btn-h-hero: 3.5rem; --za-btn-h: 2.75rem; --za-btn-h-tertiary: 2.25rem; --za-btn-icon: 2.75rem; /* 56 · 44 · 36 · 44 */
 
   /* ---------- Profondità ---------- */
