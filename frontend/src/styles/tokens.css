@@ -1,0 +1,164 @@
+/* Copia di design/system/tokens.css (repository di design UI/UX).
+   Non modificare qui: i token cambiano prima nel design system e poi si ricopiano. */
+
+/* =====================================================================
+   Zodiax Arena · Design token · v0.3 (2026-11-11)
+   Fonte: direzione artistica D-018 (tela "Direzione artistica · Home desktop"),
+   colori delle carte approvate (assets/Carte, Logo e Icone/out/*.svg).
+   Regole d'uso e motivazioni: design/system/FOUNDATIONS.md.
+   Convenzione: --za-<categoria>-<ruolo>[-variante]. Non usare valori fuori da qui.
+   Unità (D-026): rem per testo, spazi e misure che contengono testo o tocco
+   (1rem = 16px, il valore in px è nei commenti); px per linee, ombre, incavi e raggi.
+   ===================================================================== */
+
+:root {
+  /* ---------- Colore · superfici (blu Crepuscolo) ---------- */
+  --za-bg: #10172B;              /* fondo pagina, cielo notturno */
+  --za-bg-deep: #0A1020;         /* vignettature, zone sotto i dialoghi */
+  --za-surface: #18213D;         /* pannelli */
+  --za-surface-2: #222C4F;       /* testata dei pannelli, hover delle righe */
+  --za-surface-3: #2C3862;       /* selezionato, premuto */
+  --za-scrim: rgba(7, 6, 15, 0.72); /* sotto modali e bottom sheet */
+  --za-panel-fill: linear-gradient(180deg, var(--za-surface-2) 0%, var(--za-surface) 40%);
+
+  /* ---------- Colore · testo ---------- */
+  --za-text: #F3EBDD;            /* 15.0:1 su bg · testo principale */
+  --za-text-muted: #B7B9CE;      /*  9.2:1 su bg · testo secondario, metadati */
+  --za-text-disabled: #7C819C;   /*  4.6:1 su bg · solo stati disabilitati, mai testo da leggere */
+  --za-text-on-gold: #1A1408;    /*  9.7:1 sull'oro · testo dei pulsanti pieni */
+
+  /* ---------- Colore · oro (accento unico dell'interfaccia) ---------- */
+  --za-gold: #D9B97C;            /* etichette, bordi attivi, link */
+  --za-gold-bright: #EBCF93;     /* titoli, voce attiva, ornamento acceso */
+  --za-gold-deep: #7A5A2A;       /* bordo dei pulsanti pieni */
+  --za-gold-fill: linear-gradient(180deg, #FBE7B5 0%, #E2BE78 45%, #B8904E 100%); /* pulsante primario */
+  --za-gold-line-h: linear-gradient(90deg, #9C7A44 0%, #F1DCA8 50%, #9C7A44 100%);  /* linea esterna, orizzontale */
+  --za-gold-line-v: linear-gradient(180deg, #F1DCA8 0%, #C9A66B 50%, #9C7A44 100%); /* linea esterna, verticale */
+  --za-line: rgba(217, 185, 124, 0.55);      /* filo d'oro singolo (separatori importanti, header) */
+  --za-line-thin: rgba(235, 207, 147, 0.60); /* filo interno della doppia riga */
+  --za-line-soft: rgba(243, 235, 221, 0.10); /* separatori di lista */
+
+  /* ---------- Colore · stato ---------- */
+  --za-success: #7EE0A4;         /* 11.1:1 · vittoria, valido, accreditato */
+  --za-danger: #FF6B7F;          /*  6.5:1 · sconfitta, errore, non valido */
+  --za-warning: #F2B85B;         /* 10.0:1 · in scadenza, attenzione */
+  --za-info: var(--za-gold-bright);
+
+  /* ---------- Colore · statistiche (dalle carte: #FF5A4E e #5C8BFF, schiariti per il testo) ---------- */
+  --za-atk: #FF7A5C;             /* 6.9:1 */
+  --za-def: #6FA8FF;             /* 7.4:1 */
+  --za-atk-card: #FF5A4E;        /* solo riempimenti, come sulle carte */
+  --za-def-card: #5C8BFF;
+
+  /* ---------- Colore · tier (dalle carte; *-text = variante leggibile come testo) ---------- */
+  --za-tier-comune: #8A8A9E;        --za-tier-comune-text: #9097AD;  /* 6.1:1 */
+  --za-tier-rara: #2E6BFF;          --za-tier-rara-text: #4F8CFF;    /* 5.5:1 */
+  --za-tier-epica: #8B3DFF;         --za-tier-epica-text: #A970FF;   /* 5.5:1 */
+  --za-tier-leggendaria: #DDA840;   --za-tier-leggendaria-text: #E9B94F; /* 9.8:1 */
+  --za-tier-ascendente: #B98CFF;    --za-tier-ascendente-text: #D8DCE8;
+  --za-tier-leggendaria-aura: linear-gradient(135deg, #7AF0FF, #C89BFF, #FF9BD2, #FFE38A);
+  --za-tier-ascendente-aura: linear-gradient(135deg, #FF5A8A, #FFE38A, #7AF0FF, #B98CFF);
+
+  /* ---------- Colore · elementi (Q-36, approvati dall'utente il 07/11; presi dalle icone approvate) ----------
+     Sempre insieme allo stemma dell'elemento: il colore non è mai l'unico segnale. */
+  --za-el-fuoco: #FF6E40;        /* 6.4:1 */
+  --za-el-acqua: #62A8F2;        /* 7.1:1 · azzurro dei riflessi dell'icona blu, più chiaro della Rara (Q-36, 07/11) */
+  --za-el-terra: #A6CC5C;        /* 9.7:1 · verde germoglio delle foglie dell'icona, lontano dal verde del successo */
+  --za-el-aria: #C7B8FF;         /* 9.9:1 · lilla delle nuvole dell'icona, più chiaro del viola dell'Epica */
+
+  /* ---------- Tipografia ---------- */
+  --za-font-display: "Cinzel", "Times New Roman", serif;  /* titoli, etichette, pulsanti, numeri delle carte */
+  --za-font-body: "Nunito", system-ui, sans-serif;         /* testo, dati, moduli */
+  /* Scala (desktop / mobile). Cinzel sempre in maiuscolo sotto i 24 px. */
+  --za-type-display: 700 3.875rem/0.96 var(--za-font-display);     /* titolo eroico: 1 per schermata (62 dalla Home definitiva, 10/11) */
+  --za-type-display-m: 700 2.25rem/1.0 var(--za-font-display);
+  --za-type-h1: 700 2rem/1.1 var(--za-font-display);
+  --za-type-h1-m: 700 1.625rem/1.1 var(--za-font-display);
+  --za-type-h2: 700 1.25rem/1.2 var(--za-font-display);          /* titoli di sezione, tracking 0.08em */
+  --za-type-h2-m: 700 1.125rem/1.2 var(--za-font-display);
+  --za-type-h3: 700 1.0625rem/1.25 var(--za-font-display);         /* titoli di tessera, tracking 0.06em */
+  --za-type-eyebrow: 700 0.8125rem/1.3 var(--za-font-display);     /* sopratitoli, tipo di riga, tracking 0.12em */
+  --za-type-label: 700 0.75rem/1.3 var(--za-font-display);       /* etichetta: categorie in righe, tessere, pillole; tracking 0.1em; minimo assoluto */
+  --za-type-h3-compact: 700 0.9375rem/1.2 var(--za-font-display);  /* titolo di cella fitta (barre, righe) */
+  --za-type-number-l: 800 1.25rem/1 var(--za-font-body);            /* numeri grandi: totali, valori in evidenza */
+  --za-type-button: 700 0.9375rem/1 var(--za-font-display);        /* tracking 0.06em */
+  --za-type-button-l: 700 1.375rem/1 var(--za-font-display);
+  --za-type-body: 400 1rem/1.5 var(--za-font-body);           /* testo corrente: minimo 16 px (brief, #22) */
+  --za-type-body-strong: 700 1rem/1.5 var(--za-font-body);
+  --za-type-meta: 600 0.875rem/1.4 var(--za-font-body);           /* metadati, mai testo corrente */
+  --za-type-caption: 700 0.75rem/1.3 var(--za-font-body);        /* etichette brevi sotto icone: minimo assoluto */
+  --za-type-number: 800 1rem/1 var(--za-font-body);           /* numeri dell'interfaccia: tabular-nums */
+  --za-type-stat: 900 1.5625rem/1 var(--za-font-display);          /* ATK/DEF sulle carte (come gli SVG approvati) */
+  --za-tracking-caps: 0.08em;
+  --za-tracking-eyebrow: 0.12em;
+
+  /* ---------- Spazio (base 4): 4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 56 · 64 px ---------- */
+  --za-space-1: 0.25rem;  --za-space-2: 0.5rem;  --za-space-3: 0.75rem; --za-space-4: 1rem;
+  --za-space-5: 1.25rem; --za-space-6: 1.5rem; --za-space-8: 2rem; --za-space-10: 2.5rem; --za-space-12: 3rem; --za-space-14: 3.5rem; --za-space-16: 4rem;
+
+  /* ---------- Forma ----------
+     Regola: l'ARCHITETTURA è a incavo (pannelli), gli OGGETTI sono morbidi (carte, pulsanti, etichette). */
+  --za-notch-main: 24px;  --za-notch-main-inset: 8px;   /* pannello Principale */
+  --za-notch-tile: 14px;  --za-notch-tile-inset: 6px;   /* Tessera */
+  --za-notch-row: 9px;    --za-notch-row-inset: 4px;    /* Riga d'azione */
+  --za-radius-pill: 999px;   /* etichette, badge, chip, saldo */
+  --za-notch-button: 0.17;   /* pulsanti a incavo: raggio = 17% dell'altezza (min 5px), come i pannelli (D-020, set A) */
+  --za-radius-control: 8px;  /* campi, interruttori */
+  --za-radius-thumb: 5px;    /* miniature delle carte (≈ 24/500 della carta) */
+  --za-card-ratio: 5 / 7;    /* proporzione della carta (SVG approvati: 500 × 700) */
+  --za-line-outer: 2px;      /* linea d'oro esterna (1.5px sulle righe) */
+  --za-line-inner: 1px;      /* filo interno */
+
+  /* ---------- Pulsanti · set A Incavo, l'oro delle carte (D-020) ---------- */
+  --za-card-gold: linear-gradient(180deg, #FFF0B3 0%, #E8B04B 45%, #9C6A1C 100%);   /* id="gold" delle carte: anelli, medaglioni */
+  --za-btn-gold: linear-gradient(90deg, #B07A22 0%, #FFE7A0 50%, #B07A22 100%);     /* id="goldH" delle carte: Sigillo */
+  --za-btn-gold-hover: linear-gradient(90deg, #C08A2E 0%, #FFF2C6 50%, #C08A2E 100%);
+  --za-btn-gold-pressed: linear-gradient(90deg, #94641A 0%, #E9C77E 50%, #94641A 100%);
+  --za-btn-volume: linear-gradient(180deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 45%, rgba(58,34,4,0.28) 100%);
+  --za-btn-sheen: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.28) 40%, transparent 47%, rgba(255,255,255,0.13) 55%, transparent 60%); /* banda di luce satinata, spenta da premuto */
+  --za-btn-edge: #7A5216;          /* bordo del Sigillo */
+  --za-btn-ink: #2A1405;           /* testo sull'oro (come il nome delle carte) */
+  --za-btn-plate: rgba(11,14,53,0.72); /* Lastra: fondo blu notte */
+  --za-btn-h-hero: 3.5rem; --za-btn-h: 2.75rem; --za-btn-h-tertiary: 2.25rem; --za-btn-icon: 2.75rem; /* 56 · 44 · 36 · 44 */
+
+  /* ---------- Profondità ---------- */
+  --za-shadow-panel: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --za-shadow-raised: 0 8px 20px rgba(0, 0, 0, 0.5);           /* pulsante primario, carta sollevata */
+  --za-shadow-overlay: 0 18px 48px rgba(0, 0, 0, 0.6);         /* modali, bottom sheet */
+  --za-focus-ring: 0 0 0 2px var(--za-bg), 0 0 0 4px var(--za-gold-bright);
+  --za-blur-glass: 14px;                                       /* pannelli in vetro (FOUNDATIONS §4b) */
+
+  /* ---------- Movimento ---------- */
+  --za-dur-instant: 90ms;    /* pressione, toggle */
+  --za-dur-fast: 160ms;      /* hover, cambi di stato */
+  --za-dur-base: 260ms;      /* pannelli, bottom sheet, tab */
+  --za-dur-slow: 420ms;      /* cambi di schermata */
+  --za-dur-reveal: 900ms;    /* rivelazioni: carta, Verdetto, luna piena */
+  --za-ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);     /* entrate */
+  --za-ease-in: cubic-bezier(0.5, 0, 0.75, 0.2);     /* uscite */
+  --za-ease-inout: cubic-bezier(0.65, 0, 0.35, 1);   /* spostamenti, replay */
+  --za-sky-twinkle: 3s;      /* stelle: 3–7 s, sfasate */
+  --za-sky-shooting: 16s;    /* stella cadente: 16–23 s, una alla volta */
+  --za-sky-drift: 70s;       /* nuvole: deriva di ±14 px */
+
+  /* ---------- Layout ---------- */
+  --za-content-max: 85rem;    /* 1360 */
+  --za-gutter: 1.375rem;      /* 22 · desktop */
+  --za-gutter-m: 0.75rem;     /* 12 · mobile */
+  --za-page-pad: 2rem;        /* 32 · desktop */
+  --za-page-pad-m: 1rem;      /* 16 · mobile */
+  --za-hit-min: 2.75rem;      /* 44 · area minima di tocco */
+}
+
+/* Breakpoint (in rem, così seguono il carattere scelto dall'utente; i custom property non valgono nelle media query):
+   larghezza · mobile < 40rem (640) · telefono grande e piccolo tablet ≥ 40rem (640) · tablet ≥ 48rem (768)
+               · desktop ≥ 64rem (1024) · portatile ≥ 80rem (1280) · largo ≥ 90rem (1440, misura delle tavole)
+   altezza   · schermo basso ≤ 50rem (800): le schermate desktop senza scroll si compattano
+   Nel frontend: sm · md · lg · xl · 2xl · short (frontend/src/styles/theme.css). */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --za-dur-fast: 0ms; --za-dur-base: 120ms; --za-dur-slow: 120ms; --za-dur-reveal: 200ms; /* solo dissolvenze */
+    /* il cielo animato si ferma del tutto (animation: none) */
+  }
+}
