@@ -92,3 +92,14 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   const text = await response.text()
   return (text ? JSON.parse(text) : undefined) as T
 }
+
+/**
+ * Per le funzioni il cui endpoint il backend non ha ancora: segnala chiaramente il motivo
+ * invece di inventare un percorso. Si usa solo con i dati di esempio spenti.
+ *
+ * @param what Cosa manca (es. "riepilogo del giocatore").
+ * @throws {Error} Sempre.
+ */
+export function apiNotAvailable(what: string): never {
+  throw new Error(`API non ancora disponibile nel backend: ${what}`)
+}

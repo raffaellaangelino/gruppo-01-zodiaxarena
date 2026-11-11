@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { setUnauthorizedHandler } from '@/lib/http'
 import { getJwtExpiry, isJwtValid } from '@/lib/jwt'
@@ -33,14 +34,19 @@ export interface AuthProviderProps {
  * - All'avvio riprende il token salvato, se non è scaduto.
  * - Chiude la sessione quando il token scade, quando il backend risponde 401 a una richiesta
  *   autenticata e quando si esce da un'altra scheda.
+ * - All'uscita svuota la cache dei dati del server.
+ *
+ * Va dentro `QueryClientProvider`.
  */
 export function AuthProvider({ children }: AuthProviderProps) {
   const [token, setToken] = useState<string | null>(readValidToken)
+  const queryClient = useQueryClient()
 
   const logout = useCallback(() => {
     clearToken()
     setToken(null)
-  }, [])
+    queryClient.clear() // i dati del giocatore non restano in memoria per chi accede dopo
+  }, [queryClient])
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     const newToken = await loginRequest(credentials)
@@ -68,10 +74,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Accesso o uscita in un'altra scheda.
   useEffect(
     () =>
-      onTokenChangedElsewhere((newToken) =>
-        setToken(newToken && isJwtValid(newToken) ? newToken : null),
-      ),
-    [],
+      onTokenChangedElsewhere((newToken) => {
+        const valid = newToken && isJwtValid(newToken) ? newToken : null
+        if (!valid) queryClient.clear()
+        setToken(valid)
+      }),
+    [queryClient],
   )
 
   const value = useMemo<AuthContextValue>(
