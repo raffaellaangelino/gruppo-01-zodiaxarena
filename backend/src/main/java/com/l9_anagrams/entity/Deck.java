@@ -21,7 +21,7 @@ public class Deck {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ascendant_id")
-    private CardDefinition ascendant;
+    private PlayerCard ascendant;
 
     @ManyToMany
     @JoinTable(name = "deck_player_card", joinColumns = @JoinColumn(name = "deck_id"), inverseJoinColumns = @JoinColumn(name = "player_card-id"))
