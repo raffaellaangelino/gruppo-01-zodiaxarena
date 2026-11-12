@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.l9_anagrams.dto.AuthResponse;
-import com.l9_anagrams.dto.LoginRequest;
-import com.l9_anagrams.dto.RegisterRequest;
+import com.l9_anagrams.dto.AuthResponseDto;
+import com.l9_anagrams.dto.LoginRequestDto;
+import com.l9_anagrams.dto.RegisterRequestDto;
 import com.l9_anagrams.entity.AppUser;
 import com.l9_anagrams.entity.Role;
 import com.l9_anagrams.repo.AppUserRepo;
@@ -45,15 +45,15 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public AuthResponse login(@Valid @RequestBody LoginRequest req) {
+	public AuthResponseDto login(@Valid @RequestBody LoginRequestDto req) {
 		authManager.authenticate(
 				new UsernamePasswordAuthenticationToken(req.email(), req.password()));
 		// throws BadCredentialsException if wrong -> map to 401
-		return new AuthResponse(jwtService.generateToken(uds.loadUserByUsername(req.email())));
+		return new AuthResponseDto(jwtService.generateToken(uds.loadUserByUsername(req.email())));
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest req) {
+	public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequestDto req) {
 		if (repo.existsByEmail(req.email())) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
 		}
