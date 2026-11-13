@@ -26,7 +26,7 @@ public class Game {
 
 	public class PlayerSetup {
 		private God god;
-		private Ascendant ascendant;
+		private Sign ascendant;
 		private List<Card> cards;
 	}
 
