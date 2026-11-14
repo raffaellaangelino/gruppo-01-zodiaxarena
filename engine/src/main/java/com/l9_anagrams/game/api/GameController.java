@@ -1,5 +1,7 @@
-package com.game;
+package com.l9_anagrams.game.api;
 
+import com.l9_anagrams.game.model.GameInput;
+import com.l9_anagrams.game.model.GameResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,6 @@
-package com.game;
+package com.l9_anagrams.game.model;
 
+import com.l9_anagrams.game.domain.PlayerSide;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;

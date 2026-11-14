@@ -1,5 +1,9 @@
-package com.game;
+package com.l9_anagrams.game.engine;
 
+import com.l9_anagrams.game.domain.Card;
+import com.l9_anagrams.game.domain.Player;
+import com.l9_anagrams.game.domain.PlayerSide;
+import com.l9_anagrams.game.model.GameInput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

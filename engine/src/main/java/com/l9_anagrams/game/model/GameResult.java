@@ -1,4 +1,4 @@
-package com.game;
+package com.l9_anagrams.game.model;
 
 import java.util.List;
 

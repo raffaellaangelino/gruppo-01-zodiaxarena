@@ -1,4 +1,8 @@
-package com.game;
+package com.l9_anagrams.game.engine;
+
+import com.l9_anagrams.game.domain.Element;
+import com.l9_anagrams.game.domain.God;
+import com.l9_anagrams.game.domain.House;
 
 final class RuleAbilities {
 	private RuleAbilities() {
@@ -56,10 +60,10 @@ final class RuleAbilities {
 	static final class AscendantAbility implements Ability {
 		@Override
 		public void onAttacking(AttackContext event) {
-			if (event.attacker().sign().name().equalsIgnoreCase(
-					event.attackerPlayer().ascendant().sign().name())) {
-				event.add(1, "Ascendente");
-			}
+			event.attackerPlayer().ascendant()
+					.filter(ascendant -> event.attacker().sign().name()
+							.equalsIgnoreCase(ascendant.sign().name()))
+					.ifPresent(ascendant -> event.add(1, "Ascendente"));
 		}
 	}
 

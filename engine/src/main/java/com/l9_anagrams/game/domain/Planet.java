@@ -1,4 +1,4 @@
-package com.game;
+package com.l9_anagrams.game.domain;
 
 public record Planet(String name, int attackBonus, int defenseBonus) {
 	public Planet {

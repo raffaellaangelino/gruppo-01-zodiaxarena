@@ -1,17 +1,33 @@
-package com.game;
+package com.l9_anagrams.game.engine;
 
+import com.l9_anagrams.game.domain.Card;
+import com.l9_anagrams.game.domain.Element;
+import com.l9_anagrams.game.domain.House;
+import com.l9_anagrams.game.domain.Player;
+import com.l9_anagrams.game.domain.PlayerSide;
+import com.l9_anagrams.game.exception.DeckOwner;
+import com.l9_anagrams.game.exception.IllegalDeckException;
+import com.l9_anagrams.game.model.EndReason;
+import com.l9_anagrams.game.model.GameEvent;
+import com.l9_anagrams.game.model.GameInput;
+import com.l9_anagrams.game.model.GameOutcome;
+import com.l9_anagrams.game.model.GameResult;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 
 public class Game {
 	private static final int STARTING_PV = 10;
 	private static final int ROUND_LIMIT = 30;
+	private static final Set<String> PLANETS = Set.of(
+			"sole", "marte", "luna", "giove", "saturno", "mercurio", "venere");
 
 	private final GameInput input;
 	private final long seed;
@@ -24,7 +40,7 @@ public class Game {
 
 	public Game(GameInput input, List<Ability> additionalAbilities) {
 		this.input = Objects.requireNonNull(input, "Game input is required");
-		this.seed = input.seed() == null ? new SecureRandom().nextLong() : input.seed();
+		this.seed = input.seed().orElseGet(() -> new SecureRandom().nextLong());
 		this.abilities = new AbilityDispatcher()
 				.register(new RuleAbilities.ElementAbility())
 				.register(new RuleAbilities.GodAbility())
@@ -122,9 +138,49 @@ public class Game {
 	}
 
 	private void validate() {
-		for (Player player : List.of(input.player1(), input.player2())) {
-			if (player.cards().stream().anyMatch(card -> card.house() != House.I)) {
-				throw new IllegalArgumentException("Only Casa I abilities are implemented");
+		validatePlayer(DeckOwner.PLAYER1, input.player1());
+		validatePlayer(DeckOwner.PLAYER2, input.player2());
+	}
+
+	private void validatePlayer(DeckOwner deckOwner, Player player) {
+		String playerName = deckOwner.name();
+		if (player.cards().size() != 7) {
+			throw new IllegalDeckException(deckOwner, playerName + " must have exactly 7 cards");
+		}
+		Map<String, Integer> planetCounts = new LinkedHashMap<>();
+		Map<Element, Integer> elementCounts = new java.util.EnumMap<>(Element.class);
+		for (Element element : Element.values()) {
+			elementCounts.put(element, 0);
+		}
+		for (Card card : player.cards()) {
+			String planet = card.planet().name().trim().toLowerCase(Locale.ROOT);
+			if (!PLANETS.contains(planet)) {
+				throw new IllegalDeckException(deckOwner,
+						playerName + " has an unknown planet: " + card.planet().name());
+			}
+			planetCounts.put(planet, planetCounts.getOrDefault(planet, 0) + 1);
+			Element element = card.sign().element();
+			elementCounts.put(element, elementCounts.get(element) + 1);
+			if (card.house() != House.I) {
+				throw new IllegalDeckException(deckOwner, "Only Casa I abilities are implemented");
+			}
+		}
+
+		for (String planet : PLANETS) {
+			if (planetCounts.getOrDefault(planet, 0) != 1) {
+				throw new IllegalDeckException(deckOwner,
+						playerName + " must have exactly one card for planet " + planet);
+			}
+		}
+		for (Element element : Element.values()) {
+			int count = elementCounts.get(element);
+			if (count == 0) {
+				throw new IllegalDeckException(deckOwner,
+						playerName + " must have at least 1 card for element " + element);
+			}
+			if (count > 3) {
+				throw new IllegalDeckException(deckOwner,
+						playerName + " can have at most 3 cards for element " + element);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package com.game;
+package com.l9_anagrams.game.model;
 
 public enum EndReason {
 	KO,
