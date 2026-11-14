@@ -7,16 +7,31 @@ services:
       MYSQL_USER: ${DB_USER:?DB_USER mancante}
       MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD mancante}
       MYSQL_DATABASE: ${DB_DATABASE:?DB_DATABASE mancante}
+      MYSQL_TCP_PORT: 3307
     ports:
-      - "${DB_HOST_PORT:-3307}:3306"
+      - "${DB_HOST_PORT:-3307}:3307"
     volumes:
       - db:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1" ]
-      start_period: 30s
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
+
+  engine:
+    build: ./engine
+    restart: unless-stopped
+    environment:
+      - API_KEY=${API_KEY:?API_KEY mancante}
+    ports:
+      - "${ENGINE_PORT:-8082}:8082"
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8082/actuator/health" ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
 
   backend:
     build: ./backend
@@ -24,14 +39,18 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      engine:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/${DB_DATABASE}
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3307/${DB_DATABASE}
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:?JWT_SECRET_KEY mancante}
       - JWT_EXPIRATION_MS=${JWT_EXPIRATION_MS}
       - SWAGGER_ENABLED=${SWAGGER_ENABLED}
+      - ENGINE_BASE_URL=http://engine:8082
+      - ENGINE_API_KEY=${API_KEY:?API_KEY mancante}
     ports:
       - "${BACKEND_PORT:-8081}:8081"
     healthcheck:

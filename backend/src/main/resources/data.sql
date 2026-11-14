@@ -43,8 +43,8 @@ ON DUPLICATE KEY UPDATE tier = new.tier, atk = new.atk, def = new.def;
 --    NNN = base del pianeta + posizione del segno (Ariete=1 ... Pesci=12)
 --    Sole 0, Luna 12, Marte 24, Giove 36, Saturno 48, Mercurio 60, Venere 72
 -- ---------------------------------------------------------------------------
-INSERT INTO card_definition (type, sign_id, planet_id, img_id)
-SELECT 'CREATURE', s.id, p.id, x.img_id
+INSERT INTO card_definition (type, sign_id, planet_id, house, img_id)
+SELECT 'CREATURE', s.id, p.id, 'I', x.img_id
 FROM (
     SELECT po.planet_name,
            so.sign_name,
@@ -82,8 +82,8 @@ WHERE NOT EXISTS (SELECT 1 FROM card_definition c WHERE c.img_id = x.img_id);
 -- 4) CARTE ASCENDENTE (12, una per segno, nessun pianeta)
 --    imgId: za-asc-<NN>-ascendente-<segno>.png
 -- ---------------------------------------------------------------------------
-INSERT INTO card_definition (type, sign_id, planet_id, img_id)
-SELECT 'ASCENDANT', s.id, NULL,
+INSERT INTO card_definition (type, sign_id, planet_id, house, img_id)
+SELECT 'ASCENDANT', s.id, NULL, NULL,
        CONCAT('za-asc-', LPAD(so.idx, 2, '0'), '-ascendente-', LOWER(so.sign_name), '.png')
 FROM (
     SELECT 'Ariete'     AS sign_name,  1 AS idx UNION ALL

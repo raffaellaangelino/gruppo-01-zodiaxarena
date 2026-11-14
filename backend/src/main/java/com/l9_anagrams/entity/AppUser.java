@@ -1,5 +1,7 @@
 package com.l9_anagrams.entity;
 
+import com.l9_anagrams.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

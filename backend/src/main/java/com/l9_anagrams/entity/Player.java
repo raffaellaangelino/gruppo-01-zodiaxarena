@@ -8,6 +8,7 @@ import java.util.List;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import com.l9_anagrams.enums.God;
 
 @Entity
 @Table(name = "player")
@@ -29,9 +30,10 @@ public class Player {
     @Column(nullable = false)
     private long credits = 0;
 
-    private String house;
+    @Enumerated(EnumType.STRING)
+    private God god;
 
-    private LocalDateTime lastHouseChange;
+    private LocalDateTime lastGodChange;
 
     @Column(nullable = false)
     private int pityCounter = 0;
