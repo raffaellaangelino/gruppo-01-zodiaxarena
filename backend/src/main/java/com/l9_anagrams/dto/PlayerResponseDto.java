@@ -7,13 +7,14 @@ import java.util.List;
 import com.l9_anagrams.entity.Player;
 import com.l9_anagrams.entity.PlayerCard;
 import com.l9_anagrams.entity.Sign;
+import com.l9_anagrams.enums.God;
 
 public record PlayerResponseDto(
         Long id,
         Long appUserId,
         String nickName,
         long credits,
-        String house,
+        God house,
         LocalDateTime lastHouseChange,
         int pityCounter,
         Sign sunSign,
@@ -27,8 +28,8 @@ public record PlayerResponseDto(
                 player.getAppUser() != null ? player.getAppUser().getId() : null,
                 player.getNickName(),
                 player.getCredits(),
-                player.getHouse(),
-                player.getLastHouseChange(),
+                player.getGod(),
+                player.getLastGodChange(),
                 player.getPityCounter(),
                 player.getSunSign(),
                 player.getBirthDate(),

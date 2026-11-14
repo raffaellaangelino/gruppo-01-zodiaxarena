@@ -4,12 +4,13 @@ import java.time.LocalDate;
 
 import com.l9_anagrams.entity.Player;
 import com.l9_anagrams.entity.Sign;
+import com.l9_anagrams.enums.God;
 
 public record PlayerRequestDto(
         Long appUserId,
         String nickName,
         long credits,
-        String house,
+        God god,
         int pityCounter,
         Sign sunSign,
         LocalDate birthDate) {
@@ -19,7 +20,7 @@ public record PlayerRequestDto(
                 player.getAppUser() != null ? player.getAppUser().getId() : null,
                 player.getNickName(),
                 player.getCredits(),
-                player.getHouse(),
+                player.getGod(),
                 player.getPityCounter(),
                 player.getSunSign(),
                 player.getBirthDate());
