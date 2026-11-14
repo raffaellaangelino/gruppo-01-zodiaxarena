@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Value("${security.api-key:}")
+	@Value("${security.api-key:${zodiax.api-key:}}")
 	private String apiKey;
 
 	private static final String[] PUBLIC_ENDPOINTS = {
