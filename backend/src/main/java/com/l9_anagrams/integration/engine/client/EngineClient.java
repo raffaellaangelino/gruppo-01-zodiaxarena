@@ -22,11 +22,14 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Client per l'invocazione dell'engine di gioco.
  *
- * <p>Il client non interroga il database: il servizio chiamante deve caricare e
+ * <p>
+ * Il client non interroga il database: il servizio chiamante deve caricare e
  * convertire in snapshot tutti i dati di entrambi i giocatori e dei rispettivi
  * mazzi selezionati prima di chiamare {@link #playMatch}. L'ordine degli
- * argomenti determina i riferimenti {@code PLAYER1} e {@code PLAYER2} restituiti
- * dall'engine in caso di mazzo non valido.</p>
+ * argomenti determina i riferimenti {@code PLAYER1} e {@code PLAYER2}
+ * restituiti
+ * dall'engine in caso di mazzo non valido.
+ * </p>
  */
 @Component
 public class EngineClient {
@@ -43,18 +46,23 @@ public class EngineClient {
 	}
 
 	/**
-	 * Invia una partita all'engine e restituisce senza rimappatura il risultato JSON.
+	 * Invia una partita all'engine e restituisce senza rimappatura il risultato
+	 * JSON.
 	 *
-	 * <p>Prima della chiamata, il servizio deve fornire per ogni partecipante il
+	 * <p>
+	 * Prima della chiamata, il servizio deve fornire per ogni partecipante il
 	 * giocatore con il Dio selezionato e il mazzo scelto, con Ascendente opzionale
 	 * e tutte le carte creatura complete. Ogni creatura deve avere segno, pianeta,
 	 * bonus del pianeta e Casa; il client non sceglie un mazzo e non recupera dati
-	 * tramite repository.</p>
+	 * tramite repository.
+	 * </p>
 	 *
-	 * <p>Se il seed e' presente, viene inoltrato per rendere la partita
+	 * <p>
+	 * Se il seed e' presente, viene inoltrato per rendere la partita
 	 * riproducibile; se e' vuoto, sara' l'engine a generarlo. Il JSON restituito
 	 * contiene il risultato, il seed effettivo e il log degli eventi, che il
-	 * chiamante puo' inoltrare o elaborare.</p>
+	 * chiamante puo' inoltrare o elaborare.
+	 * </p>
 	 *
 	 * @param player1 snapshot del primo giocatore e del mazzo scelto; gli errori
 	 *                di validazione lo identificano come {@code PLAYER1}
