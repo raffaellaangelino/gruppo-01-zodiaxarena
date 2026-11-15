@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.l9_anagrams.entity.CardDefinition;
-import com.l9_anagrams.entity.CardType;
+import com.l9_anagrams.enums.CardType;
 
 public interface CardDefinitionRepo extends JpaRepository<CardDefinition, Long> {
 	@EntityGraph(attributePaths = { "sign", "planet" })
