@@ -1,4 +1,4 @@
-package com.l9_anagrams.filter;
+package com.l9_anagrams.auth.jwt;
 
 import java.io.IOException;
 
@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.l9_anagrams.service.JwtService;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

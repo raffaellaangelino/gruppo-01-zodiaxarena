@@ -1,4 +1,4 @@
-package com.l9_anagrams.properties;
+package com.l9_anagrams.auth.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;

@@ -1,4 +1,4 @@
-package com.l9_anagrams.config;
+package com.l9_anagrams.auth.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
