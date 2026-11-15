@@ -16,7 +16,7 @@ import com.l9_anagrams.dto.AuthResponse;
 import com.l9_anagrams.dto.LoginRequest;
 import com.l9_anagrams.dto.RegisterRequest;
 import com.l9_anagrams.entity.AppUser;
-import com.l9_anagrams.entity.Role;
+import com.l9_anagrams.enums.Role;
 import com.l9_anagrams.repo.AppUserRepo;
 import com.l9_anagrams.service.JwtService;
 

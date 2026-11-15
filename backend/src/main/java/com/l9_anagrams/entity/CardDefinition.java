@@ -1,28 +1,30 @@
 package com.l9_anagrams.entity;
 
+import com.l9_anagrams.enums.CardType;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table (name = "card_definition")
+@Table(name = "card_definition")
 @Getter
-@Setter 
+@Setter
 public class CardDefinition {
 
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated (EnumType.STRING)
-    @Column (nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private CardType type;
 
-    @ManyToOne (fetch = FetchType.LAZY, optional = false)
-    @JoinColumn (name = "sign_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sign_id", nullable = false)
     private Sign sign;
 
-    //**Null se type = ASCENDANT. */
+    // **Null se type = ASCENDANT. */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planet_id")
     private Planet planet;
@@ -33,7 +35,7 @@ public class CardDefinition {
 
     }
 
-    //CREATURA: ha sempre un pianeta
+    // CREATURA: ha sempre un pianeta
     public CardDefinition(Sign sign, Planet planet, String imgId) {
         this.type = CardType.CREATURE;
         this.sign = sign;
@@ -41,7 +43,7 @@ public class CardDefinition {
         this.imgId = imgId;
     }
 
-    //Ascendente: nessun pianeta
+    // Ascendente: nessun pianeta
     public CardDefinition(Sign sign, String imgId) {
         this.type = CardType.ASCENDANT;
         this.sign = sign;

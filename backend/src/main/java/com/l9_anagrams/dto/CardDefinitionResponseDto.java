@@ -2,7 +2,7 @@ package com.l9_anagrams.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.l9_anagrams.entity.CardDefinition;
-import com.l9_anagrams.entity.CardType;
+import com.l9_anagrams.enums.CardType;
 
 public record CardDefinitionResponseDto(
 		Long id,
