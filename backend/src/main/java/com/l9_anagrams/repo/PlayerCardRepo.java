@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.l9_anagrams.entity.CardType;
 import com.l9_anagrams.entity.PlayerCard;
+import com.l9_anagrams.enums.CardType;
 
 import jakarta.persistence.LockModeType;
 

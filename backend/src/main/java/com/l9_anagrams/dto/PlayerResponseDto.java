@@ -20,7 +20,7 @@ public record PlayerResponseDto(
         Sign sunSign,
         LocalDate birthDate,
         List<PlayerCard> playerCards,
-        Long deckId) {
+        List<Long> deckIds) {
 
     public static PlayerResponseDto from(Player player) {
         return new PlayerResponseDto(
@@ -34,6 +34,6 @@ public record PlayerResponseDto(
                 player.getSunSign(),
                 player.getBirthDate(),
                 player.getPlayerCards(),
-                player.getDeck() != null ? player.getDeck().getId() : null);
+                player.getDecks() != null ? player.getDecks().stream().map(d -> d.getId()).toList() : null);
     }
 }
