@@ -14,11 +14,14 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Table(name = "deck")
-@Data
+@Getter
+@Setter 
 public class Deck {
 
     @Id
@@ -38,6 +41,7 @@ public class Deck {
     private PlayerCard ascendant;
 
     @ManyToMany
-    @JoinTable(name = "deck_player_card", joinColumns = @JoinColumn(name = "deck_id"), inverseJoinColumns = @JoinColumn(name = "player_card-id"))
+    @JoinTable(name = "deck_player_card", joinColumns = @JoinColumn(name = "deck_id"), inverseJoinColumns = @JoinColumn(name = "player_card_id"))
     private List<PlayerCard> playerCards = new ArrayList<>();
+
 }

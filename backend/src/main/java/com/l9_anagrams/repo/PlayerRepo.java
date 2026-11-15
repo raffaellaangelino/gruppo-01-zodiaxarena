@@ -22,7 +22,7 @@ public interface PlayerRepo extends JpaRepository<Player, Long> {
     @EntityGraph(attributePaths = {"sunSign"})
     Optional<Player> findByAppUserEmail(String email);
     Optional<Player> findByNickName(String nickName);
-    boolean existsByNickname(String nickName);
+    boolean existsByNickName(String nickName);
     boolean existsByAppUserId(Long userId);
 
     //Quando una transazione legge quel player, blocca la riga a livello di database finché la transazione non termina

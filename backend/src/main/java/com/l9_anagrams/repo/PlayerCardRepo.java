@@ -41,7 +41,7 @@ public interface PlayerCardRepo extends JpaRepository<PlayerCard, Long>{
     long countByPlayerId(Long playerId);
 
     //true se il giocatore possiede già almeno un'istanza di una specifica carta
-    boolean existsByPlayerIdAndCardDefinition(Long playerId, Long cardDefinitionId);
+    boolean existsByPlayerIdAndCardDefinitionId(Long playerId, Long cardDefinitionId);
 
     /** ricavare gli ID di tutte le carte già possedute dall'utente 
      * JPQL personalizzata con distinct per evitare duplicati se l'utente possiede più doppioni della stessa carta

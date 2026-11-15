@@ -15,19 +15,19 @@ import com.l9_anagrams.entity.Deck;
 public interface DeckRepo extends JpaRepository<Deck, Long> {
 
     // ricerca mazzo tramite il suo ID primario
-    @EntityGraph(attributePaths = { "ascendant", "ascendant.sign", "playerCards", "playerCards.cardDefinition", "playerCards.cardDefinition.sign", "playerCards.cardDefinition.planet" })
+    @EntityGraph(attributePaths = { "ascendant", "ascendant.cardDefinition.sign", "playerCards", "playerCards.cardDefinition", "playerCards.cardDefinition.sign", "playerCards.cardDefinition.planet" })
     Optional<Deck> findById(Long id);
 
     //* Mazzi del giocatore, completi di carte (composizione e validazione)
     // FindPlayerById restituisce una lista di mazzi associata all'ID del giocatore */
     //* EntityGraph assicura che la struttura del mazzo e delle sue carte venga caricata subito in memoria in una sola query JOIN */
-    @EntityGraph(attributePaths = { "ascendant", "ascendant.sign", "playerCards", "playerCards.cardDefinition", "playerCards.cardDefinition.sign", "playerCards.cardDefinition.planet" })
+    @EntityGraph(attributePaths = { "ascendant", "ascendant.cardDefinition.sign", "playerCards", "playerCards.cardDefinition", "playerCards.cardDefinition.sign", "playerCards.cardDefinition.planet" })
     List<Deck> findByPlayerId(Long playerId);
 
     //* Validazione di proprietà Mazzo, verifica che il mazzo appartenga effettivamente al giocatore che sta eseguendo un'azione */
     //* Cerca un mazzo filtrando sia per Id del mazzo che per playerId del proprietario */
-    @EntityGraph(attributePaths = { "ascendant", "ascendant.sign", "playerCards", "playerCards.cardDefinition", "playerCards.cardDefinition.sign", "playerCards.cardDefinition.planet" })
-    Optional<Deck> findByAndPlayerId(Long id, Long PlayerId);
+    @EntityGraph(attributePaths = { "ascendant", "ascendant.cardDefinition.sign", "playerCards", "playerCards.cardDefinition", "playerCards.cardDefinition.sign", "playerCards.cardDefinition.planet" })
+    Optional<Deck> findByIdAndPlayerId(Long id, Long PlayerId);
 
     //* Conteggio dei mazzi. Restituisce il numero totale di mazzi posseduti dal giocatore specificato */
     long countByPlayerId(Long playerId);
