@@ -17,7 +17,7 @@ public interface CardDefinitionRepo extends JpaRepository<CardDefinition, Long> 
 	Optional<CardDefinition> findById(Long id);
 
 	@EntityGraph(attributePaths = { "sign", "planet" })
-	List<CardDefinition> findByAllById(Iterable<Long> ids);
+	List<CardDefinition> findAllById(Iterable<Long> ids);
 
 	/** Tutte le creature oppure tutti gli Ascendenti (catalogo, backOffice) 
 	 * Filtra il catalogo per tipologia

@@ -13,7 +13,7 @@ public interface PlanetRepo extends JpaRepository<Planet, Long> {
     Optional<Planet> findByName(String name);
     
     // Verifica la presenza di un pianeta con quel determinato nome
-    boolean existsName(String name);
+    boolean existsByName(String name);
 
     List<Planet> findByTier(int tier);
 

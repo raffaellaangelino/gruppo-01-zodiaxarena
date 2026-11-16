@@ -1,13 +1,15 @@
-package com.l9_anagrams.service;
+package com.l9_anagrams.auth.userdetails;
 
-import org.springframework.security.core.userdetails.User;
+import java.util.List;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.l9_anagrams.auth.AppUserRepo;
 import com.l9_anagrams.entity.AppUser;
-import com.l9_anagrams.repo.AppUserRepo;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
@@ -21,13 +23,11 @@ public class AppUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		AppUser u = repo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-		return User
-				.withUsername(u.getEmail())
-				.password(u.getPasswordHash())
-				.roles(u.getRole().name())
-				.build();
+		return new AppUserPrincipal(
+				u.getId(),
+				u.getEmail(),
+				u.getPasswordHash(),
+				List.of(new SimpleGrantedAuthority("ROLE_" + u.getRole().name())));
 	}
 
 }
-
-// TODO: rinominare classe?

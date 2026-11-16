@@ -1,4 +1,4 @@
-package com.l9_anagrams.service;
+package com.l9_anagrams.auth.jwt;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.l9_anagrams.properties.JwtProperties;
+import com.l9_anagrams.auth.config.JwtProperties;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

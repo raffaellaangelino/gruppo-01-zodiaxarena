@@ -1,10 +1,11 @@
-package com.l9_anagrams.controller;
+package com.l9_anagrams.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.l9_anagrams.dto.AuthResponseDto;
-import com.l9_anagrams.dto.LoginRequestDto;
-import com.l9_anagrams.dto.RegisterRequestDto;
+import com.l9_anagrams.auth.dto.AuthResponseDto;
+import com.l9_anagrams.auth.dto.LoginRequestDto;
+import com.l9_anagrams.auth.dto.RegisterRequestDto;
+import com.l9_anagrams.auth.jwt.JwtService;
 import com.l9_anagrams.entity.AppUser;
 import com.l9_anagrams.enums.Role;
-import com.l9_anagrams.repo.AppUserRepo;
-import com.l9_anagrams.service.JwtService;
 
 import jakarta.validation.Valid;
 
@@ -29,29 +29,26 @@ public class AuthController {
 	private final PasswordEncoder encoder;
 	private final AuthenticationManager authManager;
 	private final JwtService jwtService;
-	private final UserDetailsService uds;
 
 	public AuthController(
 			AppUserRepo repo,
 			PasswordEncoder encoder,
 			AuthenticationManager authManager,
-			JwtService jwtService,
-			UserDetailsService uds) {
+			JwtService jwtService) {
 		this.repo = repo;
 		this.encoder = encoder;
 		this.authManager = authManager;
 		this.jwtService = jwtService;
-		this.uds = uds;
 	}
 
 	@PostMapping("/login")
 	public AuthResponseDto login(@Valid @RequestBody LoginRequestDto req) {
-		authManager.authenticate(
+		Authentication auth = authManager.authenticate(
 				new UsernamePasswordAuthenticationToken(req.email(), req.password()));
-		// throws BadCredentialsException if wrong -> map to 401
-		return new AuthResponseDto(jwtService.generateToken(uds.loadUserByUsername(req.email())));
+		return new AuthResponseDto(jwtService.generateToken((UserDetails) auth.getPrincipal()));
 	}
 
+	// TODO muovere logica in RegistrationService
 	@PostMapping("/register")
 	public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequestDto req) {
 		if (repo.existsByEmail(req.email())) {

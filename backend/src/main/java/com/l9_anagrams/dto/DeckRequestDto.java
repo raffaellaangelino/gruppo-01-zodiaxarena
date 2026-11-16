@@ -2,16 +2,13 @@ package com.l9_anagrams.dto;
 
 import java.util.List;
 
-import com.l9_anagrams.entity.Deck;
-import com.l9_anagrams.entity.PlayerCard;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
+/** Il client invia solo id: i controlli sulle carte li fa il server. */
 public record DeckRequestDto(
-        Long playerId,
-        PlayerCard ascendant,
-        List<PlayerCard> playerCards) {
-
-    // restituisce DTO a partire da entity corrispondente
-    public static DeckRequestDto from(Deck deck) {
-        return new DeckRequestDto(deck.getPlayer().getId(), deck.getAscendant(), deck.getPlayerCards());
-    }
+		@NotBlank @Size(max = 50) String name,
+		@NotNull Long ascendantId,
+		@NotNull List<Long> playerCardIds) {
 }

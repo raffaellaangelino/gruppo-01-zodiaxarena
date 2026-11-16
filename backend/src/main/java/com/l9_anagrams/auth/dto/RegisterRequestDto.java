@@ -1,4 +1,4 @@
-package com.l9_anagrams.dto;
+package com.l9_anagrams.auth.dto;
 
 import java.time.LocalDate;
 
