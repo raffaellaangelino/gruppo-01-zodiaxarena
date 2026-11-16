@@ -8,3 +8,6 @@
  * lo segnala con un'etichetta visibile (`MockDataNotice`).
  */
 export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
+
+/** Skip access screens while developing locally; this is never enabled in production. */
+export const DEV_AUTH_BYPASS = import.meta.env.DEV

@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router'
 import { PATHS } from '@/app/paths'
+import { DEV_AUTH_BYPASS } from '@/config/env'
 import type { LoginRedirectState } from '@/features/auth/types'
 import { useAuth } from '@/features/auth/useAuth'
 
@@ -11,7 +12,7 @@ export function RequireAuth() {
   const { isAuthenticated } = useAuth()
   const location = useLocation()
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !DEV_AUTH_BYPASS) {
     const state: LoginRedirectState = { from: location.pathname + location.search }
     return <Navigate to={PATHS.login} replace state={state} />
   }

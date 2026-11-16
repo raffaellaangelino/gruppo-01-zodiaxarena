@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router'
 import { PATHS } from '@/app/paths'
+import { DEV_AUTH_BYPASS } from '@/config/env'
 import type { LoginRedirectState } from '@/features/auth/types'
 import { useAuth } from '@/features/auth/useAuth'
 
@@ -12,7 +13,7 @@ export function GuestOnly() {
   const { isAuthenticated } = useAuth()
   const location = useLocation()
 
-  if (isAuthenticated) {
+  if (isAuthenticated || DEV_AUTH_BYPASS) {
     const from = (location.state as LoginRedirectState | null)?.from
     return <Navigate to={from ?? PATHS.home} replace />
   }
