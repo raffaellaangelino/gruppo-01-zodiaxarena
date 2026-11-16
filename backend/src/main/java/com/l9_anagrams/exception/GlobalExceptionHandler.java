@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(RuleViolationException.class)
 	public ResponseEntity<ApiErrorResponse> rules(RuleViolationException exception) {
-		return build(HttpStatus.UNPROCESSABLE_ENTITY, ApiErrorCode.RULE_VIOLATION,
+		return build(HttpStatus.UNPROCESSABLE_CONTENT, ApiErrorCode.RULE_VIOLATION,
 				"Game rules violated", Map.of("rules", exception.getViolations()));
 	}
 

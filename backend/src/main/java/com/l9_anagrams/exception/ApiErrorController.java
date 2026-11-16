@@ -41,7 +41,7 @@ public class ApiErrorController implements ErrorController {
 			case FORBIDDEN -> ApiErrorCode.FORBIDDEN;
 			case NOT_FOUND -> ApiErrorCode.RESOURCE_NOT_FOUND;
 			case CONFLICT -> ApiErrorCode.CONFLICT;
-			case UNPROCESSABLE_ENTITY -> ApiErrorCode.UNPROCESSABLE_ENTITY;
+			case UNPROCESSABLE_CONTENT -> ApiErrorCode.UNPROCESSABLE_ENTITY;
 			default -> status.is5xxServerError() ? ApiErrorCode.INTERNAL_ERROR : ApiErrorCode.BAD_REQUEST;
 		};
 	}
