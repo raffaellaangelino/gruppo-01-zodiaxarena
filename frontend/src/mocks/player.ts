@@ -1,10 +1,15 @@
 import type { PlayerSummary } from '@/features/player/types'
 
-/** Giocatore di esempio, lo stesso delle tavole (Lyra, Fazione Efesto). */
-export const playerSummaryMock: PlayerSummary = {
-  nickname: 'Lyra',
-  credits: 340,
-  faction: { god: 'Efesto', element: 'fuoco', effect: '+2 ATK al Fuoco' },
-  unreadNotifications: 1,
-  pending: { challenges: 2, trades: 1 },
+/** Giocatore di esempio, lo stesso delle tavole (Lyra, Sole in Leone, Fazione Efesto). */
+export function playerSummaryMock(): PlayerSummary {
+  return {
+    id: 7,
+    nickname: 'Lyra',
+    sign: 'LEONE',
+    credits: 340,
+    faction: { god: 'EFESTO', element: 'FIRE' },
+    unreadNotifications: 1,
+    pending: { challenges: 2, trades: 1, replays: 1 },
+    onboarding: { completed: true, currentStep: null },
+  }
 }

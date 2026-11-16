@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { PATHS } from '@/app/paths'
 import type { IconName } from '@/components/ui/Icon'
 import type { WaitingItem } from '@/features/home/types'
+import { daysAgoLabel, daysUntil } from '@/lib/dates'
 import { plural } from '@/lib/plural'
 
 /** Come si mostra una cosa che aspetta il giocatore. */
@@ -31,28 +32,28 @@ export interface WaitingItemView {
  */
 export function toWaitingItemView(item: WaitingItem, compact = false): WaitingItemView {
   switch (item.kind) {
-    case 'challenge-received':
+    case 'CHALLENGE_RECEIVED':
       return {
         category: 'Sfida ricevuta',
         text: (
           <>
-            <b>{item.from}</b> ti ha sfidato
+            <b>{item.from.nickname}</b> ti ha sfidato
           </>
         ),
-        meta: item.receivedLabel,
+        meta: `ricevuta ${daysAgoLabel(item.receivedAt)}`,
         action: {
           label: 'Gioca',
           icon: 'sfide',
           to: PATHS.challenges,
-          ariaLabel: `Gioca la sfida di ${item.from}`,
+          ariaLabel: `Gioca la sfida di ${item.from.nickname}`,
         },
       }
-    case 'replay':
+    case 'REPLAY_UNSEEN':
       return {
         category: 'Replay da guardare',
         text: (
           <>
-            Contro <b>{item.opponent}</b>
+            Contro <b>{item.opponent.nickname}</b>
           </>
         ),
         meta: compact ? 'esito nascosto' : 'esito nascosto finché non lo guardi',
@@ -60,25 +61,25 @@ export function toWaitingItemView(item: WaitingItem, compact = false): WaitingIt
           label: 'Guarda',
           icon: 'rotolo',
           to: PATHS.challenges,
-          ariaLabel: `Guarda il replay contro ${item.opponent}`,
+          ariaLabel: `Guarda il replay contro ${item.opponent.nickname}`,
         },
       }
-    case 'trade-received':
+    case 'TRADE_RECEIVED':
       return {
         category: 'Scambio ricevuto',
         text: (
           <>
-            <b>{item.from}</b> {compact ? 'propone uno scambio' : 'ti propone uno scambio'}
+            <b>{item.from.nickname}</b> {compact ? 'propone uno scambio' : 'ti propone uno scambio'}
           </>
         ),
         meta: compact
           ? 'attende risposta'
-          : `${plural(item.cardsOffered, 'carta', 'carte')} contro ${item.cardsRequested} · scade tra ${plural(item.expiresInDays, 'giorno', 'giorni')}`,
+          : `${plural(item.cardsOffered, 'carta', 'carte')} contro ${item.cardsRequested} · scade tra ${plural(daysUntil(item.expiresAt), 'giorno', 'giorni')}`,
         action: {
           label: 'Rispondi',
           icon: 'scambi',
           to: PATHS.trades,
-          ariaLabel: `Rispondi allo scambio di ${item.from}`,
+          ariaLabel: `Rispondi allo scambio di ${item.from.nickname}`,
         },
       }
   }

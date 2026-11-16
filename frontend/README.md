@@ -123,8 +123,9 @@ Un file, una responsabilità: tutto ciò che si riusa ha il suo file.
 ### Dati dal server e dati di esempio
 
 - Ogni funzione definisce le sue richieste in `queries.ts` (chiave della cache e funzione) e un hook per leggerle (`usePlayerSummary`, `useHomeSummary`). Gli hook usano la Suspense di TanStack Query: la pagina riceve i dati già pronti e non gestisce lo stato "in arrivo".
-- Il backend non ha ancora le API di crediti, sfide, scambi, missioni e Fazione. Per ora `api.ts` di ogni funzione risponde con i dati di `src/mocks/`, attivi salvo `VITE_USE_MOCKS=false`; finché sono attivi compare l'etichetta **"Dati di esempio"**.
-- Quando arriva un'API si cambia solo il suo `api.ts` (via il dato di esempio, dentro `request()`): pagine e componenti non cambiano.
+- Gli endpoint, le richieste e le risposte sono nel **contratto API**, sul Drive del progetto: [Contratto API · frontend e backend](https://docs.google.com/document/d/1uxGZ1eYt0agcypYPsjD7N_ohplPN1JSrCoXyPCYXKBU/edit). I tipi del frontend hanno le stesse forme, e ogni `api.ts` chiama già l'endpoint del contratto.
+- Finché il backend non li ha, le risposte arrivano dai dati di esempio di `src/mocks/`, attivi salvo `VITE_USE_MOCKS=false`; mentre sono attivi compare l'etichetta **"Dati di esempio"**.
+- I codici del gioco arrivano come nel contratto (`FIRE`, `EFESTO`, `LEONE`…); i nomi italiani stanno in `domain/labels.ts`. Le date arrivano in ISO 8601 e diventano parole ("ricevuta oggi", "tra 17 g") con `lib/dates.ts`.
 - All'uscita la cache si svuota: i dati di un giocatore non restano per chi accede dopo.
 
 ### Ingresso nel gioco (come nei client di gioco)

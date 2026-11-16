@@ -4,7 +4,7 @@ import fuoco from '@/assets/elements/fuoco.webp'
 import terra from '@/assets/elements/terra.webp'
 import type { Element } from '@/domain/game'
 
-const EMBLEMS: Record<Element, string> = { fuoco, acqua, terra, aria }
+const EMBLEMS: Record<Element, string> = { FIRE: fuoco, WATER: acqua, EARTH: terra, AIR: aria }
 
 /** Proprietà di {@link ElementEmblem}. */
 export interface ElementEmblemProps {

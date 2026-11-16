@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Coin } from '@/components/ui/Coin'
 import { Icon } from '@/components/ui/Icon'
 import { Medallion } from '@/components/ui/Medallion'
+import { GOD_LABELS } from '@/domain/labels'
 import type { PlayerSummary } from '@/features/player/types'
 
 /** Misura dei collegamenti: barra desktop o intestazione mobile. */
@@ -37,7 +38,7 @@ export function CreditsLink({ player, density }: PlayerLinkProps) {
 export function ProfileLink({ player, density }: PlayerLinkProps) {
   const desktop = density === 'desktop'
   const label = player.faction
-    ? `Profilo di ${player.nickname}, Fazione ${player.faction.god}`
+    ? `Profilo di ${player.nickname}, Fazione ${GOD_LABELS[player.faction.god].name}`
     : `Profilo di ${player.nickname}`
   const avatar = (
     <Medallion size={desktop ? 32 : 34} variant="avatar" className={desktop ? 'm-1' : ''}>
@@ -60,7 +61,9 @@ export function ProfileLink({ player, density }: PlayerLinkProps) {
         <span aria-hidden="true" className="flex flex-col">
           <span className="type-body-strong">{player.nickname}</span>
           {player.faction && (
-            <span className="type-label text-gold">Fazione {player.faction.god}</span>
+            <span className="type-label text-gold">
+              Fazione {GOD_LABELS[player.faction.god].name}
+            </span>
           )}
         </span>
       )}

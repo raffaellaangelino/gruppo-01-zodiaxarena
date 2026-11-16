@@ -1,13 +1,22 @@
-import type { Faction } from '@/domain/game'
+import type { Faction, SignCode } from '@/domain/game'
 
-/** Riepilogo del giocatore per la barra di gioco: chi sei, quanto hai, cosa ti aspetta. */
+/** Passi dei primi passi con Ermes (tavole Benvenuto-*). */
+export type OnboardingStep = 'FACTION' | 'FIRST_SKY' | 'PACKS' | 'DECK' | 'FIRST_CHALLENGE'
+
+/**
+ * Riepilogo del giocatore per la barra di gioco: `GET /api/players/me`
+ * (contratto API §3.1).
+ */
 export interface PlayerSummary {
+  id: number
   nickname: string
+  /** Segno del Sole, dal giorno di nascita (la data non si salva). */
+  sign: SignCode
   /** Saldo dei crediti. */
   credits: number
-  /** Fazione scelta; `null` se il giocatore non l'ha ancora scelta. */
+  /** Fazione scelta; `null` finché non la sceglie (primo passo con Ermes). */
   faction: Faction | null
-  /** Notifiche non lette senza un'azione da fare (la campanella). */
+  /** Novità senza un'azione da fare (la campanella). */
   unreadNotifications: number
   /** Cose da fare, contate sulla loro voce della barra. */
   pending: {
@@ -15,5 +24,12 @@ export interface PlayerSummary {
     challenges: number
     /** Scambi ricevuti a cui rispondere. */
     trades: number
+    /** Rotoli non ancora visti. */
+    replays: number
+  }
+  onboarding: {
+    completed: boolean
+    /** Il passo da cui riprendere; `null` se il percorso è finito. */
+    currentStep: OnboardingStep | null
   }
 }

@@ -10,12 +10,18 @@
 
 const STORAGE_KEY = 'za.auth.token'
 
-/** Token salvato, oppure `null`. */
+/** Copia in memoria: vale anche quando lo storage del browser non è disponibile. */
+let memoryToken: string | null = null
+
+/**
+ * Token salvato, oppure `null`. Se lo storage funziona vale solo lui (così un'uscita fatta in
+ * un'altra scheda vale anche qui); la copia in memoria serve solo se lo storage non è disponibile.
+ */
 export function readToken(): string | null {
   try {
     return localStorage.getItem(STORAGE_KEY)
   } catch {
-    return null
+    return memoryToken
   }
 }
 
@@ -25,6 +31,7 @@ export function readToken(): string | null {
  * @param token Token JWT ricevuto dall'accesso.
  */
 export function saveToken(token: string): void {
+  memoryToken = token
   try {
     localStorage.setItem(STORAGE_KEY, token)
   } catch {
@@ -34,6 +41,7 @@ export function saveToken(token: string): void {
 
 /** Cancella il token (uscita o sessione scaduta). */
 export function clearToken(): void {
+  memoryToken = null
   try {
     localStorage.removeItem(STORAGE_KEY)
   } catch {

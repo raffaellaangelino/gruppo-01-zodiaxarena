@@ -8,6 +8,8 @@ import { Icon } from '@/components/ui/Icon'
 import { Medallion } from '@/components/ui/Medallion'
 import type { HomeSummary } from '@/features/home/types'
 import type { PlayerSummary } from '@/features/player/types'
+import { GOD_LABELS } from '@/domain/labels'
+import { daysUntil } from '@/lib/dates'
 import { plural } from '@/lib/plural'
 
 /** Un riquadro in evidenza: tutta la superficie porta alla sua pagina. */
@@ -50,6 +52,8 @@ export function buildHighlights(
   const medal = band ? 50 : 46
   const sunWithin = home.packs.sunCounter.total - home.packs.sunCounter.done
   const { faction } = player
+  const god = faction ? GOD_LABELS[faction.god] : null
+  const moonDays = daysUntil(home.fullMoon.nextAt)
 
   return [
     {
@@ -127,16 +131,16 @@ export function buildHighlights(
         </Medallion>
       ),
       category: 'La tua Fazione',
-      title: faction?.god ?? 'Da scegliere',
+      title: god?.name ?? 'Da scegliere',
       ariaLabel: faction
-        ? `La tua Fazione: ${faction.god}, ${faction.effect}, luna piena tra ${plural(home.daysToFullMoon, 'giorno', 'giorni')}`
+        ? `La tua Fazione: ${god?.name}, ${god?.effect}, luna piena tra ${plural(moonDays, 'giorno', 'giorni')}`
         : 'La tua Fazione: da scegliere',
       status: faction ? (
         <>
-          <span>{band ? `${faction.effect} ·` : faction.effect}</span>
+          <span>{band ? `${god?.effect} ·` : god?.effect}</span>
           <span className="inline-flex items-center gap-1">
             <Icon name="luna-piena" size={14} className="text-gold-bright" />
-            {band ? `tra ${home.daysToFullMoon} g` : `luna piena tra ${home.daysToFullMoon} g`}
+            {band ? `tra ${moonDays} g` : `luna piena tra ${moonDays} g`}
           </span>
         </>
       ) : (

@@ -2,26 +2,41 @@
  * Client HTTP verso le API del backend.
  *
  * Tutte le chiamate passano da qui: percorso relativo sotto `/api` (inoltrato al backend
- * da Vite in sviluppo e da nginx nel container), JSON in entrata e in uscita, token JWT
- * aggiunto quando c'è, errori trasformati in {@link ApiError}.
+ * da Vite in sviluppo e da nginx nel container), JSON in entrata e in uscita, token JWT della
+ * sessione aggiunto da solo, errori trasformati in {@link ApiError} con il `code` del contratto
+ * API (§1.2).
  */
 
 /** Prefisso delle API: sempre relativo, mai l'indirizzo del backend scritto nel codice. */
 const API_BASE = '/api'
 
+/** Corpo d'errore del backend (contratto API §1.2). */
+interface ApiErrorBody {
+  code?: string
+  message?: string
+  fieldErrors?: Record<string, string>
+}
+
 /** Errore di una chiamata alle API, con lo stato HTTP (0 = rete non raggiungibile). */
 export class ApiError extends Error {
   /** Stato HTTP della risposta; 0 se la richiesta non è arrivata al server. */
   readonly status: number
+  /** Codice dell'errore deciso dal backend (es. `NICKNAME_TAKEN`): sceglie il testo da mostrare. */
+  readonly code: string | null
+  /** Codice d'errore per campo, negli errori di validazione (400). */
+  readonly fieldErrors: Record<string, string>
 
   /**
    * @param status Stato HTTP, oppure 0 per un errore di rete.
    * @param message Descrizione tecnica, per il debug: non va mostrata al giocatore.
+   * @param body Corpo dell'errore, se il backend l'ha mandato.
    */
-  constructor(status: number, message: string) {
-    super(message)
+  constructor(status: number, message: string, body: ApiErrorBody = {}) {
+    super(body.message ?? message)
     this.name = 'ApiError'
     this.status = status
+    this.code = body.code ?? null
+    this.fieldErrors = body.fieldErrors ?? {}
   }
 
   /** Vero se la richiesta non ha raggiunto il server (rete assente o server spento). */
@@ -36,7 +51,10 @@ export interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   /** Corpo della richiesta, inviato come JSON. */
   body?: unknown
-  /** Token JWT da inviare; se manca la richiesta è anonima. */
+  /**
+   * Token JWT da inviare. Se non è indicato si usa quello della sessione;
+   * `null` per una richiesta anonima.
+   */
   token?: string | null
   /** Per annullare la richiesta (es. quando il componente si smonta). */
   signal?: AbortSignal
@@ -46,6 +64,21 @@ export interface RequestOptions {
 type UnauthorizedHandler = () => void
 
 let onUnauthorized: UnauthorizedHandler | null = null
+
+/** Restituisce il token della sessione corrente. */
+type TokenProvider = () => string | null
+
+let tokenProvider: TokenProvider = () => null
+
+/**
+ * Registra da dove leggere il token della sessione (lo fa il provider dell'autenticazione),
+ * così le funzioni delle API non devono passarlo a mano.
+ *
+ * @param provider Funzione che restituisce il token corrente, o `null` se non c'è sessione.
+ */
+export function setTokenProvider(provider: TokenProvider): void {
+  tokenProvider = provider
+}
 
 /**
  * Registra chi gestisce la sessione scaduta (lo fa il provider dell'autenticazione).
@@ -65,7 +98,8 @@ export function setUnauthorizedHandler(handler: UnauthorizedHandler | null): voi
  * @throws {ApiError} Se la risposta non è 2xx o se il server non è raggiungibile.
  */
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { method = 'GET', body, token, signal } = options
+  const { method = 'GET', body, signal } = options
+  const token = options.token === undefined ? tokenProvider() : options.token
   const headers: Record<string, string> = { Accept: 'application/json' }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
   if (token) headers.Authorization = `Bearer ${token}`
@@ -86,20 +120,10 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   if (response.status === 401 && token) onUnauthorized?.()
 
   if (!response.ok) {
-    throw new ApiError(response.status, `${method} ${path} → ${response.status}`)
+    const errorBody = (await response.json().catch(() => ({}))) as ApiErrorBody
+    throw new ApiError(response.status, `${method} ${path} → ${response.status}`, errorBody)
   }
 
   const text = await response.text()
   return (text ? JSON.parse(text) : undefined) as T
-}
-
-/**
- * Per le funzioni il cui endpoint il backend non ha ancora: segnala chiaramente il motivo
- * invece di inventare un percorso. Si usa solo con i dati di esempio spenti.
- *
- * @param what Cosa manca (es. "riepilogo del giocatore").
- * @throws {Error} Sempre.
- */
-export function apiNotAvailable(what: string): never {
-  throw new Error(`API non ancora disponibile nel backend: ${what}`)
 }
