@@ -18,7 +18,7 @@ COPY src src
 RUN --mount=type=cache,target=/root/.m2 ./mvnw package -DskipTests
 
 # --- Stage 2: Runtime Stage ---
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre-alpine-3.24
 WORKDIR /backend
 
 # Run as non-root user for security
