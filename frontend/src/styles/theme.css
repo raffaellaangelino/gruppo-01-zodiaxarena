@@ -1,0 +1,225 @@
+/* =====================================================================
+   Tema Tailwind collegato ai design token (tokens.css).
+
+   Regola dei nomi: ogni classe ha il nome del token senza "--za-"
+   (--za-surface → bg-surface, --za-type-h1 → type-h1).
+   Qui ci sono solo collegamenti: i valori stanno in tokens.css.
+
+   Si azzera solo ciò che definisce l'aspetto del gioco (colori, testo,
+   font, ombre, raggi, sfocature): classi come text-blue-500, text-sm o
+   shadow-lg non producono CSS. Resta lo standard di Tailwind dove
+   coincide con il design o serve così com'è: spazi (base 4, in rem),
+   breakpoint, contenitori, animazioni, proporzioni.
+   ===================================================================== */
+
+@theme inline {
+  /* ---------- Azzerati: li sostituiscono i nostri ---------- */
+  --color-*: initial;
+  --font-*: initial;
+  --font-weight-*: initial;
+  --text-*: initial;
+  --text-shadow-*: initial;
+  --tracking-*: initial;
+  --leading-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --blur-*: initial;
+  --ease-*: initial;
+
+  /* ---------- Breakpoint (standard di Tailwind, 2xl portato a 1440, la misura delle tavole) ----------
+     sm 640 · md 768 tablet · lg 1024 desktop · xl 1280 portatile · 2xl 1440 largo */
+  --breakpoint-2xl: 90rem;
+
+  /* ---------- Colore · superfici ---------- */
+  --color-bg: var(--za-bg);
+  --color-bg-deep: var(--za-bg-deep);
+  --color-surface: var(--za-surface);
+  --color-surface-2: var(--za-surface-2);
+  --color-surface-3: var(--za-surface-3);
+  --color-scrim: var(--za-scrim);
+
+  /* ---------- Colore · testo ---------- */
+  --color-text: var(--za-text);
+  --color-text-muted: var(--za-text-muted);
+  --color-text-disabled: var(--za-text-disabled);
+  --color-text-on-gold: var(--za-text-on-gold);
+
+  /* ---------- Colore · oro e linee ---------- */
+  --color-gold: var(--za-gold);
+  --color-gold-bright: var(--za-gold-bright);
+  --color-gold-deep: var(--za-gold-deep);
+  --color-line: var(--za-line);
+  --color-line-thin: var(--za-line-thin);
+  --color-line-soft: var(--za-line-soft);
+
+  /* ---------- Colore · stato ---------- */
+  --color-success: var(--za-success);
+  --color-danger: var(--za-danger);
+  --color-warning: var(--za-warning);
+  --color-info: var(--za-info);
+
+  /* ---------- Colore · statistiche ---------- */
+  --color-atk: var(--za-atk);
+  --color-def: var(--za-def);
+  --color-atk-card: var(--za-atk-card);
+  --color-def-card: var(--za-def-card);
+
+  /* ---------- Colore · tier (*-text = variante leggibile come testo) ---------- */
+  --color-tier-comune: var(--za-tier-comune);
+  --color-tier-comune-text: var(--za-tier-comune-text);
+  --color-tier-rara: var(--za-tier-rara);
+  --color-tier-rara-text: var(--za-tier-rara-text);
+  --color-tier-epica: var(--za-tier-epica);
+  --color-tier-epica-text: var(--za-tier-epica-text);
+  --color-tier-leggendaria: var(--za-tier-leggendaria);
+  --color-tier-leggendaria-text: var(--za-tier-leggendaria-text);
+  --color-tier-ascendente: var(--za-tier-ascendente);
+  --color-tier-ascendente-text: var(--za-tier-ascendente-text);
+
+  /* ---------- Colore · elementi (sempre insieme allo stemma) ---------- */
+  --color-el-fuoco: var(--za-el-fuoco);
+  --color-el-acqua: var(--za-el-acqua);
+  --color-el-terra: var(--za-el-terra);
+  --color-el-aria: var(--za-el-aria);
+
+  /* ---------- Colore · pulsanti ---------- */
+  --color-btn-edge: var(--za-btn-edge);
+  --color-btn-ink: var(--za-btn-ink);
+  --color-btn-plate: var(--za-btn-plate);
+
+  /* ---------- Font: famiglie e solo i pesi caricati (per le misure: classi type-*) ---------- */
+  --font-display: var(--za-font-display);
+  --font-body: var(--za-font-body);
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* ---------- Forma ---------- */
+  --radius-pill: var(--za-radius-pill);
+  --radius-control: var(--za-radius-control);
+  --radius-thumb: var(--za-radius-thumb);
+  --aspect-card: var(--za-card-ratio);
+
+  /* ---------- Profondità ---------- */
+  --shadow-panel: var(--za-shadow-panel);
+  --shadow-raised: var(--za-shadow-raised);
+  --shadow-overlay: var(--za-shadow-overlay);
+  --blur-glass: var(--za-blur-glass);
+
+  /* ---------- Movimento (durate: duration-(--za-dur-fast)) ---------- */
+  --ease-out: var(--za-ease-out);
+  --ease-in: var(--za-ease-in);
+  --ease-in-out: var(--za-ease-inout);
+  --default-transition-duration: var(--za-dur-fast);
+  --default-transition-timing-function: var(--za-ease-out);
+
+  /* ---------- Layout ---------- */
+  --container-content: var(--za-content-max);
+}
+
+/* Schermo basso (portatili con le barre del browser): le schermate desktop
+   pensate per 1440 × 900 senza scroll si compattano. Uso: short:gap-4 */
+@custom-variant short (@media (max-height: 50rem));
+
+/* =====================================================================
+   Aree sicure dei telefoni (notch, barra di sistema). Servono con
+   viewport-fit=cover (index.html). Uso: pb-safe sulla barra in basso.
+   ===================================================================== */
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@utility pl-safe {
+  padding-left: env(safe-area-inset-left);
+}
+@utility pr-safe {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* =====================================================================
+   Scala tipografica: una classe per livello (famiglia, peso, misura,
+   interlinea, spaziatura e maiuscolo insieme). Le varianti -m sono per
+   il mobile. Regole d'uso in design/system/FOUNDATIONS.md §3.
+   ===================================================================== */
+
+@utility type-display {
+  font: var(--za-type-display);
+}
+@utility type-display-m {
+  font: var(--za-type-display-m);
+}
+@utility type-h1 {
+  font: var(--za-type-h1);
+}
+@utility type-h1-m {
+  font: var(--za-type-h1-m);
+}
+@utility type-h2 {
+  font: var(--za-type-h2);
+  letter-spacing: var(--za-tracking-caps);
+  text-transform: uppercase;
+}
+@utility type-h2-m {
+  font: var(--za-type-h2-m);
+  letter-spacing: var(--za-tracking-caps);
+  text-transform: uppercase;
+}
+@utility type-h3 {
+  font: var(--za-type-h3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@utility type-h3-compact {
+  font: var(--za-type-h3-compact);
+}
+@utility type-eyebrow {
+  font: var(--za-type-eyebrow);
+  letter-spacing: var(--za-tracking-eyebrow);
+  text-transform: uppercase;
+}
+@utility type-label {
+  font: var(--za-type-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+@utility type-button {
+  font: var(--za-type-button);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@utility type-button-l {
+  font: var(--za-type-button-l);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@utility type-body {
+  font: var(--za-type-body);
+}
+@utility type-body-strong {
+  font: var(--za-type-body-strong);
+}
+@utility type-meta {
+  font: var(--za-type-meta);
+}
+@utility type-caption {
+  font: var(--za-type-caption);
+}
+@utility type-number {
+  font: var(--za-type-number);
+  font-variant-numeric: tabular-nums;
+}
+@utility type-number-l {
+  font: var(--za-type-number-l);
+  font-variant-numeric: tabular-nums;
+}
+@utility type-stat {
+  font: var(--za-type-stat);
+  font-variant-numeric: tabular-nums;
+}
