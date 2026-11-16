@@ -2,8 +2,8 @@ package com.l9_anagrams.service;
 
 import java.util.List;
 
-import com.l9_anagrams.dto.DeckResponseDto;
 import com.l9_anagrams.dto.DeckRequestDto;
+import com.l9_anagrams.dto.DeckResponseDto;
 import com.l9_anagrams.dto.DeckValidationDto;
 
 public interface DeckService {
@@ -19,7 +19,7 @@ public interface DeckService {
 
     public DeckResponseDto create(String email, DeckRequestDto request);
 
-    public DeckResponseDto update(Long id, String email, DeckResponseDto request);
+    public DeckResponseDto update(Long id, String email, DeckRequestDto request);
 
     public void delete(Long id, String email);
 }
