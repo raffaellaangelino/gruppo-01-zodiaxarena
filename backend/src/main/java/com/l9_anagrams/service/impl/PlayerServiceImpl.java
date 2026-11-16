@@ -5,28 +5,23 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.l9_anagrams.auth.AppUserRepo;
-import com.l9_anagrams.dto.PlayerRequestDto;
 import com.l9_anagrams.dto.PlayerResponseDto;
-import com.l9_anagrams.entity.AppUser;
 import com.l9_anagrams.entity.Player;
 import com.l9_anagrams.exception.ConflictException;
 import com.l9_anagrams.exception.ResourceNotFoundException;
+import com.l9_anagrams.enums.God;
+import com.l9_anagrams.enums.OnboardingStep;
 import com.l9_anagrams.repo.PlayerRepo;
 import com.l9_anagrams.service.PlayerService;
+import java.time.LocalDateTime;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
-	// Regolamento, sezione "Benvenuto": 300 crediti alla registrazione
-	private static final long WELCOME_CREDITS = 300;
-
 	private final PlayerRepo playerRepo;
-	private final AppUserRepo appUserRepo;
 
-	public PlayerServiceImpl(PlayerRepo playerRepo, AppUserRepo appUserRepo) {
+	public PlayerServiceImpl(PlayerRepo playerRepo) {
 		this.playerRepo = playerRepo;
-		this.appUserRepo = appUserRepo;
 	}
 
 	@Override
@@ -54,28 +49,25 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	@Transactional
-	public PlayerResponseDto create(String email, PlayerRequestDto request) {
-		AppUser user = appUserRepo.findByEmail(email)
-				.orElseThrow(() -> new ResourceNotFoundException("Utente non trovato"));
-		if (playerRepo.existsByAppUserId(user.getId())) {
-			throw new ConflictException("Il giocatore esiste già per questo utente");
+	public PlayerResponseDto chooseInitialFaction(String email, God god) {
+		Player existing = playerRepo.findByAppUserEmail(email)
+				.orElseThrow(
+						() -> new ResourceNotFoundException("Giocatore non trovato per l'utente corrente"));
+		Player player = playerRepo.findByForUpdate(existing.getId())
+				.orElseThrow(
+						() -> new ResourceNotFoundException("Giocatore non trovato per l'utente corrente"));
+		if (player.getOnboardingStep() != OnboardingStep.FACTION) {
+			throw new ConflictException("La fazione iniziale è già stata scelta");
 		}
-		String nickName = request.nickName().trim();
-		if (playerRepo.existsByNickName(nickName)) {
-			throw new ConflictException("Nickname già in uso");
-		}
-
-		Player player = new Player(user, nickName);
-		player.setBirthDate(request.birthDate());
-		player.setGod(request.god());
-		player.setCredits(WELCOME_CREDITS);
-		// TODO: calcolare sunSign dalla data di nascita (libreria astronomica)
-		// TODO: regalo "Il tuo primo cielo" (7 carte), da decidere con il team
-		return PlayerResponseDto.from(playerRepo.save(player));
+		player.setGod(god);
+		player.setLastGodChange(LocalDateTime.now());
+		player.setOnboardingStep(null);
+		return PlayerResponseDto.from(player);
 	}
 
 	private Player currentPlayer(String email) {
 		return playerRepo.findByAppUserEmail(email)
-				.orElseThrow(() -> new ResourceNotFoundException("Giocatore non trovato per l'utente corrente"));
+				.orElseThrow(
+						() -> new ResourceNotFoundException("Giocatore non trovato per l'utente corrente"));
 	}
 }

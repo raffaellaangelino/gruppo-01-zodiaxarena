@@ -1,6 +1,5 @@
 package com.l9_anagrams.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.l9_anagrams.enums.God;
+import com.l9_anagrams.enums.OnboardingStep;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -55,7 +55,9 @@ public class Player {
     @JoinColumn(name = "sun_sign_id")
     private Sign sunSign;
 
-    private LocalDate birthDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "onboarding_step")
+    private OnboardingStep onboardingStep;
 
     @OneToMany(mappedBy = "player")
     private List<PlayerCard> playerCards = new ArrayList<>();
