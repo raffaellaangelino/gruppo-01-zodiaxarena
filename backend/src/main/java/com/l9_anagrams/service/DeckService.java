@@ -5,6 +5,8 @@ import java.util.List;
 import com.l9_anagrams.dto.DeckRequestDto;
 import com.l9_anagrams.dto.DeckResponseDto;
 import com.l9_anagrams.dto.DeckValidationDto;
+import com.l9_anagrams.entity.Deck;
+import com.l9_anagrams.entity.Player;
 
 public interface DeckService {
 
@@ -16,6 +18,8 @@ public interface DeckService {
 
     /** Controlla il mazzo senza salvarlo e restituisce le regole violate */
     public DeckValidationDto validate(String email, DeckRequestDto request);
+
+    public DeckValidationDto validateDeck(Player player, Deck deck);
 
     public DeckResponseDto create(String email, DeckRequestDto request);
 
