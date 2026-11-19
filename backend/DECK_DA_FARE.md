@@ -24,7 +24,8 @@ Ogni voce indica la priorità:
 
 | # | Decisione | Dettagli | Priorità |
 |---|---|---|---|
-| 1.1 | **Carte nello slot sbagliato** | Oggi la risposta è 422 `WRONG_SLOT`, un codice che non esiste nel contratto. Le opzioni (A: 422 `WRONG_SLOT`, B: 400 `VALIDATION_ERROR`, C: salvare e segnalarlo in `problems`) sono confrontate in `DECK_MODIFICHE.md`, sezione 9.4. Questa scelta cambia come si scrivono le regole V4 e V5 (punto 2). | Bloccante |
+| 1.1 | ✅ **Carte nello slot sbagliato** | **Deciso:** il mazzo è un insieme di carte e gli slot non si salvano. Una carta "fuori posto" si salva e diventa un problema delle regole (ad esempio V4: 2 Lune e 0 Soli), non un errore. Il controllo `WRONG_SLOT` è stato tolto dal codice. Dettagli in `DECK_MODIFICHE.md`, sezione 9.4. | Fatto |
+| 1.4 | **Campo `planet` in `DeckProblem`** | Per dire quale pianeta viola V4 (ad esempio `LUNA`), `DeckProblem` avrebbe bisogno di un campo `planet`, come `element` per V8. Da concordare con il frontend. | Importante |
 | 1.2 | **Codici dei problemi V1–V8** | Il contratto mostra solo due esempi: `ELEMENT_MISSING` (V8) e `ASCENDANT_MISSING` (V2). Gli altri codici vanno concordati con il frontend (elenco proposto al punto 2). | Bloccante |
 | 1.3 | **Forma di `fieldErrors` in `ApiError`** | Oggi è una lista di `{ field, message }`. Va confrontata con il §1.2 del contratto. | Importante |
 
@@ -44,12 +45,12 @@ già gestita (422 `CARD_NOT_OWNED`).
 | Regola | Cosa controlla | Codice proposto | Note |
 |---|---|---|---|
 | V1 | Il giocatore ha scelto una casa (Dio) | `GOD_MISSING` | `player.getGod() == null` |
-| V2 | C'è esattamente 1 Ascendente | `ASCENDANT_MISSING` (dal contratto) | Slot `ASCENDANT` vuoto |
-| V3 | Ci sono esattamente 7 carte di gioco | `CARD_COUNT` | Meno di 7 creature |
-| V4 | 1 carta per ciascun pianeta | `PLANET_DUPLICATE` | Con l'opzione A o B del punto 1.1 è sempre rispettata |
-| V5 | Nessuna carta (pianeta + segno) ripetuta | `CARD_DUPLICATE` | Come V4 |
+| V2 | C'è esattamente 1 Ascendente | `ASCENDANT_MISSING` (dal contratto) | Campo `ascendant` vuoto: chiave `ASCENDANT` vuota o con una carta che non è un Ascendente |
+| V3 | Ci sono esattamente 7 carte di gioco | `CARD_COUNT` | Carte diverse da 7: meno in una bozza, 8 se una creatura è stata inviata nella chiave `ASCENDANT` |
+| V4 | 1 carta per ciascun pianeta | `PLANET_DUPLICATE` / `PLANET_MISSING` | **Da scrivere** (decisione 1.1): ad esempio 2 Lune e 0 Soli. Per indicare il pianeta serve il campo `planet` (punto 1.4) |
+| V5 | Nessuna carta (pianeta + segno) ripetuta | `CARD_DUPLICATE` | **Da scrivere**: la stessa carta inviata in due chiavi, se il giocatore ne possiede due copie |
 | V6 | Il giocatore possiede le carte | `CARD_NOT_OWNED` | **Già fatto**: è un errore 422, non un problema |
-| V7 | Le carte di gioco sono creature con un pianeta | `NOT_A_CREATURE` | Con l'opzione A o B è sempre rispettata |
+| V7 | Le carte di gioco sono creature con un pianeta | `NOT_A_CREATURE` | **Da scrivere**: un Ascendente inviato in una chiave pianeta finisce tra le carte di gioco |
 | V8 | Da 1 a 3 creature per elemento | `ELEMENT_MISSING` (dal contratto), `ELEMENT_EXCESS` | Ogni problema riporta `element` (`FIRE`, `EARTH`, `AIR`, `WATER`). Da decidere se va controllata solo a mazzo completo, come faceva il vecchio codice. |
 
 Cosa fare:
@@ -144,7 +145,9 @@ Vanno aggiunti o modificati:
 - gli endpoint nuovi: `GET /api/decks` (elenco, con `max`), `POST /api/decks` (creazione),
   `DELETE /api/decks/{deckId}` (cancellazione);
 - i campi `id` e `updatedAt` nella risposta;
-- i codici di errore `DECK_LIMIT_REACHED` e `LAST_DECK`, più quello scelto al punto 1.1;
+- i codici di errore `DECK_LIMIT_REACHED` e `LAST_DECK` (con la decisione 1.1 non serve un
+  codice nuovo per le carte nello slot sbagliato);
+- l'eventuale campo `planet` nei problemi V4 (punto 1.4);
 - i codici dei problemi V1–V8 (punto 1.2).
 
 ---
@@ -196,7 +199,7 @@ Test automatici da scrivere:
 
 ## Riepilogo in ordine di lavoro
 
-1. Decidere i punti 1.1 e 1.2, insieme al frontend.
+1. Decidere i punti 1.2 e 1.4 insieme al frontend (il punto 1.1 è deciso ✅).
 2. Ricreare il database e fare le verifiche del punto 11 sul codice attuale.
 3. Scrivere la validazione V1–V8 (punto 2).
 4. Passare al formato errori `ApiError` (punto 4). `/error` è già pubblico ✅.

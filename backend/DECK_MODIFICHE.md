@@ -1,7 +1,7 @@
 # Deck – Step 1, Step 2 e inizio Step 3: modifiche apportate e motivazioni
 
 Lo step 1 (entity, DTO, controller) è descritto nelle sezioni 1–8. Lo step 2 (il service)
-è nella sezione 9, che finisce con una scelta ancora da approvare. La sezione 10 descrive le
+è nella sezione 9, che finisce con la decisione sulle carte messe nello slot sbagliato (9.4). La sezione 10 descrive le
 prime modifiche dello step 3: quelle che non dipendevano da decisioni del collega o del
 frontend. Cosa manca ancora è elencato in `DECK_DA_FARE.md`.
 
@@ -279,9 +279,11 @@ ancora stata avviata e gli endpoint non sono ancora stati provati.
 - **Dagli id del catalogo alle copie possedute.** La richiesta contiene gli id delle
   `CardDefinition` (quelli di `GET /api/cards`), mentre il mazzo salva copie possedute
   (`PlayerCard`). Il service carica la collezione del giocatore e, per ogni id, prende la copia
-  con l'id più basso. Se il giocatore non possiede una carta, la risposta è 422
-  `CARD_NOT_OWNED` (V6, contratto §5.2). Il messaggio elenca tutte le carte mancanti, non solo
-  la prima.
+  con l'id più basso. Se la stessa carta compare in più chiavi, usa copie diverse, dalla più
+  vecchia. Se il giocatore non possiede una carta, o ne possiede meno copie di quante ne chiede
+  la richiesta, la risposta è 422 `CARD_NOT_OWNED` (V6, contratto §5.2). Il messaggio elenca
+  tutte le carte mancanti, non solo la prima. È l'unico errore del salvataggio: tutto il resto
+  diventa un problema della bozza (sezione 9.4).
 - **Un mazzo incompleto si salva comunque.** Gli slot `null` o assenti sono ammessi: il mazzo
   resta una bozza (contratto §5.2).
 - **`saveAndFlush` e `updatedAt`.** Il salvataggio viene scritto subito sul database, così
@@ -290,9 +292,10 @@ ancora stata avviata e gli endpoint non sono ancora stati provati.
   e aumenta `version`.
 - **Forma della risposta.** `slots` ha sempre 8 chiavi nell'ordine del regolamento, con `null`
   negli slot vuoti. `elementBalance` ha sempre le 4 chiavi `FIRE`, `EARTH`, `AIR`, `WATER` e
-  conta solo le 7 creature, non l'Ascendente (V8).
+  conta solo le creature, non l'Ascendente né eventuali altre carte non creatura (V8).
 - **Lo slot di una creatura si ricava dal suo pianeta.** Il nome del pianeta nel database,
-  scritto in maiuscolo, coincide con `DeckSlot` (`"Sole"` → `SOLE`).
+  scritto in maiuscolo, coincide con `DeckSlot` (`"Sole"` → `SOLE`). Gli slot non vengono
+  salvati (sezione 9.4).
 
 ### 9.3 Cosa manca ancora (step 3)
 
@@ -312,7 +315,7 @@ ancora stata avviata e gli endpoint non sono ancora stati provati.
    collezioni piccole va bene. Una query mirata richiederebbe un metodo nuovo in
    `PlayerCardRepo`.
 
-### 9.4 Scelta da approvare: carte nello slot sbagliato
+### 9.4 Decisione: carte nello slot sbagliato
 
 **Il problema.** Il `Deck` del PDF non salva in quale slot sta una creatura: salva solo
 l'insieme delle carte (`deck_card`), e lo slot si ricava dal pianeta della carta. Se la
@@ -320,28 +323,59 @@ richiesta mettesse una carta Luna nello slot `SOLE`, al salvataggio quella posiz
 persa: rileggendo il mazzo, la carta comparirebbe nello slot `LUNA`. Lo stesso vale per un
 Ascendente messo in uno slot creatura, o per una creatura messa nello slot `ASCENDANT`.
 
-**Cosa fa oggi il codice.** Il service rifiuta la richiesta con **422** e il codice
-**`WRONG_SLOT`**, e nel messaggio elenca tutte le carte fuori posto. È lo stesso controllo che
-il PDF suggerisce per il service (`slot.name().equals(planet...)`). Se nella stessa richiesta ci
-sono anche carte non possedute, viene restituito prima `CARD_NOT_OWNED`.
+**Le opzioni valutate.**
 
-**Effetto utile.** Con questo controllo le regole V4 (un pianeta per slot) e V5 (nessuna carta
-pianeta + segno ripetuta) sono sempre rispettate per costruzione, perché ogni slot accetta solo
-carte del suo pianeta e contiene al massimo una carta.
+| Opzione | Come funziona | Esito |
+|---|---|---|
+| A. 422 `WRONG_SLOT` | Si rifiuta la richiesta con un codice di errore nuovo. | Scartata: era la prima versione del codice, ma `WRONG_SLOT` non esiste nel contratto e tratta come errore un mazzo che il §5.2 vuole salvare come bozza. |
+| B. 400 `VALIDATION_ERROR` | Si tratta come un errore di forma della richiesta. | Scartata: stesso problema di A, e il frontend riceverebbe un errore generico. |
+| C. Salvare anche lo slot | Si aggiunge a `deck_card` una colonna con lo slot. | Scartata: il team **non vuole gestire il salvataggio delle carte negli slot**. |
+| **D. Il mazzo è un insieme di carte** | Le carte si salvano tutte; i problemi li segnalano le regole del mazzo. | **Scelta**, su proposta del collega. |
 
-**Perché va deciso.** `WRONG_SLOT` non esiste nel contratto. Le opzioni sono:
+**La decisione (opzione D).** Visto che il mazzo non ha slot ma un insieme di carte, non si dice
+"hai messo la Luna nel posto sbagliato", ma "hai messo 2 Lune e 0 Soli, e di entrambi ne devi
+avere esattamente 1". È un problema della regola **V4**, non un errore: il mazzo si salva come
+bozza e la risposta dice `valid: false`, come vuole il contratto (§5.2).
 
-| Opzione | Come funziona | Pro | Contro |
-|---|---|---|---|
-| **A. 422 `WRONG_SLOT`** (attuale) | Nuovo codice di errore, da aggiungere al contratto. | Il frontend riceve un codice preciso e sa quale slot correggere. | Serve una riga nuova nel contratto, da concordare con il frontend. |
-| **B. 400 `VALIDATION_ERROR`** | Si tratta come un errore di forma della richiesta, con lo slot in `fieldErrors` (ad esempio `slots.SOLE`). | Usa un codice già previsto dal contratto. | Serve un'eccezione nuova (oggi solo gli errori di `@Valid` diventano 400). Il frontend riceve un errore generico. |
-| **C. Salvare comunque e segnalarlo in `problems`** | La carta fuori posto si salva e la risposta dice `valid: false`. | È coerente con l'idea di bozza (§5.2). | Con l'entity attuale non funziona: lo slot non viene salvato, quindi la posizione si perde lo stesso. Bisognerebbe aggiungere a `deck_card` una colonna con lo slot, cioè cambiare l'entity e il database. |
+**Come funziona nel codice** (`DeckServiceImpl.resolveSlots`):
 
-Il frontend, se costruisce la richiesta mostrando per ogni slot solo le carte di quel pianeta
-(l'endpoint `candidates` dello Sprint 4 serve proprio a questo), non dovrebbe mai produrre
-questo errore. In quel caso l'errore protegge solo da richieste costruite a mano.
+- la chiave della richiesta conta solo per l'Ascendente: se nella chiave `ASCENDANT` c'è una
+  carta di tipo Ascendente, va nel campo `ascendant` del mazzo;
+- tutte le altre carte vanno nell'insieme delle carte, comprese una creatura inviata nella
+  chiave `ASCENDANT` e un Ascendente inviato in una chiave pianeta. Nessuna carta inviata va
+  persa;
+- l'unico errore resta 422 `CARD_NOT_OWNED` (V6). Il controllo `WRONG_SLOT` è stato tolto.
 
-**Decisione:** _da compilare dopo il confronto con il collega._
+**Quali regole segnaleranno i casi "fuori posto"** (step 3):
+
+| Caso | Regola |
+|---|---|
+| 2 Lune e 0 Soli | V4: una carta per ciascun pianeta |
+| Nessun Ascendente nella chiave `ASCENDANT` | V2: esattamente 1 Ascendente |
+| Una creatura nella chiave `ASCENDANT` | V2 (manca l'Ascendente) e V3 (le carte di gioco non sono 7) |
+| Un Ascendente in una chiave pianeta | V7: le carte di gioco devono essere creature |
+| La stessa carta in due chiavi (con due copie possedute) | V5: nessuna carta ripetuta |
+
+**Il limite accettato: la risposta `slots`.** Nella risposta ogni slot ha posto per una sola
+carta. Ogni creatura va nello slot del suo pianeta; se le creature di un pianeta sono due, nello
+slot compare quella con l'id più basso. Le carte in più e le carte che non sono creature non
+compaiono in `slots`, ma restano salvate e le segnalano i `problems`. Il limite è accettabile
+per due motivi:
+
+- con `PUT` il mazzo viene sempre sostituito per intero: al salvataggio successivo dal frontend,
+  che invia solo le carte visibili negli 8 slot, la carta nascosta sparisce da sola;
+- se il frontend propone per ogni slot solo le carte di quel pianeta (l'endpoint `candidates`
+  dello Sprint 4 serve a questo), il caso si presenta solo con richieste costruite a mano.
+
+**Effetti sul resto del lavoro.**
+
+- Non serve aggiungere al contratto un codice di errore nuovo.
+- Le regole V2, V3, V4, V5 e V7 vanno scritte davvero nello step 3: prima, con `WRONG_SLOT`,
+  V4, V5 e V7 erano rispettate per costruzione.
+- Il problema V4 dovrebbe dire quale pianeta è sbagliato (ad esempio `LUNA`). Oggi `DeckProblem`
+  ha solo il campo `element`: va deciso con il frontend se aggiungere un campo `planet`.
+
+**Stato:** il codice compila; non è ancora stato provato con l'applicazione avviata.
 
 ---
 
@@ -351,7 +385,7 @@ questo errore. In quel caso l'errore protegge solo da richieste costruite a mano
 
 Lo step 3 prevede la validazione V1–V8, le statistiche effettive e il formato errori del
 contratto. Gran parte di questo lavoro dipende da decisioni ancora aperte (la scelta della
-sezione 9.4, i codici dei problemi, la forma di `ApiError`). Queste quattro modifiche invece non
+sezione 9.4, poi presa, i codici dei problemi, la forma di `ApiError`). Queste quattro modifiche invece non
 ne dipendevano e non toccano il lavoro già fatto.
 
 Il progetto compila. Le modifiche non sono ancora state provate con l'applicazione avviata.
