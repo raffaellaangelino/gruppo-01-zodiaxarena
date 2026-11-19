@@ -24,16 +24,16 @@ AS new
 ON DUPLICATE KEY UPDATE type = new.type, atk = new.atk, def = new.def;
 
 -- ---------------------------------------------------------------------------
--- 2) PIANETI (7)  -- tier: 1 = Leggendaria, 2 = Epica, 3 = Rara, 4 = Comune
+-- 2) PIANETI (7)  -- tier: LEGENDARY, EPIC, RARE, COMMON
 -- ---------------------------------------------------------------------------
 INSERT INTO planet (name, tier, atk, def) VALUES
-    ('Sole',     1, 9, 8),
-    ('Luna',     2, 5, 6),
-    ('Marte',    2, 7, 4),
-    ('Giove',    3, 4, 2),
-    ('Saturno',  3, 2, 4),
-    ('Mercurio', 4, 2, 0),
-    ('Venere',   4, 0, 2)
+    ('Sole',     'LEGENDARY', 9, 8),
+    ('Luna',     'EPIC',      5, 6),
+    ('Marte',    'EPIC',      7, 4),
+    ('Giove',    'RARE',      4, 2),
+    ('Saturno',  'RARE',      2, 4),
+    ('Mercurio', 'COMMON',    2, 0),
+    ('Venere',   'COMMON',    0, 2)
 AS new
 ON DUPLICATE KEY UPDATE tier = new.tier, atk = new.atk, def = new.def;
 

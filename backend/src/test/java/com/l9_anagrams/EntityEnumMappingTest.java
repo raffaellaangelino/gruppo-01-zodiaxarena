@@ -16,18 +16,20 @@ import com.l9_anagrams.entity.Player;
 import com.l9_anagrams.entity.Sign;
 import com.l9_anagrams.entity.SignType;
 import com.l9_anagrams.enums.House;
+import com.l9_anagrams.enums.PlanetTier;
 
 class EntityEnumMappingTest {
 	@Test
 	void godAndCardHouseEnumsAreStoredByName() throws ReflectiveOperationException {
 		assertStringEnum(Player.class, "god");
 		assertStringEnum(CardDefinition.class, "house");
+		assertStringEnum(Planet.class, "tier");
 	}
 
 	@Test
 	void creaturesDefaultToCasaOneAndAscendantsHaveNoHouse() {
 		Sign sign = new Sign("Ariete", SignType.FIRE, 7, 13);
-		Planet planet = new Planet("Sole", 1, 8, 9);
+		Planet planet = new Planet("Sole", PlanetTier.LEGENDARY, 8, 9);
 		CardDefinition creature = new CardDefinition(sign, planet, "creature.png");
 		CardDefinition ascendant = new CardDefinition(sign, "ascendant.png");
 

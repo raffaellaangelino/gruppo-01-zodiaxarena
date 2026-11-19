@@ -1,11 +1,12 @@
 package com.l9_anagrams.dto;
 
 import com.l9_anagrams.entity.Planet;
+import com.l9_anagrams.enums.PlanetTier;
 
 public record PlanetResponseDto(
 		Long id,
 		String name,
-		int tier,
+		PlanetTier tier,
 		int atk,
 		int def) {
 	public static PlanetResponseDto from(Planet planet) {
