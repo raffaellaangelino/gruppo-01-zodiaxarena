@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,6 +44,18 @@ public class GlobalExceptionHandler {
 				.map(f -> f.getField() + ": " + f.getDefaultMessage())
 				.toList();
 		return build(HttpStatus.BAD_REQUEST, "Dati non validi", details);
+	}
+
+	/** Corpo JSON assente o non leggibile (contratto: 400 VALIDATION_ERROR). */
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ErrorResponse> unreadable(HttpMessageNotReadableException ex) {
+		return build(HttpStatus.BAD_REQUEST, "JSON non leggibile", List.of());
+	}
+
+	/** Due salvataggi contemporanei della stessa riga (@Version, ad esempio sul Deck). */
+	@ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+	public ResponseEntity<ErrorResponse> optimisticLock(ObjectOptimisticLockingFailureException ex) {
+		return build(HttpStatus.CONFLICT, "Dati modificati da un'altra richiesta: ricarica e riprova", List.of());
 	}
 
 	@ExceptionHandler(BadCredentialsException.class)
