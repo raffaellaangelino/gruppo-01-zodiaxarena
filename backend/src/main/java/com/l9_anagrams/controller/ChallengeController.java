@@ -46,8 +46,8 @@ public class ChallengeController {
 		this.sseRegistry = sseRegistry;
 	}
 
-	@GetMapping("/challenges")
-	@Operation(summary = "List challenges", description = "List received pending and recent played challenges in TO_PLAY, or sent and recently closed challenges in SENT.")
+	@GetMapping("/challenges/me")
+	@Operation(summary = "List my challenges", description = "List the authenticated player's received pending and recent played challenges in TO_PLAY, or sent and recently closed challenges in SENT.")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", description = "Challenge list", content = @Content(schema = @Schema(implementation = ChallengeListResponseDto.class))),
 			@ApiResponse(responseCode = "400", description = "Invalid challenge box", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
