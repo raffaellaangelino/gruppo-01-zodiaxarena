@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import com.l9_anagrams.entity.ChallengeDeckCardSnapshot;
 import com.l9_anagrams.entity.ChallengeDeckSnapshot;
 import com.l9_anagrams.entity.CardDefinition;
 import com.l9_anagrams.entity.Player;
@@ -25,7 +24,7 @@ public class ChallengeEngineMapper {
 				: Optional.of(new AscendantSnapshot(toSign(snapshot.getAscendantCardDefinition())));
 
 		List<CreatureCardSnapshot> cards = snapshot.getCardSnapshots().stream()
-				.sorted(java.util.Comparator.comparingInt(ChallengeDeckCardSnapshot::getPosition))
+				.sorted(java.util.Comparator.comparingInt(c -> c.getPosition()))
 				.map(card -> toCreatureCard(card.getCardDefinition()))
 				.toList();
 
