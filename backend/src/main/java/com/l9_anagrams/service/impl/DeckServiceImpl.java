@@ -72,6 +72,17 @@ public class DeckServiceImpl implements DeckService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public DeckValidationDto validateDeck(Player player, Deck deck) {
+		DeckRequestDto request = new DeckRequestDto(
+				deck.getName(),
+				deck.getAscendant() == null ? null : deck.getAscendant().getId(),
+				deck.getPlayerCards().stream().map(card -> card.getId()).toList());
+		Checked result = check(player, request);
+		return new DeckValidationDto(result.violations.isEmpty(), result.violations);
+	}
+
+	@Override
 	@Transactional
 	public DeckResponseDto create(String email, DeckRequestDto request) {
 		Player player = currentPlayer(email);
