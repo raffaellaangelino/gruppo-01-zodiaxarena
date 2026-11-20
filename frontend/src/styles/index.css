@@ -25,4 +25,15 @@
     outline: none;
     box-shadow: var(--za-focus-ring);
   }
+
+  /* Autocompilazione del browser: Chrome colora il campo con il suo sfondo e ignora
+     background-color. Si rimanda il cambio di colore all'infinito e si fissa il testo,
+     così il campo resta quello del design system. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--za-text);
+    caret-color: var(--za-text);
+    transition: background-color 600000s 0s;
+  }
 }

@@ -8,14 +8,14 @@ import { defineConfig } from 'vite'
  */
 const apiTarget = process.env.API_TARGET ?? 'http://localhost:8081'
 
+/** Inoltro di `/api` al backend: uguale per il server di sviluppo e per `npm run preview`. */
+const proxy = { '/api': { target: apiTarget, changeOrigin: true } }
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   // Alias @/ → src/, letti da tsconfig.app.json
   resolve: { tsconfigPaths: true },
-  server: {
-    proxy: {
-      '/api': { target: apiTarget, changeOrigin: true },
-    },
-  },
+  server: { proxy },
+  preview: { proxy },
 })
