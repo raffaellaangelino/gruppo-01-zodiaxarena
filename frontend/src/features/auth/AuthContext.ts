@@ -13,6 +13,12 @@ export interface AuthContextValue {
    * @throws {import('@/lib/http').ApiError} Se le credenziali sono errate o il server non risponde.
    */
   login: (credentials: LoginCredentials) => Promise<void>
+  /**
+   * Apre la sessione con un token già ricevuto dal backend (es. dalla registrazione).
+   *
+   * @param token Token JWT valido.
+   */
+  startSession: (token: string) => void
   /** Uscita: chiude la sessione su questo dispositivo. */
   logout: () => void
 }

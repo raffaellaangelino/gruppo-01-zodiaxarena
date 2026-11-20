@@ -8,7 +8,7 @@ import { MobileHeader } from '@/app/shell/MobileHeader'
 import { MobileTabBar } from '@/app/shell/MobileTabBar'
 import { MockDataNotice } from '@/app/shell/MockDataNotice'
 import { MEDIA } from '@/config/breakpoints'
-import { USE_MOCKS } from '@/config/env'
+import { SHOWS_SAMPLE_DATA } from '@/config/env'
 import { usePlayerSummary } from '@/features/player/queries'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import './shell.css'
@@ -39,7 +39,7 @@ export function AppShell() {
           <Outlet />
         </Suspense>
       </PageErrorBoundary>
-      {USE_MOCKS && pathname !== PATHS.guide && <MockDataNotice />}
+      {SHOWS_SAMPLE_DATA && pathname !== PATHS.guide && <MockDataNotice />}
     </div>
   )
 }

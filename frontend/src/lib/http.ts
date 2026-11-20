@@ -14,7 +14,7 @@ const API_BASE = '/api'
 interface ApiErrorBody {
   code?: string
   message?: string
-  fieldErrors?: Record<string, string>
+  fieldErrors?: Record<string, string[]>
 }
 
 /** Errore di una chiamata alle API, con lo stato HTTP (0 = rete non raggiungibile). */
@@ -23,8 +23,11 @@ export class ApiError extends Error {
   readonly status: number
   /** Codice dell'errore deciso dal backend (es. `NICKNAME_TAKEN`): sceglie il testo da mostrare. */
   readonly code: string | null
-  /** Codice d'errore per campo, negli errori di validazione (400). */
-  readonly fieldErrors: Record<string, string>
+  /**
+   * Errori di validazione per campo (400), con il nome del campo del backend (es. `nickName`).
+   * I testi sono tecnici: servono a capire quale campo correggere, non vanno mostrati.
+   */
+  readonly fieldErrors: Record<string, string[]>
 
   /**
    * @param status Stato HTTP, oppure 0 per un errore di rete.
