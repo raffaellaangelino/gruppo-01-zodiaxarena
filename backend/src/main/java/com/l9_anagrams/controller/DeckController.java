@@ -16,7 +16,7 @@ import com.l9_anagrams.auth.userdetails.AppUserPrincipal;
 import com.l9_anagrams.dto.deck.DeckListResponse;
 import com.l9_anagrams.dto.deck.DeckResponse;
 import com.l9_anagrams.dto.deck.DeckSaveRequest;
-import com.l9_anagrams.exception.ApiError;
+import com.l9_anagrams.exception.ApiErrorResponse;
 import com.l9_anagrams.service.DeckService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,9 +53,9 @@ public class DeckController {
     @Operation(summary = "Crea un mazzo, anche come bozza non valida")
     @ApiResponse(responseCode = "201", description = "Creato; valid=false se viola V1–V8")
     @ApiResponse(responseCode = "409", description = "DECK_LIMIT_REACHED",
-            content = @Content(schema = @Schema(implementation = ApiError.class)))
+            content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     @ApiResponse(responseCode = "422", description = "CARD_NOT_OWNED",
-            content = @Content(schema = @Schema(implementation = ApiError.class)))
+            content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     public DeckResponse createDeck(@AuthenticationPrincipal AppUserPrincipal principal,
                                    @Valid @RequestBody DeckSaveRequest request) {
         return deckService.createDeck(principal.getUsername(), request);
@@ -64,7 +64,7 @@ public class DeckController {
     @GetMapping("/{deckId}")
     @Operation(summary = "Un mio mazzo, con validità, problemi e statistiche")
     @ApiResponse(responseCode = "404", description = "Inesistente o di un altro giocatore",
-            content = @Content(schema = @Schema(implementation = ApiError.class)))
+            content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     public DeckResponse getDeck(@AuthenticationPrincipal AppUserPrincipal principal,
                                 @PathVariable Long deckId) {
         return deckService.getDeck(principal.getUsername(), deckId);
@@ -73,7 +73,7 @@ public class DeckController {
     @PutMapping("/{deckId}")
     @Operation(summary = "Salva un mio mazzo, anche come bozza non valida")
     @ApiResponse(responseCode = "422", description = "CARD_NOT_OWNED",
-            content = @Content(schema = @Schema(implementation = ApiError.class)))
+            content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     public DeckResponse updateDeck(@AuthenticationPrincipal AppUserPrincipal principal,
                                    @PathVariable Long deckId,
                                    @Valid @RequestBody DeckSaveRequest request) {
@@ -84,7 +84,7 @@ public class DeckController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Cancella un mio mazzo (non l'ultimo)")
     @ApiResponse(responseCode = "409", description = "LAST_DECK",
-            content = @Content(schema = @Schema(implementation = ApiError.class)))
+            content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     public void deleteDeck(@AuthenticationPrincipal AppUserPrincipal principal,
                            @PathVariable Long deckId) {
         deckService.deleteDeck(principal.getUsername(), deckId);

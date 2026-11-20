@@ -1,6 +1,5 @@
 package com.l9_anagrams.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,9 +15,9 @@ public record PlayerResponseDto(
 		LocalDateTime lastGodChange,
 		int pityCounter,
 		SignResponseDto sunSign,
-		LocalDate birthDate,
 		int cardCount,
-		List<Long> deckIds) {
+		List<Long> deckIds,
+		PlayerOnboardingDto onboarding) {
 
 	public static PlayerResponseDto from(Player player) {
 		return new PlayerResponseDto(
@@ -30,8 +29,8 @@ public record PlayerResponseDto(
 				player.getLastGodChange(),
 				player.getPityCounter(),
 				player.getSunSign() != null ? SignResponseDto.from(player.getSunSign()) : null,
-				player.getBirthDate(),
 				player.getPlayerCards().size(),
-				player.getDecks().stream().map(d -> d.getId()).toList());
+				player.getDecks().stream().map(d -> d.getId()).toList(),
+				new PlayerOnboardingDto(player.getOnboardingStep() == null, player.getOnboardingStep()));
 	}
 }

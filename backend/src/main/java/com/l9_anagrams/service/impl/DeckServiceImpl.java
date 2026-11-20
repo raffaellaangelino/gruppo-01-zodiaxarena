@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.l9_anagrams.dto.DeckValidationDto;
 import com.l9_anagrams.dto.deck.DeckListResponse;
 import com.l9_anagrams.dto.deck.DeckListResponse.DeckSummary;
 import com.l9_anagrams.dto.deck.DeckResponse;
@@ -28,6 +29,7 @@ import com.l9_anagrams.entity.Player;
 import com.l9_anagrams.entity.PlayerCard;
 import com.l9_anagrams.entity.SignType;
 import com.l9_anagrams.enums.CardType;
+import com.l9_anagrams.exception.ApiErrorCode;
 import com.l9_anagrams.exception.ConflictException;
 import com.l9_anagrams.exception.ResourceNotFoundException;
 import com.l9_anagrams.exception.RuleViolationException;
@@ -82,7 +84,8 @@ public class DeckServiceImpl implements DeckService {
 		// Blocca la riga del giocatore: due creazioni in parallelo non superano il limite
 		lockPlayer(player);
 		if (deckRepo.countByPlayerId(player.getId()) >= MAX_DECKS) {
-			throw new ConflictException("DECK_LIMIT_REACHED: puoi avere al massimo " + MAX_DECKS + " mazzi");
+			throw new ConflictException(ApiErrorCode.DECK_LIMIT_REACHED,
+					"Puoi avere al massimo " + MAX_DECKS + " mazzi");
 		}
 
 		Deck deck = new Deck();
@@ -108,11 +111,27 @@ public class DeckServiceImpl implements DeckService {
 		lockPlayer(player);
 		Deck deck = ownedDeck(deckId, player);
 		if (deckRepo.countByPlayerId(player.getId()) <= 1) {
-			throw new ConflictException("LAST_DECK: non puoi cancellare il tuo unico mazzo");
+			throw new ConflictException(ApiErrorCode.LAST_DECK, "Non puoi cancellare il tuo unico mazzo");
 		}
 		// TODO: quando esisteranno le sfide, impedire la cancellazione di un mazzo
 		// usato in una sfida in attesa
 		deckRepo.delete(deck);
+	}
+
+	// ------------------------------------------------------------- validazione
+
+	/**
+	 * Usata dalle sfide (ChallengeDeckService) prima di inviare il mazzo all'engine.
+	 * Stesse regole della risposta del mazzo: violations contiene i codici dei problemi.
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public DeckValidationDto validateDeck(Player player, Deck deck) {
+		List<String> violations = problemsOf(deck).stream()
+				.map(problem -> problem.rule() + ": " + problem.code()
+						+ (problem.element() == null ? "" : " " + problem.element()))
+				.toList();
+		return new DeckValidationDto(violations.isEmpty(), violations);
 	}
 
 	// ------------------------------------------------------- giocatore e mazzo
@@ -173,7 +192,7 @@ public class DeckServiceImpl implements DeckService {
 			List<PlayerCard> copies = ownedByDefinition.getOrDefault(definitionId, List.of());
 			int index = used.merge(definitionId, 1, Integer::sum) - 1;
 			if (index >= copies.size()) {
-				notOwned.add("CARD_NOT_OWNED: slot " + slot + ", carta " + definitionId);
+				notOwned.add("slot " + slot + ", carta " + definitionId);
 				continue;
 			}
 
@@ -186,7 +205,7 @@ public class DeckServiceImpl implements DeckService {
 		}
 
 		if (!notOwned.isEmpty()) {
-			throw new RuleViolationException(notOwned);
+			throw new RuleViolationException(ApiErrorCode.CARD_NOT_OWNED, notOwned);
 		}
 		return new ResolvedSlots(ascendant, cards);
 	}

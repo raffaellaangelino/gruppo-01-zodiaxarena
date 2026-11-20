@@ -1,0 +1,18 @@
+/* =====================================================================
+   Misure del guscio: quanto spazio lasciano le barre fisse alle pagine.
+   Le pagine usano --shell-top e --shell-bottom per non finire sotto le barre.
+   ===================================================================== */
+
+.app-shell {
+  /* Mobile: intestazione 56 + area sicura in alto, barra 64 + area sicura in basso */
+  --shell-top: calc(3.5rem + env(safe-area-inset-top));
+  --shell-bottom: calc(4rem + env(safe-area-inset-bottom));
+}
+
+/* Desktop (breakpoint xl, 1280): barra di gioco 64, niente barra in basso */
+@media (width >= 80rem) {
+  .app-shell {
+    --shell-top: var(--za-bar-h);
+    --shell-bottom: 0px;
+  }
+}
