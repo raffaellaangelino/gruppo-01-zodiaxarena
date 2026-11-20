@@ -86,6 +86,10 @@
   --color-el-acqua: var(--za-el-acqua);
   --color-el-terra: var(--za-el-terra);
   --color-el-aria: var(--za-el-aria);
+  --color-el-fuoco-fill: var(--za-el-fuoco-fill);
+  --color-el-acqua-fill: var(--za-el-acqua-fill);
+  --color-el-terra-fill: var(--za-el-terra-fill);
+  --color-el-aria-fill: var(--za-el-aria-fill);
 
   /* ---------- Colore · campi dei moduli ---------- */
   --color-field-bg: var(--za-field-bg);
@@ -220,6 +224,7 @@
 
 @utility type-display {
   font: var(--za-type-display);
+  letter-spacing: 0.02em;
 }
 @utility type-display-m {
   font: var(--za-type-display-m);

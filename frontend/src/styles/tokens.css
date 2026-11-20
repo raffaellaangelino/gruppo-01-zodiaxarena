@@ -2,7 +2,7 @@
    Non modificare qui: i token cambiano prima nel design system e poi si ricopiano. */
 
 /* =====================================================================
-   Zodiax Arena · Design token · v0.3 (2026-11-11)
+   Zodiax Arena · Design token · v0.4 (2026-11-20, colori e titolo del branding, D-030)
    Fonte: direzione artistica D-018 (tela "Direzione artistica · Home desktop"),
    colori delle carte approvate (assets/Carte, Logo e Icone/out/*.svg).
    Regole d'uso e motivazioni: design/system/FOUNDATIONS.md.
@@ -22,9 +22,9 @@
   --za-panel-fill: linear-gradient(180deg, var(--za-surface-2) 0%, var(--za-surface) 40%);
 
   /* ---------- Colore · testo ---------- */
-  --za-text: #F3EBDD;            /* 15.0:1 su bg · testo principale */
-  --za-text-muted: #B7B9CE;      /*  9.2:1 su bg · testo secondario, metadati */
-  --za-text-soft: #D5D2E2;       /* 11.8:1 sulla colonna · etichette dei campi, sottotitoli dei moduli (tavole Accedi, Registrati) */
+  --za-text: #FFF8EC;            /* 16.2:1 su bg · testo principale (Avorio del branding, D-030) */
+  --za-text-muted: #A8A3CF;      /*  7.6:1 su bg · testo secondario, metadati (branding, D-030) */
+  --za-text-soft: #EFE6FF;       /* 14.6:1 su bg · Lilla nebbia del branding (D-030): etichette dei campi, sottotitoli, testi lunghi */
   --za-text-disabled: #7C819C;   /*  4.6:1 su bg · solo stati disabilitati, mai testo da leggere */
   --za-text-on-gold: #1A1408;    /*  9.7:1 sull'oro · testo dei pulsanti pieni */
 
@@ -44,7 +44,7 @@
   /* ---------- Colore · stato ---------- */
   --za-success: #7EE0A4;         /* 11.1:1 · vittoria, valido, accreditato */
   --za-danger: #FF6B7F;          /*  6.5:1 · sconfitta, errore, non valido */
-  --za-warning: #F2B85B;         /* 10.0:1 · in scadenza, attenzione */
+  --za-warning: #FFC46B;         /* 11.3:1 · in scadenza, attenzione (come nelle tavole, scelta dell'utente 20/11) */
   --za-info: var(--za-gold-bright);
 
   /* ---------- Colore · statistiche (dalle carte: #FF5A4E e #5C8BFF, schiariti per il testo) ---------- */
@@ -63,19 +63,21 @@
   --za-tier-leggendaria-aura: linear-gradient(135deg, #7AF0FF, #C89BFF, #FF9BD2, #FFE38A);
   --za-tier-ascendente-aura: linear-gradient(135deg, #FF5A8A, #FFE38A, #7AF0FF, #B98CFF);
 
-  /* ---------- Colore · elementi (Q-36, approvati dall'utente il 07/11; presi dalle icone approvate) ----------
-     Sempre insieme allo stemma dell'elemento: il colore non è mai l'unico segnale. */
-  --za-el-fuoco: #FF6E40;        /* 6.4:1 */
-  --za-el-acqua: #62A8F2;        /* 7.1:1 · azzurro dei riflessi dell'icona blu, più chiaro della Rara (Q-36, 07/11) */
-  --za-el-terra: #A6CC5C;        /* 9.7:1 · verde germoglio delle foglie dell'icona, lontano dal verde del successo */
-  --za-el-aria: #C7B8FF;         /* 9.9:1 · lilla delle nuvole dell'icona, più chiaro del viola dell'Epica */
+  /* ---------- Colore · elementi (branding del team, D-030, 20/11; prima Q-36) ----------
+     Sempre insieme allo stemma dell'elemento: il colore non è mai l'unico segnale.
+     --za-el-* per testo e linee su notte; --za-el-*-fill pieni, per icone e barre. */
+  --za-el-fuoco: #F2604A;        --za-el-fuoco-fill: #D82C23;
+  --za-el-acqua: #6E95F0;        --za-el-acqua-fill: #2F63CD;
+  --za-el-terra: #C5D27A;        --za-el-terra-fill: #96A753;
+  --za-el-aria: #D9CBE0;         --za-el-aria-fill: #B8A2A9;
 
   /* ---------- Tipografia ---------- */
   --za-font-display: "Cinzel", "Times New Roman", serif;  /* titoli, etichette, pulsanti, numeri delle carte */
+  --za-font-hero: "Cinzel Decorative", "Cinzel", serif;    /* solo il titolo eroico (D-030) */
   --za-font-body: "Nunito", system-ui, sans-serif;         /* testo, dati, moduli */
   --za-font-symbol: "Apple Symbols", "Noto Sans Symbols", "Segoe UI Symbol", sans-serif; /* glifi dei segni (♌), sempre come testo, mai emoji */
   /* Scala (desktop / mobile). Cinzel sempre in maiuscolo sotto i 24 px. */
-  --za-type-display: 700 3.875rem/0.96 var(--za-font-display);     /* titolo eroico: 1 per schermata (62 dalla Home definitiva, 10/11) */
+  --za-type-display: 900 3.5rem/1.08 var(--za-font-hero);         /* titolo eroico: 1 per schermata (56, Cinzel Decorative, D-030; tracking 0.02em) */
   --za-type-display-m: 700 2.25rem/1.0 var(--za-font-display);
   --za-type-h1: 700 2rem/1.1 var(--za-font-display);
   --za-type-h1-m: 700 1.625rem/1.1 var(--za-font-display);
