@@ -43,6 +43,50 @@ export const CHALLENGES_COPY = {
   actionFailed: "Non siamo riusciti a completare l'azione. Controlla la connessione e riprova.",
 } as const
 
+/** Testi della finestra Nuova sfida (tavola Sfide-Nuova). */
+export const NEW_CHALLENGE_COPY = {
+  title: 'Nuova sfida',
+  search: 'Cerca un giocatore per nome',
+  searchHint: 'Scrivi almeno 3 lettere del nickname.',
+  searching: 'Cerco…',
+  /** @param query Testo cercato. */
+  noResults: (query: string) => `Nessun giocatore con "${query}" nel nome.`,
+  searchFailed: 'La ricerca non ha funzionato. Controlla la connessione e riprova.',
+  searchUnavailable:
+    'La ricerca per nome arriva a breve. Intanto puoi sfidare chi hai già incontrato.',
+  results: 'Risultati',
+  recent: 'Avversari recenti',
+  noRecent:
+    'Non hai ancora sfidato nessuno. La ricerca per nome arriva a breve: da lì potrai scegliere chiunque.',
+  selected: 'Scelto',
+  alreadyPending: 'già in attesa',
+  see: 'Vedi',
+  summary: 'Riepilogo',
+  opponent: 'Avversario',
+  pickOpponent: 'Scegli chi sfidare',
+  yourSky: 'Il tuo Cielo',
+  currentDeck: 'Il mazzo in uso',
+  skyHint: 'Le carte e la validità del Cielo compariranno qui.',
+  faction: 'Fazione',
+  when: 'Quando',
+  /** @param nickname Avversario. */
+  whenText: (nickname: string) => `Si gioca appena ${nickname} accetta`,
+  whenEmpty: 'Si gioca appena il tuo avversario accetta',
+  cancel: 'Annulla',
+  launch: 'Lancia la sfida',
+  launching: 'Invio…',
+  /** @param nickname Avversario. */
+  launched: (nickname: string) => `Sfida lanciata a ${nickname}: si gioca appena accetta.`,
+  noDeck: 'Ti serve un Cielo per sfidare: componilo nella Collezione.',
+  failures: {
+    alreadyPending: 'Hai già una sfida in attesa con questo giocatore.',
+    deckInvalid: 'Il tuo Cielo non è valido: correggilo prima di sfidare.',
+    notFound: 'Questo giocatore non esiste più. Scegline un altro.',
+    network: 'Non riusciamo a raggiungere il server. Controlla la connessione e riprova.',
+    server: 'La sfida non è partita per un problema da parte nostra. Riprova tra poco.',
+  },
+} as const
+
 /**
  * Quando è arrivata o partita una sfida, con la scadenza se c'è: "ricevuta oggi · scade tra 7 giorni".
  *

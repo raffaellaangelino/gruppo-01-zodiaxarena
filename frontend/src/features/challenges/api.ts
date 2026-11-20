@@ -44,3 +44,22 @@ export async function withdrawChallenge(id: number): Promise<void> {
   if (USE_MOCKS) return mockResponse(undefined)
   await request<void>(`/challenges/${id}/withdraw`, { method: 'POST' })
 }
+
+/**
+ * Lancia una sfida: `POST /api/challenges` (contratto API §7.2). Il server controlla il mazzo e ne
+ * salva una copia, insieme alla Fazione, al momento dell'invio.
+ *
+ * @param opponentId Avversario.
+ * @param deckId Mazzo con cui sfidi.
+ * @returns L'id della sfida creata.
+ * @throws {import('@/lib/http').ApiError} 409 `CHALLENGE_ALREADY_PENDING` o `CANNOT_CHALLENGE_SELF`,
+ *   422 `DECK_INVALID`, 404 se l'avversario non esiste, 0 se il server non risponde.
+ */
+export async function createChallenge(opponentId: number, deckId: number): Promise<number> {
+  if (USE_MOCKS) return mockResponse(99)
+  const { challengeId } = await request<{ challengeId: number }>('/challenges', {
+    method: 'POST',
+    body: { opponentId, deckId },
+  })
+  return challengeId
+}

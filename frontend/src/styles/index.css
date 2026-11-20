@@ -17,6 +17,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /*
+   * Tailwind 4 lascia i pulsanti con il cursore normale: nel gioco tutto ciò che si può premere
+   * mostra la manina, così si capisce al passaggio del mouse. Spenti: il cursore normale.
+   */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary,
+  select:not(:disabled) {
+    cursor: pointer;
+  }
+
   a {
     color: var(--za-gold);
   }

@@ -129,7 +129,7 @@ Un file, una responsabilità: tutto ciò che si riusa ha il suo file.
 - Finché il backend non li ha, le risposte arrivano dai dati di esempio di `src/mocks/`, attivi salvo `VITE_USE_MOCKS=false`; mentre sono attivi compare l'etichetta **"Dati di esempio"**.
 - **Due modi di avviare:** `npm run dev` usa i dati di esempio (si lavora anche senza backend: il giocatore è sempre "Lyra", Fazione Efesto); `npm run dev:backend` usa il backend vero per tutto quello che esiste (`.env.backend`, funziona anche su Windows). Per provare registrazione e scelta della Fazione serve il secondo.
 - Le risposte del backend passano da un traduttore (es. `features/player/dto.ts`) prima di arrivare alle pagine: se il backend cambia un nome (`nickName`, `god`…) si corregge in un punto solo.
-- `GET /api/home` non esiste ancora: la Home usa i dati di esempio anche con `VITE_USE_MOCKS=false` (`HOME_API_AVAILABLE` in `config/env.ts`), così il resto si prova con il backend vero.
+- `GET /api/home` non esiste ancora: la Home usa i dati di esempio anche con `VITE_USE_MOCKS=false` (`BACKEND_READY` in `config/env.ts`, dove si segna ogni endpoint del contratto che il backend non ha ancora), così il resto si prova con il backend vero.
 - I codici del gioco arrivano come nel contratto (`FIRE`, `EFESTO`, `LEONE`…); i nomi italiani stanno in `domain/labels.ts`. Le date arrivano in ISO 8601 e diventano parole ("ricevuta oggi", "tra 17 g") con `lib/dates.ts`.
 - All'uscita la cache si svuota: i dati di un giocatore non restano per chi accede dopo.
 

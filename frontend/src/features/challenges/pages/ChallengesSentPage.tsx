@@ -1,18 +1,22 @@
+import { useLocation } from 'react-router'
 import { TilePanel } from '@/components/panels/TilePanel'
+import { Icon } from '@/components/ui/Icon'
 import { LineTitle } from '@/components/ui/LineTitle'
 import { ChallengesEmptyState } from '@/features/challenges/components/ChallengesEmptyState'
 import { SentChallengeRow } from '@/features/challenges/components/SentChallengeRow'
 import { useChallengeAction } from '@/features/challenges/hooks/useChallengeAction'
-import { CHALLENGES_COPY } from '@/features/challenges/messages'
+import type { ChallengeLaunchedState } from '@/features/challenges/hooks/useCreateChallenge'
+import { CHALLENGES_COPY, NEW_CHALLENGE_COPY } from '@/features/challenges/messages'
 import { useChallenges } from '@/features/challenges/queries'
 import type { Challenge } from '@/features/challenges/types'
 
 /**
  * Sfide · Inviate (S09, tavola Sfide-Inviate): in attesa di risposta, con Ritira, e chiuse di
- * recente con il motivo.
+ * recente con il motivo. Dopo un lancio riuscito, in alto la conferma.
  */
 export function ChallengesSentPage() {
   const sent = useChallenges('SENT')
+  const launchedTo = (useLocation().state as ChallengeLaunchedState | null)?.launchedTo
   const withdraw = useChallengeAction('withdraw')
 
   const pending = sent.filter((c) => c.status === 'PENDING')
@@ -49,6 +53,12 @@ export function ChallengesSentPage() {
 
   return (
     <div className="flex flex-col gap-4">
+      {launchedTo && (
+        <output className="flex items-center gap-2 text-success type-meta-strong">
+          <Icon name="conferma" size={18} />
+          {NEW_CHALLENGE_COPY.launched(launchedTo)}
+        </output>
+      )}
       {section(CHALLENGES_COPY.pendingSection, pending)}
       {section(CHALLENGES_COPY.closedSection, closed)}
     </div>

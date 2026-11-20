@@ -54,6 +54,7 @@ export function toPlayerSummary(dto: PlayerDto): PlayerSummary {
     sign,
     credits: dto.credits,
     faction: dto.god ? { god: dto.god, element: GOD_ELEMENT[dto.god] } : null,
+    deckIds: dto.deckIds,
     unreadNotifications: 0,
     pending: { challenges: 0, trades: 0, replays: 0 },
     onboarding: dto.onboarding,
