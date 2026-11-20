@@ -86,7 +86,7 @@ export function GodCard({ god, name, selected, proposed, disabled, onSelect }: G
             <p className="type-h3 text-text">{realm}</p>
             <p className="min-h-10 text-text-muted type-meta">{land}</p>
             <p
-              className="text-xl font-symbol tracking-[0.4em] text-gold-bright"
+              className="font-symbol text-[1.25rem] tracking-[0.4em] text-gold-bright"
               aria-label={`Segni di ${ELEMENT_LABELS[element]}: ${signs.map((s) => SIGN_LABELS[s]).join(', ')}`}
             >
               {signs.map((s) => SIGN_GLYPHS[s]).join('')}

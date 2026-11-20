@@ -6,6 +6,9 @@ import { GuestOnly } from '@/features/auth/components/GuestOnly'
 import { LogoutButton } from '@/features/auth/components/LogoutButton'
 import { RequireAuth } from '@/features/auth/components/RequireAuth'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
+import { ChallengesLayout } from '@/features/challenges/components/ChallengesLayout'
+import { ChallengesSentPage } from '@/features/challenges/pages/ChallengesSentPage'
+import { ChallengesToPlayPage } from '@/features/challenges/pages/ChallengesToPlayPage'
 import { HomePage } from '@/features/home/pages/HomePage'
 import { GuidePage } from '@/features/guide/pages/GuidePage'
 import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
@@ -18,8 +21,9 @@ import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 const PLACEHOLDERS: { path: string; title: string }[] = [
   { path: PATHS.collection, title: 'Collezione' },
   { path: PATHS.deck, title: 'Il tuo Cielo' },
-  { path: PATHS.challenges, title: 'Sfide' },
   { path: PATHS.newChallenge, title: 'Nuova sfida' },
+  { path: PATHS.playChallenge, title: 'Partita' },
+  { path: PATHS.match, title: 'Partita' },
   { path: PATHS.trades, title: 'Scambi' },
   { path: PATHS.shop, title: 'Negozio' },
   { path: PATHS.missions, title: 'Missioni' },
@@ -55,6 +59,10 @@ export function AppRoutes() {
             <Route element={<AppShell />}>
               <Route path={PATHS.home} element={<HomePage />} />
               <Route path={PATHS.guide} element={<GuidePage />} />
+              <Route element={<ChallengesLayout />}>
+                <Route path={PATHS.challenges} element={<ChallengesToPlayPage />} />
+                <Route path={PATHS.challengesSent} element={<ChallengesSentPage />} />
+              </Route>
               {PLACEHOLDERS.map(({ path, title }) => (
                 <Route key={path} path={path} element={<SectionPlaceholder title={title} />} />
               ))}

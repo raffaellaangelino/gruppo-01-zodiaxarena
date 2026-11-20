@@ -15,6 +15,3 @@ export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
  * vero. Quando l'endpoint esiste, si mette a `true`.
  */
 export const HOME_API_AVAILABLE = false
-
-/** Vero se una parte dell'interfaccia mostra dati di esempio: accende l'etichetta. */
-export const SHOWS_SAMPLE_DATA = USE_MOCKS || !HOME_API_AVAILABLE

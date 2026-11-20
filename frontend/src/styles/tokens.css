@@ -39,6 +39,7 @@
   --za-line-thin: rgba(235, 207, 147, 0.60); /* filo interno della doppia riga */
   --za-line-soft: rgba(243, 235, 221, 0.10); /* separatori di lista */
   --za-line-title: linear-gradient(90deg, rgba(217,185,124,0.55), rgba(217,185,124,0.15)); /* filo del titolo con linea */
+  --za-tab-underline: linear-gradient(90deg, rgba(255,243,196,0), #FFF3C4 25%, #FFF3C4 75%, rgba(255,243,196,0)); /* scheda attiva (gen_sf.tabs) */
 
   /* ---------- Colore · stato ---------- */
   --za-success: #7EE0A4;         /* 11.1:1 · vittoria, valido, accreditato */
