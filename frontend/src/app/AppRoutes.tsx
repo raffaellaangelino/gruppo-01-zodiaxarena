@@ -10,6 +10,7 @@ import { ChallengesLayout } from '@/features/challenges/components/ChallengesLay
 import { ChallengesSentPage } from '@/features/challenges/pages/ChallengesSentPage'
 import { ChallengesToPlayPage } from '@/features/challenges/pages/ChallengesToPlayPage'
 import { NewChallengePage } from '@/features/challenges/pages/NewChallengePage'
+import { PlayChallengePage } from '@/features/challenges/pages/PlayChallengePage'
 import { HomePage } from '@/features/home/pages/HomePage'
 import { GuidePage } from '@/features/guide/pages/GuidePage'
 import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
@@ -22,7 +23,6 @@ import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 const PLACEHOLDERS: { path: string; title: string }[] = [
   { path: PATHS.collection, title: 'Collezione' },
   { path: PATHS.deck, title: 'Il tuo Cielo' },
-  { path: PATHS.playChallenge, title: 'Partita' },
   { path: PATHS.match, title: 'Partita' },
   { path: PATHS.trades, title: 'Scambi' },
   { path: PATHS.shop, title: 'Negozio' },
@@ -56,6 +56,8 @@ export function AppRoutes() {
         >
           <Route path={PATHS.welcomeFaction} element={<FactionPage />} />
           <Route element={<OnboardingGate />}>
+            {/* Arena a schermo intero: fuori dal guscio con le barre */}
+            <Route path={PATHS.playChallenge} element={<PlayChallengePage />} />
             <Route element={<AppShell />}>
               <Route path={PATHS.home} element={<HomePage />} />
               <Route path={PATHS.guide} element={<GuidePage />} />

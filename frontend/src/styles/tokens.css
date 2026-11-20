@@ -204,6 +204,8 @@
   --za-scene-base: #0A0F22;      /* sotto la key art, finché si carica */
   --za-scene-veil-auth: linear-gradient(90deg, rgba(6,9,22,0.85) 0%, rgba(6,9,22,0.55) 38%, rgba(6,9,22,0.1) 60%, rgba(6,9,22,0.35) 100%);
   --za-scene-veil-reveal: radial-gradient(ellipse 28.75rem 23.75rem at 50% 52%, rgba(6,9,22,0.78), rgba(6,9,22,0.25) 100%); /* registrazione: velo dietro il segno che appare nella scena */
+  --za-arena-medallion-ring: 0 0 0 2px var(--za-gold), 0 0 0 7px rgba(11,14,53,0.9), 0 0 0 8px rgba(232,176,75,0.5), 0 18px 24px -10px rgba(255,214,107,0.55); /* giocatore sulla pozza di luce (gen_ar.standing) */
+  --za-arena-veil: rgba(6,9,22,0.2); /* arena dietro l'attesa e il Verdetto (gen_ar.arena dim) */
   --za-btn-h-hero: 3.5rem; --za-btn-h: 2.75rem; --za-btn-h-tertiary: 2.25rem; --za-btn-icon: 2.75rem; /* 56 · 44 · 36 · 44 */
 
   /* ---------- Profondità ---------- */

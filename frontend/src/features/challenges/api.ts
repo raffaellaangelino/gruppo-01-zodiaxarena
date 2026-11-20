@@ -63,3 +63,22 @@ export async function createChallenge(opponentId: number, deckId: number): Promi
   })
   return challengeId
 }
+
+/**
+ * Accetta una sfida e la gioca: `POST /api/challenges/{id}/accept` (contratto API §7.3). Il server
+ * copia il tuo mazzo, chiama l'engine e risponde solo a partita pronta.
+ *
+ * @param challengeId Sfida ricevuta.
+ * @param deckId Mazzo con cui rispondi.
+ * @returns L'id della partita.
+ * @throws {import('@/lib/http').ApiError} 409 `CHALLENGE_NOT_PENDING`, 422 `DECK_INVALID`,
+ *   503/502 se l'engine non risponde (la sfida resta in attesa), 404, 0 se il server non risponde.
+ */
+export async function acceptChallenge(challengeId: number, deckId: number): Promise<number> {
+  if (USE_MOCKS) return mockResponse(88)
+  const { matchId } = await request<{ matchId: number }>(`/challenges/${challengeId}/accept`, {
+    method: 'POST',
+    body: { deckId },
+  })
+  return matchId
+}

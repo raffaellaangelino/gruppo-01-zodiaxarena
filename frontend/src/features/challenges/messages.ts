@@ -87,6 +87,25 @@ export const NEW_CHALLENGE_COPY = {
   },
 } as const
 
+/** Testi dell'attesa dopo "Accetta e gioca" (tavole Sfide-Attesa e Sfide-Stati). */
+export const ACCEPT_COPY = {
+  exit: 'Torna alle sfide',
+  title: 'Cloto fila la vostra partita…',
+  text: 'Pochi istanti: poi Lachesi la svolge davanti a te.',
+  /** @param me Chi guarda. @param opponent Avversario. */
+  orbit: (me: string, opponent: string) => `${me} contro ${opponent}: la partita si sta preparando`,
+  retry: 'Riprova',
+  fixSky: 'Correggi il Cielo',
+  failures: {
+    notPending: 'Questa sfida non è più in attesa: forse è stata ritirata o è già stata giocata.',
+    deckInvalid: 'Il tuo Cielo non è valido: correggilo per accettare la sfida.',
+    engine: 'Le Moire non hanno potuto filare la partita. La sfida è ancora valida: riprova.',
+    network: 'Non riusciamo a raggiungere il server. Controlla la connessione e riprova.',
+    server: 'La partita non è partita per un problema da parte nostra. La sfida resta in attesa.',
+    noDeck: 'Ti serve un Cielo per giocare: componilo nella Collezione.',
+  },
+} as const
+
 /**
  * Quando è arrivata o partita una sfida, con la scadenza se c'è: "ricevuta oggi · scade tra 7 giorni".
  *
