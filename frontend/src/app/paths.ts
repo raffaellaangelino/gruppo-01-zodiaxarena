@@ -2,6 +2,8 @@
 export const PATHS = {
   home: '/',
   login: '/accedi',
+  guide: '/guida',
+  privacy: '/privacy',
   collection: '/collezione',
   deck: '/collezione/cielo',
   challenges: '/sfide',

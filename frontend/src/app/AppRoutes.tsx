@@ -7,6 +7,8 @@ import { LogoutButton } from '@/features/auth/components/LogoutButton'
 import { RequireAuth } from '@/features/auth/components/RequireAuth'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { HomePage } from '@/features/home/pages/HomePage'
+import { GuidePage } from '@/features/guide/pages/GuidePage'
+import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
 import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 
 /** Sezioni non ancora costruite: tengono il posto finché arriva la loro issue. */
@@ -31,6 +33,7 @@ const PLACEHOLDERS: { path: string; title: string }[] = [
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path={PATHS.privacy} element={<PrivacyPage />} />
       <Route element={<GuestOnly />}>
         <Route path={PATHS.login} element={<LoginPage />} />
       </Route>
@@ -43,6 +46,7 @@ export function AppRoutes() {
           }
         >
           <Route path={PATHS.home} element={<HomePage />} />
+          <Route path={PATHS.guide} element={<GuidePage />} />
           {PLACEHOLDERS.map(({ path, title }) => (
             <Route key={path} path={path} element={<SectionPlaceholder title={title} />} />
           ))}

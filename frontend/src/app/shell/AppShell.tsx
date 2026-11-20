@@ -1,7 +1,8 @@
 import { Suspense } from 'react'
-import { Outlet } from 'react-router'
+import { Outlet, useLocation } from 'react-router'
 import { PageErrorBoundary } from '@/app/PageErrorBoundary'
 import { PageLoading } from '@/app/PageLoading'
+import { PATHS } from '@/app/paths'
 import { GameBar } from '@/app/shell/GameBar'
 import { MobileHeader } from '@/app/shell/MobileHeader'
 import { MobileTabBar } from '@/app/shell/MobileTabBar'
@@ -21,6 +22,7 @@ import './shell.css'
 export function AppShell() {
   const player = usePlayerSummary()
   const isDesktop = useMediaQuery(MEDIA.desktop)
+  const { pathname } = useLocation()
 
   return (
     <div className="app-shell min-h-dvh">
@@ -37,7 +39,7 @@ export function AppShell() {
           <Outlet />
         </Suspense>
       </PageErrorBoundary>
-      {USE_MOCKS && <MockDataNotice />}
+      {USE_MOCKS && pathname !== PATHS.guide && <MockDataNotice />}
     </div>
   )
 }
