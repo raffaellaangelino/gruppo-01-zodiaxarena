@@ -114,6 +114,7 @@
   /* ---------- Font: famiglie e solo i pesi caricati (per le misure: classi type-*) ---------- */
   --font-display: var(--za-font-display);
   --font-body: var(--za-font-body);
+  --font-symbol: var(--za-font-symbol);
   --font-weight-normal: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
@@ -132,6 +133,7 @@
   --shadow-overlay: var(--za-shadow-overlay);
   --shadow-card-thumb: var(--za-card-thumb-shadow);
   --shadow-medallion: var(--za-medallion-ring);
+  --shadow-medallion-l: var(--za-medallion-ring-l);
   --shadow-avatar: var(--za-avatar-ring);
   --blur-glass: var(--za-blur-glass);
 
