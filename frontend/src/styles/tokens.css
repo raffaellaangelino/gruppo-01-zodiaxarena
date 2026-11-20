@@ -191,6 +191,11 @@
   --za-text-shadow-hero: 0 3px 0 #05070F, 0 0 30px rgba(6,9,22,0.9);   /* titolo sulla key art */
   --za-text-shadow-scene: 0 1px 2px #05070F, 0 0 12px rgba(5,7,15,0.95); /* testo sulla key art */
   --za-card-thumb-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 5px 10px rgba(0,0,0,0.5); /* carte del ventaglio */
+  --za-card-shadow: 0 6px 14px rgba(0,0,0,0.45); /* carta M e L (gen_c.CARD_CSS) */
+  --za-card-selected: 0 0 0 2px #FFF3C4, 0 0 0 5px rgba(16,23,43,0.9), 0 0 0 6px #E8B04B, 0 0 18px rgba(255,214,107,0.45); /* carta scelta: filo acceso */
+  --za-card-hover-glow: radial-gradient(60% 55% at 50% 100%, rgba(255,214,107,0.35), rgba(255,214,107,0) 70%); /* chiarore da sotto, come la barra */
+  --za-card-missing: grayscale(1) brightness(0.42) contrast(0.9); /* carta non posseduta: l'illustrazione vera, spenta */
+  --za-card-radius: 6% / 4.3%; /* angoli della carta, in proporzione */
 
   /* ---------- Accesso · colonna laterale e scena (FOUNDATIONS §6b-decies) ---------- */
   --za-column-w: 32.5rem;        /* 520 */

@@ -5,6 +5,8 @@ import pelago from '@/assets/factions/pelago.webp'
 import { ElementEmblem } from '@/components/game/ElementEmblem'
 import { TilePanel } from '@/components/panels/TilePanel'
 import { Medallion } from '@/components/ui/Medallion'
+import { Pill } from '@/components/ui/Pill'
+import { Spark } from '@/components/ui/Spark'
 import type { GodCode } from '@/domain/game'
 import { ELEMENT_LABELS, GOD_LABELS, GOD_REALMS, SIGN_GLYPHS, SIGN_LABELS } from '@/domain/labels'
 import { GOD_ELEMENT, signsOf } from '@/domain/rules'
@@ -56,9 +58,13 @@ export function GodCard({ god, name, selected, proposed, disabled, onSelect }: G
         aria-describedby={`${name}-${god}-potere`}
       />
       {proposed && (
-        <span className="absolute -top-2.5 left-1/2 z-10 flex h-5 -translate-x-1/2 items-center gap-1 rounded-pill bg-bg/90 px-2 tracking-[0.06em] whitespace-nowrap text-gold-bright uppercase type-badge inset-ring inset-ring-gold">
-          <span aria-hidden="true">✦</span> Proposta dal tuo segno
-        </span>
+        <Pill
+          tone="outline"
+          icon={<Spark />}
+          className="absolute -top-2.5 left-1/2 z-10 -translate-x-1/2"
+        >
+          Proposta dal tuo segno
+        </Pill>
       )}
       <TilePanel
         as="div"
