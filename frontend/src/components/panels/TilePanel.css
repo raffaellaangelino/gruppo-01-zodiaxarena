@@ -1,0 +1,110 @@
+/* =====================================================================
+   Tessera (FOUNDATIONS §4): doppia riga d'oro con gli angoli a incavo ritagliati
+   in trasparenza (dietro l'angolo si vede lo sfondo). Generatore: gen_a.notch_frame.
+   Misure: incavo 14, filo interno a 6 dal bordo, filo esterno 2.
+   ===================================================================== */
+
+@layer components {
+  .tile-panel {
+    --tile-r: var(--za-notch-tile); /* 14 */
+    --tile-d: var(--za-notch-tile-inset); /* 6 */
+    --tile-e: 19.08px; /* √((r+d)² − d²): dove il filo interno incontra l'arco */
+    --tile-mask:
+      radial-gradient(circle at top left, #0000 var(--tile-r), #000 calc(var(--tile-r) + 0.5px)) top
+        left / 51% 51% no-repeat,
+      radial-gradient(circle at top right, #0000 var(--tile-r), #000 calc(var(--tile-r) + 0.5px))
+        top right / 51% 51% no-repeat,
+      radial-gradient(circle at bottom left, #0000 var(--tile-r), #000 calc(var(--tile-r) + 0.5px))
+        bottom left / 51% 51% no-repeat,
+      radial-gradient(circle at bottom right, #0000 var(--tile-r), #000 calc(var(--tile-r) + 0.5px))
+        bottom right / 51% 51% no-repeat;
+    position: relative;
+  }
+
+  .tile-panel__fill,
+  .tile-panel__content {
+    -webkit-mask: var(--tile-mask);
+    mask: var(--tile-mask);
+  }
+  .tile-panel__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--za-panel-fill);
+  }
+  .tile-panel__content {
+    position: relative;
+    height: 100%;
+  }
+
+  /* Filo esterno: 2 px, oro orizzontale sopra e sotto, verticale ai lati */
+  .tile-panel__edge {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .tile-panel__edge--top,
+  .tile-panel__edge--bottom {
+    left: var(--tile-r);
+    right: var(--tile-r);
+    height: var(--za-line-outer);
+    background: var(--za-gold-line-h);
+  }
+  .tile-panel__edge--top {
+    top: 0;
+  }
+  .tile-panel__edge--bottom {
+    bottom: 0;
+  }
+  .tile-panel__edge--left,
+  .tile-panel__edge--right {
+    top: var(--tile-r);
+    bottom: var(--tile-r);
+    width: var(--za-line-outer);
+    background: var(--za-gold-line-v);
+  }
+  .tile-panel__edge--left {
+    left: 0;
+  }
+  .tile-panel__edge--right {
+    right: 0;
+  }
+
+  /* Filo interno: 1 px, a 6 px dal bordo */
+  .tile-panel__thin {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    background: var(--za-line-thin);
+  }
+  .tile-panel__thin--top,
+  .tile-panel__thin--bottom {
+    left: var(--tile-e);
+    right: var(--tile-e);
+    height: var(--za-line-inner);
+  }
+  .tile-panel__thin--top {
+    top: var(--tile-d);
+  }
+  .tile-panel__thin--bottom {
+    bottom: var(--tile-d);
+  }
+  .tile-panel__thin--left,
+  .tile-panel__thin--right {
+    top: var(--tile-e);
+    bottom: var(--tile-e);
+    width: var(--za-line-inner);
+  }
+  .tile-panel__thin--left {
+    left: var(--tile-d);
+  }
+  .tile-panel__thin--right {
+    right: var(--tile-d);
+  }
+
+  .tile-panel__corner {
+    position: absolute;
+    z-index: 2;
+    overflow: visible;
+    pointer-events: none;
+  }
+}
