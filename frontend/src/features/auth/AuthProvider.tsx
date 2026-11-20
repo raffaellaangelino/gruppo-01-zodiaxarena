@@ -48,11 +48,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     queryClient.clear() // i dati del giocatore non restano in memoria per chi accede dopo
   }, [queryClient])
 
-  const login = useCallback(async (credentials: LoginCredentials) => {
-    const newToken = await loginRequest(credentials)
+  const startSession = useCallback((newToken: string) => {
     saveToken(newToken)
     setToken(newToken)
   }, [])
+
+  const login = useCallback(
+    async (credentials: LoginCredentials) => startSession(await loginRequest(credentials)),
+    [startSession],
+  )
 
   // Il client HTTP avvisa qui quando il backend rifiuta il token.
   useEffect(() => {
@@ -83,8 +87,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   )
 
   const value = useMemo<AuthContextValue>(
-    () => ({ token, isAuthenticated: token !== null, login, logout }),
-    [token, login, logout],
+    () => ({ token, isAuthenticated: token !== null, login, startSession, logout }),
+    [token, login, startSession, logout],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

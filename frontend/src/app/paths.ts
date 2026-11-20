@@ -2,6 +2,8 @@
 export const PATHS = {
   home: '/',
   login: '/accedi',
+  register: '/registrati',
+  welcomeFaction: '/benvenuto/fazione',
   guide: '/guida',
   privacy: '/privacy',
   collection: '/collezione',

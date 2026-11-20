@@ -1,12 +1,13 @@
+import { PATHS } from '@/app/paths'
 import { AuthLayout } from '@/components/layout/AuthLayout'
+import { AuthSwitchLink } from '@/features/auth/components/AuthSwitchLink'
 import { LoginForm } from '@/features/auth/components/LoginForm'
 
 /**
  * Pagina d'accesso (S02, tavole Accedi e Accedi-Errore).
  *
- * Rispetto alla tavola mancano, per ora, "Password dimenticata?" e "Non hai un account?
- * Registrati": il backend non ha il recupero della password e la registrazione non è ancora
- * nel frontend. Tornano quando le loro pagine esistono, per non avere collegamenti a vuoto.
+ * Rispetto alla tavola manca, per ora, "Password dimenticata?": il backend non ha il recupero
+ * della password. Torna quando la sua pagina esiste, per non avere collegamenti a vuoto.
  */
 export function LoginPage() {
   return (
@@ -18,6 +19,7 @@ export function LoginPage() {
           <p className="text-text-soft type-body">Il tuo cielo ti aspetta.</p>
         </header>
         <LoginForm />
+        <AuthSwitchLink question="Non hai un account?" label="Registrati" to={PATHS.register} />
       </div>
     </AuthLayout>
   )

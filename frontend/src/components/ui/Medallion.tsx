@@ -7,8 +7,9 @@ export interface MedallionProps {
   /**
    * `medallion`: disco blu notte con il doppio anello d'oro (Banda, Tessere).
    * `avatar`: anello più sottile, per il profilo nella barra.
+   * `large`: anello più spesso, per i medaglioni grandi in scena (il segno nella registrazione).
    */
-  variant?: 'medallion' | 'avatar'
+  variant?: 'medallion' | 'avatar' | 'large'
   /** Contenuto al centro: un'icona o uno stemma. */
   children: ReactNode
   className?: string
@@ -21,10 +22,11 @@ export function Medallion({
   children,
   className = '',
 }: MedallionProps) {
-  const look =
-    variant === 'medallion'
-      ? 'bg-(image:--za-medallion-fill) shadow-medallion'
-      : 'bg-medallion-core shadow-avatar'
+  const look = {
+    medallion: 'bg-(image:--za-medallion-fill) shadow-medallion',
+    large: 'bg-(image:--za-medallion-fill) shadow-medallion-l',
+    avatar: 'bg-medallion-core shadow-avatar',
+  }[variant]
   return (
     <span
       className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full ${look} ${className}`}

@@ -10,6 +10,11 @@ const KEYART_POSITION = '70% 30%'
 export interface AuthLayoutProps {
   /** Contenuto della colonna, centrato in verticale sotto il logo. */
   children: ReactNode
+  /**
+   * Contenuto della scena, a destra della colonna, sopra la key art (es. il segno che appare
+   * nella registrazione). Solo da tablet in su: su mobile la colonna occupa tutto lo schermo.
+   */
+  scene?: ReactNode
 }
 
 /**
@@ -18,9 +23,10 @@ export interface AuthLayoutProps {
  * in vetro con il logo al centro in alto. Il bordo destro della colonna è la barra di gioco
  * "girata": doppio filo d'oro con il fermaglio a metà altezza.
  *
- * Su mobile (tavola non ancora disegnata) la colonna occupa tutta la larghezza e il bordo sparisce.
+ * Su mobile (tavola non ancora disegnata) la colonna occupa tutta la larghezza, il bordo e la
+ * scena spariscono.
  */
-export function AuthLayout({ children }: AuthLayoutProps) {
+export function AuthLayout({ children, scene }: AuthLayoutProps) {
   return (
     <div className="relative min-h-dvh bg-scene-base">
       <img
@@ -32,6 +38,9 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         style={{ objectPosition: KEYART_POSITION }}
       />
       <div aria-hidden="true" className="fixed inset-0 bg-(image:--za-scene-veil-auth)" />
+      {scene && (
+        <div className="fixed inset-y-0 right-0 left-(--za-column-w) hidden md:block">{scene}</div>
+      )}
 
       <div className="relative flex min-h-dvh w-full flex-col bg-(image:--za-column-fill) px-4 py-10 backdrop-blur-glass md:w-(--za-column-w) md:px-14">
         <Logo height={52} className="self-center" />

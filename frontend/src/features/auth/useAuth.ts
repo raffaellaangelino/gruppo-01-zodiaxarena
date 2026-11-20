@@ -4,7 +4,7 @@ import { AuthContext, type AuthContextValue } from '@/features/auth/AuthContext'
 /**
  * Stato e azioni dell'autenticazione.
  *
- * @returns Token, stato della sessione, `login` e `logout`.
+ * @returns Token, stato della sessione, `login`, `startSession` e `logout`.
  * @throws {Error} Se usato fuori da `AuthProvider`.
  */
 export function useAuth(): AuthContextValue {

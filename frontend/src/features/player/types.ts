@@ -1,6 +1,9 @@
 import type { Faction, SignCode } from '@/domain/game'
 
-/** Passi dei primi passi con Ermes (tavole Benvenuto-*). */
+/**
+ * Passi dei primi passi con Ermes (tavole Benvenuto-*). Il backend per ora conosce solo
+ * `FACTION`; gli altri sono quelli del contratto e arriveranno con le loro pagine.
+ */
 export type OnboardingStep = 'FACTION' | 'FIRST_SKY' | 'PACKS' | 'DECK' | 'FIRST_CHALLENGE'
 
 /**

@@ -2,6 +2,7 @@ import { USE_MOCKS } from '@/config/env'
 import { request } from '@/lib/http'
 import { mockResponse } from '@/mocks/mockResponse'
 import { playerSummaryMock } from '@/mocks/player'
+import { toPlayerSummary, type PlayerDto } from '@/features/player/dto'
 import type { PlayerSummary } from '@/features/player/types'
 
 /**
@@ -13,5 +14,5 @@ import type { PlayerSummary } from '@/features/player/types'
  */
 export async function fetchPlayerSummary(signal?: AbortSignal): Promise<PlayerSummary> {
   if (USE_MOCKS) return mockResponse(playerSummaryMock(), signal)
-  return request<PlayerSummary>('/players/me', { signal })
+  return toPlayerSummary(await request<PlayerDto>('/players/me', { signal }))
 }

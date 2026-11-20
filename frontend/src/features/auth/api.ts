@@ -16,6 +16,7 @@ export async function loginRequest(
   const { token } = await request<AuthResponse>('/auth/login', {
     method: 'POST',
     body: credentials,
+    token: null,
     signal,
   })
   return token
