@@ -79,20 +79,22 @@ frontend/
     │   └── shell/        barre di gioco: GameBar (desktop), MobileHeader e MobileTabBar
     ├── features/         una cartella per funzione del gioco
     │   ├── auth/         accesso e sessione
+    │   ├── registration/ registrazione a tre passi (account, segno, conferma)
+    │   ├── onboarding/   primi passi con Ermes: scelta della Fazione
     │   ├── player/       riepilogo del giocatore (crediti, Fazione, contatori)
     │   └── home/         Home: scena, "Ti aspettano", Banda e Tessere
     ├── pages/            pagine che non appartengono a una funzione (segnaposto delle sezioni)
     ├── components/       componenti riusabili, senza logica di gioco
-    │   ├── ui/           GoldButton/GoldLink, TertiaryButton/TertiaryLink, TextField, Badge, Icon…
+    │   ├── ui/           GoldButton/GoldLink, SecondaryButton, TertiaryButton/TertiaryLink, TextField, SelectField, Checkbox, Badge, Icon…
     │   ├── panels/       TilePanel (Tessera), BandPanel (Banda)
-    │   ├── progress/     Constellation, Meridian, LoadingConstellation
-    │   ├── game/         CardFan, ElementEmblem
+    │   ├── progress/     Constellation, Meridian, LoadingConstellation, StepIndicator
+    │   ├── game/         CardFan, ElementEmblem, SignMedallion
     │   ├── layout/       AuthLayout
     │   ├── brand/        Logo
     │   └── ornaments/    GoldClasp
-    ├── hooks/            hook generici (useElementSize, useMediaQuery)
+    ├── hooks/            hook generici (useElementSize, useMediaQuery, useDebouncedValue)
     ├── lib/              funzioni senza React: http, jwt, validazione, plurali, geometria
-    ├── domain/           tipi del gioco condivisi (elementi, carte, Fazione)
+    ├── domain/           tipi, nomi italiani e regole fisse del gioco (segni, elementi, Dei)
     ├── config/           variabili d'ambiente e breakpoint
     ├── mocks/            dati di esempio, finché il backend non ha le API
     ├── assets/           immagini (WebP), carte, stemmi, sprite delle icone
@@ -125,6 +127,9 @@ Un file, una responsabilità: tutto ciò che si riusa ha il suo file.
 - Ogni funzione definisce le sue richieste in `queries.ts` (chiave della cache e funzione) e un hook per leggerle (`usePlayerSummary`, `useHomeSummary`). Gli hook usano la Suspense di TanStack Query: la pagina riceve i dati già pronti e non gestisce lo stato "in arrivo".
 - Gli endpoint, le richieste e le risposte sono nel **contratto API**, sul Drive del progetto: [Contratto API · frontend e backend](https://docs.google.com/document/d/1uxGZ1eYt0agcypYPsjD7N_ohplPN1JSrCoXyPCYXKBU/edit). I tipi del frontend hanno le stesse forme, e ogni `api.ts` chiama già l'endpoint del contratto.
 - Finché il backend non li ha, le risposte arrivano dai dati di esempio di `src/mocks/`, attivi salvo `VITE_USE_MOCKS=false`; mentre sono attivi compare l'etichetta **"Dati di esempio"**.
+- **Due modi di avviare:** `npm run dev` usa i dati di esempio (si lavora anche senza backend: il giocatore è sempre "Lyra", Fazione Efesto); `npm run dev:backend` usa il backend vero per tutto quello che esiste (`.env.backend`, funziona anche su Windows). Per provare registrazione e scelta della Fazione serve il secondo.
+- Le risposte del backend passano da un traduttore (es. `features/player/dto.ts`) prima di arrivare alle pagine: se il backend cambia un nome (`nickName`, `god`…) si corregge in un punto solo.
+- `GET /api/home` non esiste ancora: la Home usa i dati di esempio anche con `VITE_USE_MOCKS=false` (`HOME_API_AVAILABLE` in `config/env.ts`), così il resto si prova con il backend vero.
 - I codici del gioco arrivano come nel contratto (`FIRE`, `EFESTO`, `LEONE`…); i nomi italiani stanno in `domain/labels.ts`. Le date arrivano in ISO 8601 e diventano parole ("ricevuta oggi", "tra 17 g") con `lib/dates.ts`.
 - All'uscita la cache si svuota: i dati di un giocatore non restano per chi accede dopo.
 
@@ -146,6 +151,7 @@ Un file, una responsabilità: tutto ciò che si riusa ha il suo file.
 - Il token JWT dell'accesso sta in `localStorage` (`features/auth/tokenStorage.ts`): si resta connessi anche chiudendo il browser, finché il token non scade.
 - La sessione si chiude da sola alla scadenza del token, quando il backend risponde 401 e quando si esce da un'altra scheda.
 - Le pagine riservate stanno sotto `RequireAuth`: senza sessione portano all'accesso e poi riportano alla pagina richiesta.
+- La registrazione apre la sessione con il token che restituisce il backend. Chi ha appena creato l'account (o non ha ancora scelto) passa da `OnboardingGate` alla scelta della Fazione, poi entra nel gioco.
 
 ### Copie dal design system
 

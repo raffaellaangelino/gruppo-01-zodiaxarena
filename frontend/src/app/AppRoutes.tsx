@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router'
+import { Navigate, Outlet, Route, Routes } from 'react-router'
 import { BootGate } from '@/app/boot/BootGate'
 import { PATHS } from '@/app/paths'
 import { AppShell } from '@/app/shell/AppShell'
@@ -9,6 +9,9 @@ import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { HomePage } from '@/features/home/pages/HomePage'
 import { GuidePage } from '@/features/guide/pages/GuidePage'
 import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
+import { OnboardingGate } from '@/features/onboarding/components/OnboardingGate'
+import { FactionPage } from '@/features/onboarding/pages/FactionPage'
+import { RegisterPage } from '@/features/registration/pages/RegisterPage'
 import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 
 /** Sezioni non ancora costruite: tengono il posto finché arriva la loro issue. */
@@ -26,8 +29,9 @@ const PLACEHOLDERS: { path: string; title: string }[] = [
 
 /**
  * Mappa delle pagine.
- * - Solo per chi non ha una sessione: accesso.
- * - Riservate: prima `BootGate` carica i dati essenziali, poi il guscio con le barre, Home e sezioni.
+ * - Solo per chi non ha una sessione: accesso e registrazione.
+ * - Riservate: prima `BootGate` carica i dati essenziali. Chi deve ancora scegliere la Fazione
+ *   va alla scelta (`OnboardingGate`); gli altri entrano nel guscio con le barre, Home e sezioni.
  * - Percorso sconosciuto: alla Home (la pagina 404 del design arriverà con gli stati di sistema).
  */
 export function AppRoutes() {
@@ -36,28 +40,34 @@ export function AppRoutes() {
       <Route path={PATHS.privacy} element={<PrivacyPage />} />
       <Route element={<GuestOnly />}>
         <Route path={PATHS.login} element={<LoginPage />} />
+        <Route path={PATHS.register} element={<RegisterPage />} />
       </Route>
       <Route element={<RequireAuth />}>
         <Route
           element={
             <BootGate>
-              <AppShell />
+              <Outlet />
             </BootGate>
           }
         >
-          <Route path={PATHS.home} element={<HomePage />} />
-          <Route path={PATHS.guide} element={<GuidePage />} />
-          {PLACEHOLDERS.map(({ path, title }) => (
-            <Route key={path} path={path} element={<SectionPlaceholder title={title} />} />
-          ))}
-          <Route
-            path={PATHS.profile}
-            element={
-              <SectionPlaceholder title="Profilo">
-                <LogoutButton />
-              </SectionPlaceholder>
-            }
-          />
+          <Route path={PATHS.welcomeFaction} element={<FactionPage />} />
+          <Route element={<OnboardingGate />}>
+            <Route element={<AppShell />}>
+              <Route path={PATHS.home} element={<HomePage />} />
+              <Route path={PATHS.guide} element={<GuidePage />} />
+              {PLACEHOLDERS.map(({ path, title }) => (
+                <Route key={path} path={path} element={<SectionPlaceholder title={title} />} />
+              ))}
+              <Route
+                path={PATHS.profile}
+                element={
+                  <SectionPlaceholder title="Profilo">
+                    <LogoutButton />
+                  </SectionPlaceholder>
+                }
+              />
+            </Route>
+          </Route>
         </Route>
       </Route>
       <Route path="*" element={<Navigate to={PATHS.home} replace />} />
