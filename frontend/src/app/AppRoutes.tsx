@@ -1,4 +1,5 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router'
+import { ArenaLayout } from '@/app/arena/ArenaLayout'
 import { BootGate } from '@/app/boot/BootGate'
 import { PATHS } from '@/app/paths'
 import { AppShell } from '@/app/shell/AppShell'
@@ -11,6 +12,8 @@ import { ChallengesSentPage } from '@/features/challenges/pages/ChallengesSentPa
 import { ChallengesToPlayPage } from '@/features/challenges/pages/ChallengesToPlayPage'
 import { NewChallengePage } from '@/features/challenges/pages/NewChallengePage'
 import { PlayChallengePage } from '@/features/challenges/pages/PlayChallengePage'
+import { MatchReplayPage } from '@/features/matches/pages/MatchReplayPage'
+import { MatchVerdictPage } from '@/features/matches/pages/MatchVerdictPage'
 import { HomePage } from '@/features/home/pages/HomePage'
 import { GuidePage } from '@/features/guide/pages/GuidePage'
 import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
@@ -23,7 +26,6 @@ import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 const PLACEHOLDERS: { path: string; title: string }[] = [
   { path: PATHS.collection, title: 'Collezione' },
   { path: PATHS.deck, title: 'Il tuo Cielo' },
-  { path: PATHS.match, title: 'Partita' },
   { path: PATHS.trades, title: 'Scambi' },
   { path: PATHS.shop, title: 'Negozio' },
   { path: PATHS.missions, title: 'Missioni' },
@@ -57,7 +59,11 @@ export function AppRoutes() {
           <Route path={PATHS.welcomeFaction} element={<FactionPage />} />
           <Route element={<OnboardingGate />}>
             {/* Arena a schermo intero: fuori dal guscio con le barre */}
-            <Route path={PATHS.playChallenge} element={<PlayChallengePage />} />
+            <Route element={<ArenaLayout />}>
+              <Route path={PATHS.playChallenge} element={<PlayChallengePage />} />
+              <Route path={PATHS.match} element={<MatchReplayPage />} />
+              <Route path={PATHS.matchVerdict} element={<MatchVerdictPage />} />
+            </Route>
             <Route element={<AppShell />}>
               <Route path={PATHS.home} element={<HomePage />} />
               <Route path={PATHS.guide} element={<GuidePage />} />

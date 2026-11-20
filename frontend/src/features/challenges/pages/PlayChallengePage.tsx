@@ -4,10 +4,10 @@ import moireUrl from '@/assets/images/moire.webp'
 import { PATHS } from '@/app/paths'
 import { ArenaBackdrop } from '@/components/arena/ArenaBackdrop'
 import { ArenaPlayer } from '@/components/arena/ArenaPlayer'
+import { ArenaTopBar } from '@/components/arena/ArenaTopBar'
 import { WaitingOrbit } from '@/components/arena/WaitingOrbit'
 import { FormAlert } from '@/components/ui/FormAlert'
 import { GoldButton, GoldLink } from '@/components/ui/GoldButton'
-import { Icon } from '@/components/ui/Icon'
 import { useAcceptChallenge } from '@/features/challenges/hooks/useAcceptChallenge'
 import { ACCEPT_COPY } from '@/features/challenges/messages'
 import { useChallenges } from '@/features/challenges/queries'
@@ -37,13 +37,7 @@ export function PlayChallengePage() {
     <main className="relative flex min-h-dvh flex-col items-center justify-center gap-8 overflow-hidden px-4 pt-20 pb-10 md:block md:p-0">
       <title>Cloto fila la partita · Zodiax Arena</title>
       <ArenaBackdrop />
-      <Link
-        to={PATHS.challenges}
-        className="absolute top-6 left-4 z-10 flex items-center gap-2 text-gold-bright no-underline type-meta-strong md:left-8"
-      >
-        <Icon name="indietro" size={16} />
-        {ACCEPT_COPY.exit}
-      </Link>
+      <ArenaTopBar backTo={PATHS.challenges} backLabel={ACCEPT_COPY.exit} />
 
       <ArenaPlayer
         nickname={player.nickname}

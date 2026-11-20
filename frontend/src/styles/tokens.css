@@ -206,6 +206,9 @@
   --za-scene-veil-reveal: radial-gradient(ellipse 28.75rem 23.75rem at 50% 52%, rgba(6,9,22,0.78), rgba(6,9,22,0.25) 100%); /* registrazione: velo dietro il segno che appare nella scena */
   --za-arena-medallion-ring: 0 0 0 2px var(--za-gold), 0 0 0 7px rgba(11,14,53,0.9), 0 0 0 8px rgba(232,176,75,0.5), 0 18px 24px -10px rgba(255,214,107,0.55); /* giocatore sulla pozza di luce (gen_ar.standing) */
   --za-arena-veil: rgba(6,9,22,0.2); /* arena dietro l'attesa e il Verdetto (gen_ar.arena dim) */
+  --za-arena-glow: radial-gradient(circle at 50% 28%, rgba(255,214,107,0.32), rgba(255,214,107,0.08) 32%, rgba(255,214,107,0) 60%); /* luce dal trono nella vittoria (gen_ar.arena light) */
+  --za-verdict-thread: linear-gradient(90deg, rgba(232,176,75,0), rgba(232,176,75,0.7) 12%, rgba(232,176,75,0.7) 88%, rgba(232,176,75,0)); /* filo dei momenti decisivi del Verdetto */
+  --za-verdict-loss: #C9D3F0; /* parola "Sconfitta": argento freddo, non rosso */
   --za-btn-h-hero: 3.5rem; --za-btn-h: 2.75rem; --za-btn-h-tertiary: 2.25rem; --za-btn-icon: 2.75rem; /* 56 · 44 · 36 · 44 */
 
   /* ---------- Profondità ---------- */

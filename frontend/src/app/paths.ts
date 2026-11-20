@@ -15,6 +15,8 @@ export const PATHS = {
   playChallenge: '/sfide/:challengeId/gioca',
   /** Modello del percorso: per un link usare {@link matchPath}. */
   match: '/partite/:matchId',
+  /** Modello del percorso: per un link usare {@link matchVerdictPath}. */
+  matchVerdict: '/partite/:matchId/verdetto',
   trades: '/scambi',
   shop: '/negozio',
   missions: '/missioni',
@@ -51,4 +53,14 @@ export function playChallengePath(challengeId: number): string {
  */
 export function matchPath(matchId: number): string {
   return `/partite/${matchId}`
+}
+
+/**
+ * Il Verdetto di una partita.
+ *
+ * @param matchId Partita.
+ * @returns Il percorso.
+ */
+export function matchVerdictPath(matchId: number): string {
+  return `/partite/${matchId}/verdetto`
 }
