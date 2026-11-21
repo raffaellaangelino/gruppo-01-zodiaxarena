@@ -72,6 +72,9 @@ function SkyEditor({ deckId, faction }: { deckId: number; faction: Faction | nul
   const [selected, setSelected] = useState<DeckSlot | null>(null)
   const [pickerElement, setPickerElement] = useState<Element | null>(null)
   const isDesktop = useMediaQuery(MEDIA.desktop)
+  // Su desktop la colonna di destra non resta vuota: senza una scelta è aperto il Sole, come nella
+  // tavola Collezione-Cielo. Su telefono e tablet la finestra si apre solo toccando una casella.
+  const active = selected ?? (isDesktop ? 'SOLE' : null)
 
   const dirty = name.trim() !== saved.name || !sameSlots(slots, saved.slots)
   const warnings = skyWarnings(slots, catalog)
@@ -98,18 +101,18 @@ function SkyEditor({ deckId, faction }: { deckId: number; faction: Faction | nul
   }
 
   /** Il selettore della casella aperta; nella finestra, scelta la carta, la finestra si chiude. */
-  const picker = (inSheet: boolean) => (
+  const picker = (inSheet: boolean, slot: DeckSlot | null) => (
     <SkyPicker
-      key={`${selected}-${pickerElement}`}
-      slot={selected}
+      key={`${slot}-${pickerElement}`}
+      slot={slot}
       slots={slots}
       catalog={catalog}
       owned={owned}
       initialElement={pickerElement}
       inSheet={inSheet}
       onPick={(cardId) => {
-        if (!selected) return
-        setSlots((s) => ({ ...s, [selected]: cardId }))
+        if (!slot) return
+        setSlots((s) => ({ ...s, [slot]: cardId }))
         if (inSheet) setSelected(null)
       }}
     />
@@ -216,7 +219,7 @@ function SkyEditor({ deckId, faction }: { deckId: number; faction: Faction | nul
               <SkySlotTile
                 slot={slot}
                 card={cards[slot]}
-                selected={selected === slot}
+                selected={active === slot}
                 ascendantTargets={slot === 'ASCENDANT' ? ascendantTargets : undefined}
                 onSelect={() => open(slot)}
               />
@@ -232,7 +235,7 @@ function SkyEditor({ deckId, faction }: { deckId: number; faction: Faction | nul
         // L'altezza la dà la colonna di sinistra: il pannello finisce con l'ultimo blocco
         // (Equilibrio degli elementi) e la lista scorre dentro, senza allungare la pagina.
         <div className="relative min-h-[28rem]">
-          <div className="absolute inset-0">{picker(false)}</div>
+          <div className="absolute inset-0">{picker(false, active)}</div>
         </div>
       ) : (
         selected && (
@@ -249,7 +252,7 @@ function SkyEditor({ deckId, faction }: { deckId: number; faction: Faction | nul
             onClose={() => setSelected(null)}
             className="max-w-[36rem]"
           >
-            {picker(true)}
+            {picker(true, selected)}
           </Dialog>
         )
       )}
