@@ -64,7 +64,7 @@ export function SignReveal({ preview, variant }: SignRevealProps) {
       >
         <SignMedallion sign={sign} size="l" />
         <p className="type-eyebrow tracking-[0.12em] text-gold uppercase">Il tuo segno</p>
-        <h2 className="text-text type-display">{title}</h2>
+        <h2 className="type-display text-text">{title}</h2>
         <p className="flex items-center gap-2 text-text-soft type-body">
           <ElementEmblem element={element} size={24} />
           {ELEMENT_LABELS[element]} · ti proponiamo

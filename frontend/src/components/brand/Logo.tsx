@@ -1,7 +1,7 @@
 import logoUrl from '@/assets/images/logo.webp'
 
-/** Proporzione dell'immagine del logo (536 × 160). */
-const LOGO_RATIO = 536 / 160
+/** Proporzione dell'immagine del logo (400 × 185). */
+const LOGO_RATIO = 400 / 185
 
 /** Proprietà di {@link Logo}. */
 export interface LogoProps {
@@ -12,8 +12,8 @@ export interface LogoProps {
 }
 
 /**
- * Logo di Zodiax Arena (concept Flow rifinito; il definitivo vettoriale è la Q-16).
- * È solo marchio: non è cliccabile.
+ * Logo compatto del team (D-030), per intestazioni e barre. Il simbolo dedicato sotto i 250 px
+ * non c'è ancora (Q-43): finché manca si usa il compatto. È solo marchio: non è cliccabile.
  */
 export function Logo({ height, className }: LogoProps) {
   return (

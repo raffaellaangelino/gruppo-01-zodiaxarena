@@ -1,7 +1,7 @@
-import altezze from '@/assets/factions/altezze.webp'
-import campi from '@/assets/factions/campi.webp'
-import fucina from '@/assets/factions/fucina.webp'
-import pelago from '@/assets/factions/pelago.webp'
+import demetra from '@/assets/factions/dio-demetra.webp'
+import efesto from '@/assets/factions/dio-efesto.webp'
+import era from '@/assets/factions/dio-era.webp'
+import poseidone from '@/assets/factions/dio-poseidone.webp'
 import { ElementEmblem } from '@/components/game/ElementEmblem'
 import { TilePanel } from '@/components/panels/TilePanel'
 import { Medallion } from '@/components/ui/Medallion'
@@ -11,12 +11,12 @@ import type { GodCode } from '@/domain/game'
 import { ELEMENT_LABELS, GOD_LABELS, GOD_REALMS, SIGN_GLYPHS, SIGN_LABELS } from '@/domain/labels'
 import { GOD_ELEMENT, signsOf } from '@/domain/rules'
 
-/** Il quarto dell'Eclittica di ogni Dio (arte del team, ritagliata per le Fazioni). */
-const REALM_ART: Record<GodCode, string> = {
-  EFESTO: fucina,
-  POSEIDONE: pelago,
-  DEMETRA: campi,
-  ERA: altezze,
+/** Il ritratto di ogni Dio, dalla sua carta del team (D-030). */
+const GOD_PORTRAITS: Record<GodCode, string> = {
+  EFESTO: efesto,
+  POSEIDONE: poseidone,
+  DEMETRA: demetra,
+  ERA: era,
 }
 
 /** Proprietà di {@link GodCard}. */
@@ -32,7 +32,7 @@ export interface GodCardProps {
 }
 
 /**
- * Una Fazione da scegliere (tavola Benvenuto-Fazione): Tessera con il paesaggio del regno,
+ * Una Fazione da scegliere (tavola Benvenuto-Fazione): Tessera con il ritratto del Dio,
  * lo stemma dell'elemento, il Dio, i suoi tre segni e il potere. È un'opzione di una scelta
  * singola: un `radio` vero, nascosto, così frecce, Tab e screen reader funzionano da soli.
  * Scelta: alone d'oro attorno alla Tessera.
@@ -71,8 +71,11 @@ export function GodCard({ god, name, selected, proposed, disabled, onSelect }: G
         className="rounded-sm flex-1 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-gold-bright"
       >
         <div className="flex h-full flex-col">
-          <div className="relative mx-2 mt-2 h-24 overflow-hidden rounded-[3px] bg-medallion-core lg:h-[8.875rem]">
-            <img src={REALM_ART[god]} alt="" className="size-full object-cover" />
+          {/* Volto e busto del Dio senza la cornice della carta (gen_pf.GOD_CROP); su mobile la striscia è più bassa, quindi il taglio sale */}
+          <div
+            className="relative mx-2 mt-2 h-24 overflow-hidden rounded-[3px] bg-medallion-core bg-size-[112%_auto] bg-position-[50%_12%] bg-no-repeat lg:h-[8.875rem] lg:bg-position-[50%_24%]"
+            style={{ backgroundImage: `url(${GOD_PORTRAITS[god]})` }}
+          >
             <span
               aria-hidden="true"
               className="absolute inset-0 bg-linear-to-b from-surface/0 from-45% to-surface/95"
