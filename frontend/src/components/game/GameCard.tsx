@@ -7,8 +7,11 @@ import { Spark } from '@/components/ui/Spark'
 import { plural } from '@/lib/plural'
 import './GameCard.css'
 
-/** Taglie della carta (COMPONENTS, Carta): larghezza in px; l'altezza segue il 5:7. */
-const SIZES = { xs: 40, m: 132, l: 260 } as const
+/**
+ * Taglie della carta (COMPONENTS, Carta): larghezza in px; l'altezza segue il 5:7.
+ * `fluid` riempie la colonna di una griglia (album della Collezione) con i segni della M.
+ */
+const SIZES = { xs: 40, m: 132, l: 260, fluid: 132 } as const
 
 /** Etichetta di contesto al centro in basso (es. "Nel mazzo", "Non scambiabile"). */
 export interface CardTag {
@@ -24,11 +27,14 @@ export interface GameCardProps {
   label: string
   /**
    * `xs` 40: solo immagine (ventaglio, cronaca) · `m` 132: Collezione, selettore, scambi ·
-   * `l` 260: dettaglio e rivelazioni. Sotto 120 i dati della carta vanno ripetuti fuori.
+   * `l` 260: dettaglio e rivelazioni · `fluid`: larga quanto la colonna (album). Sotto 120 i
+   * dati della carta vanno ripetuti fuori.
    */
   size?: keyof typeof SIZES
   /** Non posseduta: l'illustrazione vera, spenta, con "Mancante". */
   missing?: boolean
+  /** Testo sulla carta mancante al posto di "Mancante" (album: il numero di catalogo, "003"). */
+  missingLabel?: string
   /** Mai vista: pillola d'oro "Nuova" sopra il bordo, al centro. */
   isNew?: boolean
   /** Copie possedute: da 2 in su compare "×N" sul bordo destro. */
@@ -57,6 +63,7 @@ export function GameCard({
   label,
   size = 'm',
   missing = false,
+  missingLabel = 'Mancante',
   isNew = false,
   copies = 1,
   tag,
@@ -90,8 +97,8 @@ export function GameCard({
       {/* I segni ripetono gli stati già detti nel nome accessibile: per gli screen reader si nascondono */}
       <span aria-hidden="true" className="contents">
         {withMarks && missing && (
-          <Pill tone="muted" className="absolute bottom-2.5 left-1/2 -translate-x-1/2">
-            Mancante
+          <Pill tone="muted" className="absolute bottom-2.5 left-1/2 -translate-x-1/2 tabular-nums">
+            {missingLabel}
           </Pill>
         )}
         {withMarks && isNew && (
@@ -140,14 +147,14 @@ export function GameCard({
         aria-label={accessibleName}
         onClick={onSelect}
         className={`${classes} game-card--interactive`}
-        style={{ width }}
+        style={{ width: size === 'fluid' ? '100%' : width }}
       >
         {content}
       </button>
     )
   }
   return (
-    <span className={classes} style={{ width }}>
+    <span className={classes} style={{ width: size === 'fluid' ? '100%' : width }}>
       {content}
     </span>
   )
