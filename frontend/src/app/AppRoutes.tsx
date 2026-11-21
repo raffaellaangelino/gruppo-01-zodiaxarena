@@ -20,11 +20,11 @@ import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
 import { OnboardingGate } from '@/features/onboarding/components/OnboardingGate'
 import { FactionPage } from '@/features/onboarding/pages/FactionPage'
 import { RegisterPage } from '@/features/registration/pages/RegisterPage'
+import { CollectionPage } from '@/features/collection/pages/CollectionPage'
 import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 
 /** Sezioni non ancora costruite: tengono il posto finché arriva la loro issue. */
 const PLACEHOLDERS: { path: string; title: string }[] = [
-  { path: PATHS.collection, title: 'Collezione' },
   { path: PATHS.deck, title: 'Il tuo Cielo' },
   { path: PATHS.trades, title: 'Scambi' },
   { path: PATHS.shop, title: 'Negozio' },
@@ -67,6 +67,7 @@ export function AppRoutes() {
             <Route element={<AppShell />}>
               <Route path={PATHS.home} element={<HomePage />} />
               <Route path={PATHS.guide} element={<GuidePage />} />
+              <Route path={PATHS.collection} element={<CollectionPage />} />
               <Route element={<ChallengesLayout />}>
                 <Route path={PATHS.challenges} element={<ChallengesToPlayPage />} />
                 <Route path={PATHS.challengesSent} element={<ChallengesSentPage />} />

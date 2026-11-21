@@ -40,6 +40,18 @@ export const ELEMENT_GOD: Record<Element, GodCode> = {
   AIR: 'ERA',
 }
 
+/**
+ * Ciclo degli elementi (regolamento, "Ciclo delle fazioni"): l'Acqua spegne il Fuoco, il Fuoco
+ * cuoce la Terra, la Terra ferma i venti, i venti sollevano le onde. Fuoco–Aria e Acqua–Terra
+ * sono coppie neutre. Chi batte l'altro prende +1 ATK (lo calcola l'engine).
+ */
+export const ELEMENT_BEATS: Record<Element, Element> = {
+  WATER: 'FIRE',
+  FIRE: 'EARTH',
+  EARTH: 'AIR',
+  AIR: 'WATER',
+}
+
 /** I Dei nell'ordine delle tavole (Fuoco, Acqua, Terra, Aria). */
 export const GODS: readonly GodCode[] = ['EFESTO', 'POSEIDONE', 'DEMETRA', 'ERA']
 
