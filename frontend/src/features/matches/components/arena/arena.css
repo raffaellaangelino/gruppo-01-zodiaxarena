@@ -8,9 +8,6 @@
   .arena-card {
     flex: none;
     transform-origin: 50% 100%;
-    transition:
-      transform var(--za-dur-base) var(--za-ease-out),
-      filter var(--za-dur-base) var(--za-ease-out);
   }
 
   .arena-card__image {
@@ -36,24 +33,6 @@
     box-shadow: none;
   }
 
-  /* Ingresso: la carta sale sulla pozza */
-  .arena-card:not(.arena-card--fallen) {
-    animation: arena-card-enter var(--za-dur-slow) var(--za-ease-out) both;
-  }
-
-  @keyframes arena-card-enter {
-    from {
-      opacity: 0;
-      transform: translateY(1.5rem) scale(0.96);
-    }
-  }
-
-  /* Riduzione del movimento: niente voli, solo i cambi di stato */
-  @media (prefers-reduced-motion: reduce) {
-    .arena-card,
-    .arena-card:not(.arena-card--fallen) {
-      animation: none;
-      transition: none;
-    }
-  }
+  /* I movimenti (ingresso, colpo, caduta, danno, PV) partono da `useKeyframes`, con i tempi di
+     features/matches/motion.ts: qui solo gli stati. Con "riduci movimento" restano solo gli stati. */
 }

@@ -62,6 +62,22 @@ export interface TextSegment {
 /** Tipo di momento: ingresso, vantaggio del round, colpo simultaneo, fine. */
 export type StepKind = 'enter' | 'advantage' | 'clash' | 'end'
 
+/** Cosa cambia in un momento, per le animazioni (lo stato resta in `ReplayStep`). */
+export interface StepChange {
+  /** Chi entra (ingresso) o chi prende il vantaggio. */
+  actor: MatchSide | null
+  /** DEF prima e dopo il colpo, per lato (solo nel colpo simultaneo). */
+  hits: Record<MatchSide, { before: number; after: number; amount: number } | null>
+  /** Chi cade in questo momento. */
+  fell: Record<MatchSide, boolean>
+}
+
+const NO_CHANGE: StepChange = {
+  actor: null,
+  hits: { A: null, B: null },
+  fell: { A: false, B: false },
+}
+
 /** Un momento del Racconto, con lo stato completo dell'arena. */
 export interface ReplayStep {
   kind: StepKind
@@ -76,6 +92,7 @@ export interface ReplayStep {
   advantage: Advantage | null
   /** La frase della Cronaca. */
   text: TextSegment[]
+  change: StepChange
 }
 
 /** PV iniziali (regolamento: 10 per giocatore). Si usano solo se il log non ha round. */
@@ -192,8 +209,12 @@ export function buildReplay(match: Match): ReplayStep[] {
     if (index < 0) return
     tokens = { ...tokens, [side]: tokens[side].map((t, i) => (i === index ? to : t)) }
   }
-  const push = (kind: StepKind, text: TextSegment[], hpLost = { A: 0, B: 0 }) =>
-    steps.push({ kind, turn, round, hp, hpLost, creatures, tokens, advantage, text })
+  const push = (
+    kind: StepKind,
+    text: TextSegment[],
+    hpLost = { A: 0, B: 0 },
+    change: StepChange = NO_CHANGE,
+  ) => steps.push({ kind, turn, round, hp, hpLost, creatures, tokens, advantage, text, change })
 
   const { events } = match
   let i = 0
@@ -223,7 +244,10 @@ export function buildReplay(match: Match): ReplayStep[] {
         },
       }
       mark(event.side, event.card, 'left', 'inPlay')
-      push('enter', enterText(event, nickname(event.side)))
+      push('enter', enterText(event, nickname(event.side)), undefined, {
+        ...NO_CHANGE,
+        actor: event.side,
+      })
       i += 1
       continue
     }
@@ -263,11 +287,16 @@ export function buildReplay(match: Match): ReplayStep[] {
     const advantageKey = advantage ? `${advantage.side}:${advantage.card.name}` : null
     if (advantage && advantageKey !== announced) {
       announced = advantageKey
-      push('advantage', [
-        {
-          text: `${capitalize(ELEMENT_WITH_ARTICLE[advantage.winner])} batte ${ELEMENT_WITH_ARTICLE[advantage.loser]}: ${signed(advantage.amount)} ATK a ${advantage.card.name}.`,
-        },
-      ])
+      push(
+        'advantage',
+        [
+          {
+            text: `${capitalize(ELEMENT_WITH_ARTICLE[advantage.winner])} batte ${ELEMENT_WITH_ARTICLE[advantage.loser]}: ${signed(advantage.amount)} ATK a ${advantage.card.name}.`,
+          },
+        ],
+        undefined,
+        { ...NO_CHANGE, actor: advantage.side },
+      )
     }
 
     if (attacks.length === 0 && damages.length === 0) continue
@@ -332,7 +361,15 @@ export function buildReplay(match: Match): ReplayStep[] {
         tone: 'danger',
       })
     }
-    push('clash', text, hpLost)
+    const hitOf = (side: MatchSide) => {
+      const damage = damages.find((d) => d.side === side)
+      return damage ? { before: damage.before, after: damage.after, amount: damage.applied } : null
+    }
+    push('clash', text, hpLost, {
+      actor: null,
+      hits: { A: hitOf('A'), B: hitOf('B') },
+      fell: { A: defeats.some((d) => d.side === 'A'), B: defeats.some((d) => d.side === 'B') },
+    })
     advantage = null
     if (defeats.length > 0) newTurn = true
   }

@@ -50,7 +50,11 @@ function MatchVerdict({ match }: { match: Match }) {
       <ArenaTopBar
         backTo={PATHS.challenges}
         backLabel={MATCH_COPY.back}
-        action={<SecondaryLink to={matchPath(match.id)}>{MATCH_COPY.replay}</SecondaryLink>}
+        action={
+          <SecondaryLink to={matchPath(match.id)} replace>
+            {MATCH_COPY.replay}
+          </SecondaryLink>
+        }
       />
 
       <header className="flex flex-col items-center gap-3 text-center text-shadow-scene md:absolute md:inset-x-0 md:top-[11.5%]">

@@ -1,4 +1,7 @@
+import { useRef } from 'react'
+import { useKeyframes } from '@/features/matches/hooks/useReplayMotion'
 import { MATCH_COPY } from '@/features/matches/messages'
+import { EASE_OUT, MOTION } from '@/features/matches/motion'
 
 const COPY = MATCH_COPY.arena
 
@@ -12,6 +15,8 @@ export interface RoundTrackProps {
   round: number
   total: number
   onSeekRound: (round: number) => void
+  /** Fine della partita: Atropo taglia il filo (un lampo sulla stella corrente). */
+  cut?: boolean
 }
 
 /** Stella a quattro punte. */
@@ -25,12 +30,21 @@ function starPath(cx: number, r: number): string {
  * accese quelle raccontate, la corrente più grande con il turno sopra, spente le prossime.
  * Ogni stella porta a quel round. Con tanti round le stelle si stringono, la linea no.
  */
-export function RoundTrack({ turn, round, total, onSeekRound }: RoundTrackProps) {
+export function RoundTrack({ turn, round, total, onSeekRound, cut = false }: RoundTrackProps) {
+  const cutRef = useRef<SVGCircleElement>(null)
   const rounds = Math.max(total, 1)
   const gap = rounds > 1 ? Math.min(GAP, MAX_WIDTH / (rounds - 1)) : 0
   const width = gap * (rounds - 1)
   const nowX = Math.max(0, round - 1) * gap
   const hit = Math.max(gap, 16)
+  useKeyframes(
+    cutRef,
+    [
+      { transform: 'scale(0.4)', opacity: 1 },
+      { transform: 'scale(3)', opacity: 0 },
+    ],
+    { run: cut, duration: MOTION.end.cut, easing: EASE_OUT },
+  )
 
   return (
     <nav
@@ -63,6 +77,17 @@ export function RoundTrack({ turn, round, total, onSeekRound }: RoundTrackProps)
           strokeDasharray="2 4"
         />
         <circle cx={nowX} cy="0" r="16" fill="rgba(255,214,107,0.18)" />
+        <circle
+          ref={cutRef}
+          cx={nowX}
+          cy="0"
+          r="10"
+          fill="none"
+          stroke="var(--za-clasp-light)"
+          strokeWidth="1.5"
+          opacity="0"
+          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
+        />
         {Array.from({ length: rounds }, (_, i) => (
           <path
             key={i}

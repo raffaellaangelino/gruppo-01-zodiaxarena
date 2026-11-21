@@ -15,11 +15,29 @@ export interface ReplayControlsProps {
 
 /**
  * Comandi del Racconto (tavola Sfide-Rotolo): evento precedente, riproduci o pausa (d'oro, il
- * principale), evento successivo e la velocità. Alla fine il pulsante principale riparte da capo.
+ * principale), evento successivo e la velocità. Alla fine il pulsante principale riparte da capo;
+ * se si sta per passare da soli al Verdetto, prima ferma il passaggio.
  */
 export function ReplayControls({ controls }: ReplayControlsProps) {
-  const { playing, atStart, atEnd, speed, previous, next, togglePlay, toggleSpeed } = controls
-  const mainLabel = atEnd ? COPY.restart : playing ? COPY.pause : COPY.play
+  const {
+    playing,
+    atStart,
+    atEnd,
+    awaitingVerdict,
+    speed,
+    previous,
+    next,
+    togglePlay,
+    toggleSpeed,
+  } = controls
+  // In attesa del Verdetto il pulsante principale ferma il passaggio: "Resta nel Rotolo".
+  const mainLabel = awaitingVerdict
+    ? COPY.stay
+    : atEnd
+      ? COPY.restart
+      : playing
+        ? COPY.pause
+        : COPY.play
   return (
     <div className="relative flex items-center gap-4">
       <button
@@ -37,7 +55,7 @@ export function ReplayControls({ controls }: ReplayControlsProps) {
         onClick={togglePlay}
         className="flex size-12 cursor-pointer items-center justify-center rounded-full border-0 bg-[linear-gradient(180deg,var(--za-clasp-light),var(--za-card-gold-mid))] text-text-on-gold shadow-[inset_0_0_0_1px_var(--za-gold)]"
       >
-        <Icon name={playing ? 'pausa' : 'riproduci'} size={20} />
+        <Icon name={playing || awaitingVerdict ? 'pausa' : 'riproduci'} size={20} />
       </button>
       <button
         type="button"
