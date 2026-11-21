@@ -126,6 +126,7 @@ export function CardDetail({ entry, index, total, onPrevious, onNext }: CardDeta
           label={card.name}
           missing={!owned}
           missingLabel={number}
+          aura={card.tier}
           isNew={owned?.isNew ?? false}
           copies={owned?.quantity ?? 1}
           className="max-w-[17rem]"

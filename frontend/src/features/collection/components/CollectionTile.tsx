@@ -24,6 +24,7 @@ export function CollectionTile({ entry, withName, onOpen }: CollectionTileProps)
         label={card.name}
         missing={!owned}
         missingLabel={number}
+        aura={card.tier}
         isNew={owned?.isNew ?? false}
         copies={owned?.quantity ?? 1}
         onSelect={onOpen}
