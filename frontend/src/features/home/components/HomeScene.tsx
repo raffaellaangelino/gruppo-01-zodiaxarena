@@ -8,8 +8,8 @@ import { SCENE_COPY } from '@/features/home/messages'
 export interface HomeSceneProps {
   /** Mobile: titolo più piccolo, racconto in una riga, pulsante a tutta larghezza. */
   compact: boolean
-  /** Sfide premiate oggi. */
-  rewarded: Progress
+  /** Sfide premiate oggi; `null` finché il backend non le manda (allora non si mostrano). */
+  rewarded: Progress | null
 }
 
 /**
@@ -34,11 +34,13 @@ export function HomeScene({ compact, rewarded }: HomeSceneProps) {
       <GoldLink hero size="l" to={PATHS.newChallenge} className="mt-1 w-full xl:mt-2 xl:w-64">
         {SCENE_COPY.newChallenge}
       </GoldLink>
-      <RewardedChallenges
-        progress={rewarded}
-        width={compact ? 86 : 92}
-        className={compact ? 'justify-center' : ''}
-      />
+      {rewarded && (
+        <RewardedChallenges
+          progress={rewarded}
+          width={compact ? 86 : 92}
+          className={compact ? 'justify-center' : ''}
+        />
+      )}
     </section>
   )
 }
