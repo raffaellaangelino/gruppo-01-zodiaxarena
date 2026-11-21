@@ -1,7 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { PATHS } from '@/app/paths'
 import { PorticoBackdrop } from '@/components/layout/PorticoBackdrop'
-import { PageTabs } from '@/components/navigation/PageTabs'
 import { Dialog } from '@/components/overlay/Dialog'
 import { GoldLink } from '@/components/ui/GoldButton'
 import { Icon } from '@/components/ui/Icon'
@@ -17,6 +16,7 @@ import {
   type CollectionFilters,
 } from '@/features/collection/album'
 import { CardDetail } from '@/features/collection/components/CardDetail'
+import { CollectionHeader } from '@/features/collection/components/CollectionHeader'
 import { CollectionProgress } from '@/features/collection/components/CollectionProgress'
 import { CollectionTile } from '@/features/collection/components/CollectionTile'
 import { CollectionToolbar } from '@/features/collection/components/CollectionToolbar'
@@ -90,19 +90,7 @@ export function CollectionPage() {
       <title>{`${COPY.title} · Zodiax Arena`}</title>
       <PorticoBackdrop />
 
-      <header className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4 pt-6 xl:pt-8">
-        <div className="flex flex-wrap items-end gap-x-10 gap-y-2">
-          <h1 className="text-text type-h1-m xl:type-h1">{COPY.title}</h1>
-          <PageTabs
-            label={COPY.tabsLabel}
-            tabs={[
-              { to: PATHS.collection, label: COPY.tabs.cards },
-              { to: PATHS.deck, label: COPY.tabs.sky },
-            ]}
-          />
-        </div>
-        <CollectionProgress progress={collection.progress} />
-      </header>
+      <CollectionHeader aside={<CollectionProgress progress={collection.progress} />} />
 
       <div className="mt-6">
         <CollectionToolbar

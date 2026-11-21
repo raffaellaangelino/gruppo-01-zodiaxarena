@@ -108,6 +108,17 @@ export const SIGN_IN: Record<SignCode, string> = {
 }
 
 /**
+ * Abilità di ogni elemento, come le applica l'engine (`RuleAbilities.ElementAbility`,
+ * `EarthDamageAbility`; i dadi d'Aria nel calcolo d'ingresso). Il frontend le descrive soltanto.
+ */
+export const ELEMENT_ABILITY: Record<Element, string> = {
+  FIRE: '+1 ATK quando attacca.',
+  WATER: '+1 DEF quando entra in campo.',
+  EARTH: 'Se cade, il giocatore perde 1 PV in meno.',
+  AIR: 'ATK e DEF si tirano con i dadi (2d4×2) quando entra in campo.',
+}
+
+/**
  * Glifi dei segni, con il selettore di variante testo (U+FE0E): restano segni d'oro,
  * mai emoji colorate. Si scrivono con il font `font-symbol`.
  */

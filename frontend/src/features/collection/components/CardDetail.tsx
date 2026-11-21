@@ -3,14 +3,17 @@ import { GameCard } from '@/components/game/GameCard'
 import { Icon } from '@/components/ui/Icon'
 import { Medallion } from '@/components/ui/Medallion'
 import {
+  ELEMENT_ABILITY,
   ELEMENT_LABELS,
   ELEMENT_WITH_ARTICLE,
+  SIGN_IN,
   PLANET_LABELS,
   SIGN_LABELS,
   TIER_LABELS,
 } from '@/domain/labels'
 import { ELEMENT_BEATS } from '@/domain/rules'
-import type { Element } from '@/domain/game'
+import type { Element, SignCode } from '@/domain/game'
+import { printedStats } from '@/features/cards/stats'
 import { COLLECTION_COPY } from '@/features/collection/messages'
 import type { CollectionEntry } from '@/features/collection/types'
 
@@ -25,18 +28,13 @@ const TIER_TEXT = {
   ASCENDANT: 'text-tier-ascendente-text',
 } as const
 
-/** Valori dei dadi d'Aria (regolamento: 2d4×2). */
-const AIR_DICE = { min: 4, max: 16 }
-
 /** Chi batte questo elemento: il ciclo letto al contrario. */
 const beatenBy = (element: Element): Element =>
   (Object.keys(ELEMENT_BEATS) as Element[]).find((e) => ELEMENT_BEATS[e] === element) ?? element
 
 /** "di Fuoco", "d'Acqua". */
-const ofElement = (element: Element) => {
-  const label = ELEMENT_LABELS[element]
-  return /^[AEIOU]/.test(label) ? `d'${label}` : `di ${label}`
-}
+/** "nel Leone" → "del Leone", "nell'Ariete" → "dell'Ariete". */
+const ofSign = (sign: SignCode) => `d${SIGN_IN[sign].slice(1)}`
 const signed = (n: number) => (n < 0 ? `−${Math.abs(n)}` : `+${n}`)
 
 /** Una statistica grande con la sua scomposizione ("17 · Attacco · 8 Toro + 9 Sole"). */
@@ -44,7 +42,7 @@ function Stat({ kind, value, parts }: { kind: 'atk' | 'def'; value: string; part
   return (
     <div className="flex items-center gap-3">
       <span
-        className={`text-white inline-flex h-12 min-w-20 items-center justify-center gap-1.5 rounded-pill px-4 font-display text-[1.375rem] font-black tabular-nums ${
+        className={`inline-flex h-12 min-w-20 items-center justify-center gap-1.5 rounded-pill px-4 font-display text-[1.375rem] font-black text-text tabular-nums ${
           kind === 'atk' ? 'bg-atk-card' : 'bg-def-card'
         }`}
       >
@@ -91,31 +89,12 @@ export interface CardDetailProps {
 export function CardDetail({ entry, index, total, onPrevious, onNext }: CardDetailProps) {
   const { card, owned, number } = entry
   const element = card.element
-  const isAir = element === 'AIR'
   const planet = card.planetStats
   const signName = SIGN_LABELS[card.sign]
   const planetName = card.planet ? PLANET_LABELS[card.planet] : null
 
-  // Statistiche spiegate come sulla carta stampata: segno (o dadi d'Aria) + pianeta, con i valori
-  // del catalogo. La Casa agisce in campo e la applica l'engine: qui si dice solo cosa fa.
-  const atkBase = isAir ? `${AIR_DICE.min}–${AIR_DICE.max}` : String(card.signStats.atk)
-  const defBase = isAir ? `${AIR_DICE.min}–${AIR_DICE.max}` : String(card.signStats.def)
-  const atkValue = isAir
-    ? `${AIR_DICE.min + (planet?.atk ?? 0)}–${AIR_DICE.max + (planet?.atk ?? 0)}`
-    : String(card.signStats.atk + (planet?.atk ?? 0))
-  const defValue = isAir
-    ? `${AIR_DICE.min + (planet?.def ?? 0)}–${AIR_DICE.max + (planet?.def ?? 0)}`
-    : String(card.signStats.def + (planet?.def ?? 0))
-  // "12 Leone + 9 Sole"; per l'Aria "dadi 2d4×2 (4–16) + 2 Mercurio" (come la tavola).
-  const explain = (signValue: string, planetValue: number | undefined) =>
-    [
-      isAir ? `dadi 2d4×2 (${signValue})` : `${signValue} ${signName}`,
-      planetValue !== undefined && planetName && `${planetValue} ${planetName}`,
-    ]
-      .filter(Boolean)
-      .join(' + ')
-  const atkParts = explain(atkBase, planet?.atk)
-  const defParts = explain(defBase, planet?.def)
+  // Statistiche spiegate come sulla carta stampata (i bonus in campo li applica l'engine).
+  const stats = printedStats(card)
 
   return (
     <div className="grid gap-8 px-5 py-8 md:grid-cols-[minmax(0,17rem)_1fr] md:items-start md:px-12 md:py-10">
@@ -175,8 +154,8 @@ export function CardDetail({ entry, index, total, onPrevious, onNext }: CardDeta
 
         {card.type === 'CREATURE' && (
           <div className="flex flex-wrap gap-x-8 gap-y-4">
-            <Stat kind="atk" value={atkValue} parts={atkParts} />
-            <Stat kind="def" value={defValue} parts={defParts} />
+            <Stat kind="atk" value={stats.atk.value} parts={stats.atk.parts} />
+            <Stat kind="def" value={stats.def.value} parts={stats.def.parts} />
           </div>
         )}
 
@@ -188,16 +167,17 @@ export function CardDetail({ entry, index, total, onPrevious, onNext }: CardDeta
           )}
           <Block title={COPY.sign} name={`${signName} · ${ELEMENT_LABELS[element]}`}>
             Batte {ELEMENT_WITH_ARTICLE[ELEMENT_BEATS[element]]}, perde contro{' '}
-            {ELEMENT_WITH_ARTICLE[beatenBy(element)]}.
+            {ELEMENT_WITH_ARTICLE[beatenBy(element)]}. {ELEMENT_ABILITY[element]}
           </Block>
           {card.type === 'CREATURE' && card.house && (
             <Block title={COPY.house} name={`Casa ${card.house}`}>
-              Effetto all&apos;ingresso in campo: aggiunge DEF.
+              +2 DEF quando entra in campo.
             </Block>
           )}
           {card.type === 'ASCENDANT' && (
             <Block title={COPY.ascendant} name={signName}>
-              +1 ATK alle carte {ofElement(element)} del tuo Cielo.
+              {/* Come l'engine (AscendantAbility): solo le carte dello stesso segno */}
+              +1 ATK quando attaccano le carte {ofSign(card.sign)} del tuo Cielo.
             </Block>
           )}
         </div>
