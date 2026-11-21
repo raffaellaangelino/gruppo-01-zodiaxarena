@@ -52,6 +52,7 @@
   --za-def: #6FA8FF;             /* 7.4:1 */
   --za-atk-card: #FF5A4E;        /* solo riempimenti, come sulle carte */
   --za-def-card: #5C8BFF;
+  --za-stat-hurt: #FFA49C;       /* DEF sotto quella d'ingresso nel Rotolo (tavola Sfide-Rotolo) */
 
   /* ---------- Colore · tier (dalle carte; *-text = variante leggibile come testo) ---------- */
   --za-tier-comune: #8A8A9E;        --za-tier-comune-text: #9097AD;  /* 6.1:1 */

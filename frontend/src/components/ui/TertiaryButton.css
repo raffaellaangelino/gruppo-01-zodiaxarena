@@ -6,6 +6,8 @@
 
 @layer components {
   .tertiary {
+    /* Il testo è inciso sul pulsante: niente ombre ereditate dalla scena (es. text-shadow-scene) */
+    text-shadow: none;
     position: relative;
     display: inline-flex;
     flex: none;
