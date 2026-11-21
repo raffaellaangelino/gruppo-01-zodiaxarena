@@ -1,5 +1,5 @@
 import { CARD_ART_CODES } from '@/components/game/cardArt'
-import type { CardDefinitionDto } from '@/features/cards/dto'
+import type { CardDefinitionDto, PlanetDto } from '@/features/cards/dto'
 
 /**
  * Catalogo di esempio, nella forma di `GET /api/cards`, ricavato dai nomi delle 96 illustrazioni
@@ -23,14 +23,14 @@ const SIGNS: Record<string, { type: CardDefinitionDto['sign']['type']; atk: numb
     Pesci: { type: 'WATER', atk: 10, def: 10 },
   }
 
-const PLANETS: Record<string, { tier: number; atk: number; def: number }> = {
-  Sole: { tier: 1, atk: 9, def: 8 },
-  Luna: { tier: 2, atk: 5, def: 6 },
-  Marte: { tier: 2, atk: 7, def: 4 },
-  Giove: { tier: 3, atk: 4, def: 2 },
-  Saturno: { tier: 3, atk: 2, def: 4 },
-  Mercurio: { tier: 4, atk: 2, def: 0 },
-  Venere: { tier: 4, atk: 0, def: 2 },
+const PLANETS: Record<string, { tier: PlanetDto['tier']; atk: number; def: number }> = {
+  Sole: { tier: 'LEGENDARY', atk: 9, def: 8 },
+  Luna: { tier: 'EPIC', atk: 5, def: 6 },
+  Marte: { tier: 'EPIC', atk: 7, def: 4 },
+  Giove: { tier: 'RARE', atk: 4, def: 2 },
+  Saturno: { tier: 'RARE', atk: 2, def: 4 },
+  Mercurio: { tier: 'COMMON', atk: 2, def: 0 },
+  Venere: { tier: 'COMMON', atk: 0, def: 2 },
 }
 
 const SIGN_NAMES = Object.keys(SIGNS)

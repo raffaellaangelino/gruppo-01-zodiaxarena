@@ -19,9 +19,9 @@ export const BACKEND_READY = {
   /** `GET /api/home` (contratto §3.2): dati della Home. */
   home: false,
   /** `GET /api/players/search?q=` (§10.1): cercare l'avversario. */
-  playerSearch: false,
-  /** `GET /api/decks/me` (§5.1): il tuo Cielo con le carte. */
-  myDeck: false,
+  playerSearch: true,
+  /** `GET /api/decks/{id}` (§5.1, più mazzi per giocatore): il tuo Cielo con le carte. */
+  myDeck: true,
   /** `GET /api/matches/{id}` (§8.2): una partita giocata. */
-  match: false,
+  match: true,
 } as const

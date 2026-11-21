@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { matchPath } from '@/app/paths'
 import { ApiError } from '@/lib/http'
 import { acceptChallenge } from '@/features/challenges/api'
-import { CHALLENGES_KEY } from '@/features/challenges/queries'
+import { refreshChallenges } from '@/features/challenges/queries'
 
 /** Perché l'accettazione non è riuscita (tavola Sfide-Stati). */
 export type AcceptFailure = 'notPending' | 'deckInvalid' | 'engine' | 'network' | 'server'
@@ -49,10 +49,10 @@ export function useAcceptChallenge(challengeId: number | null, deckId: number | 
       return matchId
     },
     onSuccess: (matchId) => {
-      void queryClient.invalidateQueries({ queryKey: CHALLENGES_KEY })
+      void refreshChallenges(queryClient)
       void navigate(matchPath(matchId), { replace: true })
     },
-    onError: () => void queryClient.invalidateQueries({ queryKey: CHALLENGES_KEY }),
+    onError: () => void refreshChallenges(queryClient),
   })
 
   const { mutate } = mutation

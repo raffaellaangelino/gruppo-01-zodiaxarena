@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ApiError } from '@/lib/http'
 import { declineChallenge, withdrawChallenge } from '@/features/challenges/api'
-import { CHALLENGES_KEY } from '@/features/challenges/queries'
+import { refreshChallenges } from '@/features/challenges/queries'
 import type { Challenge } from '@/features/challenges/types'
 
 /** Azione su una sfida in attesa: rifiutare (chi la riceve) o ritirare (chi l'ha inviata). */
@@ -13,7 +13,7 @@ export type ChallengeActionFailure = 'gone' | 'failed'
 const ACTIONS = { decline: declineChallenge, withdraw: withdrawChallenge } as const
 
 /**
- * Rifiuta o ritira una sfida e riscarica le liste. Se la sfida non era più in attesa
+ * Rifiuta o ritira una sfida e riscarica le liste e il contatore della barra. Se la sfida non era più in attesa
  * (409, per esempio ritirata dall'altro nel frattempo) le liste si aggiornano lo stesso:
  * la pagina mostra com'è adesso, non com'era.
  *
@@ -24,7 +24,7 @@ export function useChallengeAction(action: ChallengeAction) {
   const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: (challenge: Challenge) => ACTIONS[action](challenge.id),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: CHALLENGES_KEY }),
+    onSettled: () => refreshChallenges(queryClient),
   })
 
   const error = mutation.error

@@ -9,6 +9,7 @@ import { CHALLENGES_COPY } from '@/features/challenges/messages'
 import { recentOpponents } from '@/features/challenges/opponents'
 import { useChallenges } from '@/features/challenges/queries'
 import type { Challenge } from '@/features/challenges/types'
+import { useMyDeck } from '@/features/decks/queries'
 
 /** Sfida giocata con la sua partita: si può aprire il Rotolo. */
 const hasMatch = (c: Challenge): c is Challenge & { matchId: number } => c.matchId !== null
@@ -25,6 +26,7 @@ export function ChallengesToPlayPage() {
   const toPlay = useChallenges('TO_PLAY')
   const sent = useChallenges('SENT')
   const decline = useChallengeAction('decline')
+  const { deck } = useMyDeck()
 
   const received = toPlay.filter((c) => c.status === 'PENDING')
   const replays = toPlay.filter((c) => c.status === 'PLAYED').filter(hasMatch)
@@ -47,6 +49,7 @@ export function ChallengesToPlayPage() {
           <ReceivedChallengeTile
             key={challenge.id}
             challenge={challenge}
+            deck={deck}
             onDecline={() => decline.run(challenge)}
             declining={decline.pendingId === challenge.id}
             error={

@@ -5,11 +5,12 @@ import { PLANET_TIER, SIGN_ELEMENT, toPlanetCode, toSignCode } from '@/domain/ru
 import type { SignDto } from '@/features/player/dto'
 import type { CardDefinition } from '@/features/cards/types'
 
-/** Pianeta come lo manda il backend (`PlanetResponseDto`); `tier` è un numero da 1 a 4. */
+/** Pianeta come lo manda il backend (`PlanetResponseDto`); `tier` è la rarità come testo.
+ * L'interfaccia non la legge: la ricava dal pianeta (`PLANET_TIER`). */
 export interface PlanetDto {
   id: number
   name: string
-  tier: number
+  tier: 'LEGENDARY' | 'EPIC' | 'RARE' | 'COMMON'
   atk: number
   def: number
 }

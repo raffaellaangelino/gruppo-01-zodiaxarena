@@ -15,6 +15,7 @@ import { NEW_CHALLENGE_COPY } from '@/features/challenges/messages'
 import { recentOpponents } from '@/features/challenges/opponents'
 import { ChallengesToPlayPage } from '@/features/challenges/pages/ChallengesToPlayPage'
 import { useChallenges } from '@/features/challenges/queries'
+import { useMyDeck } from '@/features/decks/queries'
 import { usePlayerSummary } from '@/features/player/queries'
 import { PLAYER_SEARCH_AVAILABLE, usePlayerSearch } from '@/features/players/hooks/usePlayerSearch'
 
@@ -43,7 +44,10 @@ export function NewChallengePage() {
     recents.find((r) => r.player.id === preselectedId && !r.pending)?.player ?? null
   const [opponent, setOpponent] = useState<PlayerRef | null>(preselected)
 
-  const deckId = player.deckIds[0] ?? null
+  const sky = useMyDeck()
+  const { deckId } = sky
+  // Il backend dice che il Cielo non è valido: non si lancia (lo rifiuterebbe con DECK_INVALID).
+  const skyInvalid = sky.deck?.valid === false
   const close = () => void navigate(PATHS.challenges, { replace: true })
 
   const choose = (next: PlayerRef) => {
@@ -73,7 +77,7 @@ export function NewChallengePage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (opponent && deckId !== null && !launching) launch({ opponent, deckId })
+    if (opponent && deckId !== null && !skyInvalid && !launching) launch({ opponent, deckId })
   }
 
   return (
@@ -144,16 +148,17 @@ export function NewChallengePage() {
               {NEW_CHALLENGE_COPY.summary}
             </h3>
             <div className="mt-2">
-              <ChallengeSummary opponent={opponent} faction={player.faction} />
+              <ChallengeSummary opponent={opponent} faction={player.faction} sky={sky} />
             </div>
             <div className="mt-auto flex flex-col gap-3 pt-6">
               {deckId === null && <FormAlert>{NEW_CHALLENGE_COPY.noDeck}</FormAlert>}
+              {skyInvalid && <FormAlert>{NEW_CHALLENGE_COPY.failures.deckInvalid}</FormAlert>}
               {failure && <FormAlert>{NEW_CHALLENGE_COPY.failures[failure]}</FormAlert>}
               <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                 <SecondaryButton onClick={close}>{NEW_CHALLENGE_COPY.cancel}</SecondaryButton>
                 <GoldButton
                   type="submit"
-                  disabled={!opponent || deckId === null}
+                  disabled={!opponent || deckId === null || skyInvalid}
                   busy={launching}
                   className="sm:w-58"
                 >

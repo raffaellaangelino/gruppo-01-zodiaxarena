@@ -14,6 +14,10 @@ export const CHALLENGES_COPY = {
   yourSky: 'Il tuo Cielo',
   /** @param nickname Avversario. */
   hiddenDeck: (nickname: string) => `Il mazzo e la Fazione di ${nickname} si scoprono nel Rotolo.`,
+  /** @param count Regole non rispettate. */
+  deckProblems: (count: number) =>
+    `Il tuo Cielo ha ${plural(count, 'problema', 'problemi')}: correggilo per accettare`,
+  fixSky: 'Correggi il Cielo',
   accept: 'Accetta e gioca',
   decline: 'Rifiuta',
   replayToWatch: 'Rotolo da guardare',
@@ -66,7 +70,8 @@ export const NEW_CHALLENGE_COPY = {
   pickOpponent: 'Scegli chi sfidare',
   yourSky: 'Il tuo Cielo',
   currentDeck: 'Il mazzo in uso',
-  skyHint: 'Le carte e la validità del Cielo compariranno qui.',
+  skyLoading: 'Arrivano le carte del tuo Cielo…',
+  skyFailed: 'Le carte del Cielo non sono arrivate: la sfida parte lo stesso.',
   faction: 'Fazione',
   when: 'Quando',
   /** @param nickname Avversario. */

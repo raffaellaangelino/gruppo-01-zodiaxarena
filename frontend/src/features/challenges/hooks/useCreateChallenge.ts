@@ -4,7 +4,7 @@ import { PATHS } from '@/app/paths'
 import { ApiError } from '@/lib/http'
 import type { PlayerRef } from '@/domain/game'
 import { createChallenge } from '@/features/challenges/api'
-import { CHALLENGES_KEY } from '@/features/challenges/queries'
+import { refreshChallenges } from '@/features/challenges/queries'
 
 /** Perché il lancio non è riuscito. */
 export type CreateChallengeFailure =
@@ -43,7 +43,7 @@ export function useCreateChallenge() {
     mutationFn: ({ opponent, deckId }: { opponent: PlayerRef; deckId: number }) =>
       createChallenge(opponent.id, deckId),
     onSuccess: async (_id, { opponent }) => {
-      await queryClient.invalidateQueries({ queryKey: CHALLENGES_KEY })
+      await refreshChallenges(queryClient)
       const state: ChallengeLaunchedState = { launchedTo: opponent.nickname }
       void navigate(PATHS.challengesSent, { replace: true, state })
     },

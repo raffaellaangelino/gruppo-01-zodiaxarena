@@ -25,4 +25,8 @@ export const MATCH_COPY = {
     DRAW: { word: 'Pareggio', phrase: '«Due fili della stessa lunghezza. Li taglio insieme.»' },
   } satisfies Record<MatchOutcome, { word: string; phrase: string }>,
   atropo: 'Atropo',
+  notFound: {
+    title: 'Questa partita non è qui',
+    text: 'Non esiste, oppure è una partita tra altri giocatori.',
+  },
 } as const

@@ -12,8 +12,9 @@ import { SecondaryLink } from '@/components/ui/SecondaryButton'
 import { GOD_LABELS } from '@/domain/labels'
 import { buildChronicle, type ChronicleLine } from '@/features/matches/chronicle'
 import { MatchCardImage } from '@/features/matches/components/MatchCardImage'
+import { MatchNotFound } from '@/features/matches/components/MatchNotFound'
 import { MATCH_COPY } from '@/features/matches/messages'
-import { MATCH_IS_SAMPLE, useMatch } from '@/features/matches/queries'
+import { MATCH_IS_SAMPLE, useMarkMatchSeen, useMatch } from '@/features/matches/queries'
 import type { Match, MatchSide } from '@/features/matches/types'
 
 /** Icona di ogni tipo di riga della cronaca. */
@@ -70,6 +71,12 @@ function PlayerPlate({ match, side }: { match: Match; side: MatchSide }) {
 export function MatchReplayPage() {
   const { matchId } = useParams()
   const match = useMatch(Number(matchId))
+  return match ? <MatchReplay match={match} /> : <MatchNotFound />
+}
+
+/** Il Rotolo di una partita trovata: aprirlo la segna come vista. */
+function MatchReplay({ match }: { match: Match }) {
+  useMarkMatchSeen(match.id)
   const rounds = buildChronicle(match)
   const opponent: MatchSide = match.me === 'A' ? 'B' : 'A'
   const verdict = matchVerdictPath(match.id)

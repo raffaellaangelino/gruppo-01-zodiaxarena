@@ -9,8 +9,9 @@ import { SecondaryLink } from '@/components/ui/SecondaryButton'
 import { endSummary, keyMoments } from '@/features/matches/chronicle'
 import { MatchCardImage } from '@/features/matches/components/MatchCardImage'
 import { MATCH_COPY } from '@/features/matches/messages'
+import { MatchNotFound } from '@/features/matches/components/MatchNotFound'
 import { MATCH_IS_SAMPLE, useMatch } from '@/features/matches/queries'
-import type { MatchSide } from '@/features/matches/types'
+import type { Match, MatchSide } from '@/features/matches/types'
 
 /** Colore della parola dell'esito (gen_ar.verdetto). */
 const OUTCOME_COLORS = {
@@ -31,6 +32,11 @@ const OUTCOME_COLORS = {
 export function MatchVerdictPage() {
   const { matchId } = useParams()
   const match = useMatch(Number(matchId))
+  return match ? <MatchVerdict match={match} /> : <MatchNotFound />
+}
+
+/** Il Verdetto di una partita trovata. */
+function MatchVerdict({ match }: { match: Match }) {
   const opponent: MatchSide = match.me === 'A' ? 'B' : 'A'
   const { word, phrase } = MATCH_COPY.outcome[match.outcome]
   const moments = keyMoments(match)

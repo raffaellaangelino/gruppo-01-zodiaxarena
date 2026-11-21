@@ -32,13 +32,15 @@ export interface PlayerDto {
   cardCount: number
   deckIds: number[]
   onboarding: { completed: boolean; currentStep: OnboardingStep | null }
+  /** Contatori della barra (contratto API §3.1): per ora solo le sfide da giocare. */
+  pending?: { challenges: number }
 }
 
 /**
  * Traduce il giocatore del backend nel riepilogo usato dall'interfaccia.
  *
- * Il backend non ha ancora notifiche, sfide, scambi e Rotoli in attesa (contratto API §3.1):
- * finché non arrivano valgono zero, e la barra non mostra contatori.
+ * Dei contatori in attesa (contratto API §3.1) il backend manda per ora solo le sfide da giocare:
+ * notifiche, scambi e Rotoli valgono zero finché non arrivano, e la barra non li mostra.
  *
  * @param dto Giocatore come lo manda il backend.
  * @returns Il riepilogo del giocatore.
@@ -56,7 +58,7 @@ export function toPlayerSummary(dto: PlayerDto): PlayerSummary {
     faction: dto.god ? { god: dto.god, element: GOD_ELEMENT[dto.god] } : null,
     deckIds: dto.deckIds,
     unreadNotifications: 0,
-    pending: { challenges: 0, trades: 0, replays: 0 },
+    pending: { challenges: dto.pending?.challenges ?? 0, trades: 0, replays: 0 },
     onboarding: dto.onboarding,
   }
 }
