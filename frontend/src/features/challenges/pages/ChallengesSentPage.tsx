@@ -1,4 +1,5 @@
-import { useLocation } from 'react-router'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router'
 import { TilePanel } from '@/components/panels/TilePanel'
 import { Icon } from '@/components/ui/Icon'
 import { LineTitle } from '@/components/ui/LineTitle'
@@ -16,7 +17,14 @@ import type { Challenge } from '@/features/challenges/types'
  */
 export function ChallengesSentPage() {
   const sent = useChallenges('SENT')
-  const launchedTo = (useLocation().state as ChallengeLaunchedState | null)?.launchedTo
+  const location = useLocation()
+  const navigate = useNavigate()
+  // La conferma del lancio si legge una volta: poi si toglie dallo stato della navigazione, così
+  // non ricompare ricaricando la pagina quando la sfida è già stata giocata.
+  const [launchedTo] = useState(() => (location.state as ChallengeLaunchedState | null)?.launchedTo)
+  useEffect(() => {
+    if (location.state) navigate(location.pathname, { replace: true, state: null })
+  }, [location.state, location.pathname, navigate])
   const withdraw = useChallengeAction('withdraw')
 
   const pending = sent.filter((c) => c.status === 'PENDING')

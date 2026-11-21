@@ -1,5 +1,6 @@
 import type { PlayerRef } from '@/domain/game'
 import type { Challenge } from '@/features/challenges/types'
+import { parseApiDate } from '@/lib/dates'
 
 /** Un avversario con cui hai già avuto a che fare, per "Sfida di nuovo". */
 export interface RecentOpponent {
@@ -21,7 +22,9 @@ export interface RecentOpponent {
  */
 export function recentOpponents(challenges: Challenge[], limit = 5): RecentOpponent[] {
   const byPlayer = new Map<number, RecentOpponent>()
-  const sorted = [...challenges].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+  const sorted = [...challenges].sort(
+    (a, b) => parseApiDate(b.createdAt) - parseApiDate(a.createdAt),
+  )
   for (const challenge of sorted) {
     const known = byPlayer.get(challenge.opponent.id)
     const pending = challenge.status === 'PENDING' ? challenge : null

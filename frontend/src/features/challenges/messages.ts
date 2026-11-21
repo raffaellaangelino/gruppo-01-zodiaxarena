@@ -34,8 +34,9 @@ export const CHALLENGES_COPY = {
   closedSection: 'Chiuse di recente',
   withdraw: 'Ritira',
   emptyToPlay: {
-    title: 'Nessuno ti ha ancora sfidato',
-    text: "Lancia tu la prima sfida: Ermes la consegna e la partita si gioca appena l'altro accetta.",
+    // Vale anche dopo una partita: chi è stato sfidato e ha visto il Rotolo non la ritrova qui.
+    title: 'Nessuna sfida da giocare',
+    text: "Quando qualcuno ti sfida, la trovi qui. Intanto lanciane una tu: Ermes la consegna e si gioca appena l'altro accetta.",
   },
   emptySent: {
     title: 'Non hai sfide inviate',
