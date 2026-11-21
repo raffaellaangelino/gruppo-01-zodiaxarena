@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import type { Tier } from '@/domain/game'
 import { CARD_BACK } from '@/components/game/cardBack'
 import { GoldClasp } from '@/components/ornaments/GoldClasp'
 import { Icon, type IconName } from '@/components/ui/Icon'
@@ -35,6 +36,11 @@ export interface GameCardProps {
   missing?: boolean
   /** Testo sulla carta mancante al posto di "Mancante" (album: il numero di catalogo, "003"). */
   missingLabel?: string
+  /**
+   * Rarità per l'aura: il bagliore stampato sul bordo dell'illustrazione continua fuori dalla
+   * carta e sfuma, invece di finire netto sul bordo dell'immagine. Non sulle mancanti.
+   */
+  aura?: Tier
   /** Mai vista: pillola d'oro "Nuova" sopra il bordo, al centro. */
   isNew?: boolean
   /** Copie possedute: da 2 in su compare "×N" sul bordo destro. */
@@ -64,6 +70,7 @@ export function GameCard({
   size = 'm',
   missing = false,
   missingLabel = 'Mancante',
+  aura,
   isNew = false,
   copies = 1,
   tag,
@@ -133,6 +140,7 @@ export function GameCard({
     'game-card',
     `game-card--${size}`,
     selected && 'game-card--selected',
+    aura && !missing && size !== 'xs' && `game-card--aura game-card--aura-${aura.toLowerCase()}`,
     dimmed && 'opacity-55',
     className,
   ]

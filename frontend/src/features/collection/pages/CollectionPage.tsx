@@ -142,7 +142,40 @@ export function CollectionPage() {
         </div>
       )}
 
-      <div className="mt-6 pb-10">
+      {/* Su desktop i segni sono le colonne dell'album e il filtro per segno: un tocco mostra solo
+          quel segno, un altro lo toglie. Su mobile il segno sta in "Altri filtri". */}
+      {!(nothingOwned && !filteredView) && (
+        <fieldset className={`m-0 mt-6 hidden border-0 p-0 ${GRID} xl:grid`}>
+          <legend className="sr-only">{COPY.filters.sign}</legend>
+          {SIGN_ORDER.map((sign) => {
+            const pressed = filters.sign === sign
+            return (
+              <button
+                key={sign}
+                type="button"
+                aria-pressed={pressed}
+                onClick={() => setFilters({ ...filters, sign: pressed ? null : sign })}
+                className={`rounded-md flex cursor-pointer flex-col items-center gap-1 border-0 bg-transparent px-1 pt-2 pb-1 type-eyebrow tracking-[0.1em] uppercase transition-[color,opacity] ${
+                  pressed
+                    ? 'text-(--za-clasp-light)'
+                    : `text-gold-bright hover:text-(--za-clasp-light) ${filters.sign ? 'opacity-50 hover:opacity-100' : ''}`
+                }`}
+              >
+                <span aria-hidden="true" className="text-[1rem]">
+                  {SIGN_GLYPHS[sign]}
+                </span>
+                {SIGN_LABELS[sign]}
+                <span
+                  aria-hidden="true"
+                  className={`mt-1 h-px w-10 ${pressed ? 'bg-(image:--za-edge-gold-h) shadow-[0_0_8px_rgba(255,214,107,0.7)]' : 'bg-transparent'}`}
+                />
+              </button>
+            )
+          })}
+        </fieldset>
+      )}
+
+      <div className="mt-4 pb-10">
         {nothingOwned && !filteredView ? (
           <EmptyState
             title={COPY.empty.title}
@@ -169,18 +202,6 @@ export function CollectionPage() {
           </ul>
         ) : (
           <div aria-label={COPY.albumLabel} className="flex flex-col gap-8">
-            {/* Le colonne dell'album sono i segni, nell'ordine dello zodiaco (solo su desktop) */}
-            <ol aria-hidden="true" className={`hidden ${GRID} xl:grid`}>
-              {SIGN_ORDER.map((sign) => (
-                <li
-                  key={sign}
-                  className="flex flex-col items-center gap-1 type-eyebrow tracking-[0.1em] text-gold-bright uppercase"
-                >
-                  <span className="text-[1rem]">{SIGN_GLYPHS[sign]}</span>
-                  {SIGN_LABELS[sign]}
-                </li>
-              ))}
-            </ol>
             {groups.map((group) => (
               <section
                 key={group.key}

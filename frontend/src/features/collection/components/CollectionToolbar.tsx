@@ -138,7 +138,13 @@ export function CollectionToolbar({ filters, onChange, duplicates }: CollectionT
           onClick={() => setMoreOpen((o) => !o)}
         >
           {COPY.more}
-          {moreCount > 0 && <span className="ml-1 text-gold-bright tabular-nums">{moreCount}</span>}
+          {/* Su desktop il segno ha la sua riga: qui conta solo lo stato */}
+          {moreCount > 0 && (
+            <span className="ml-1 text-gold-bright tabular-nums xl:hidden">{moreCount}</span>
+          )}
+          {filters.state !== 'ALL' && (
+            <span className="ml-1 hidden text-gold-bright tabular-nums xl:inline">1</span>
+          )}
         </TertiaryButton>
         {moreOpen && (
           <TilePanel
@@ -147,7 +153,7 @@ export function CollectionToolbar({ filters, onChange, duplicates }: CollectionT
             className="absolute top-full left-0 z-20 mt-2 w-[min(22rem,calc(100vw-2rem))]"
           >
             <div id="collezione-altri-filtri" className="flex flex-col gap-4 p-4">
-              <fieldset className="flex flex-col gap-2">
+              <fieldset className="flex flex-col gap-2 xl:hidden">
                 <legend className="mb-2 type-eyebrow tracking-[0.12em] text-text-muted uppercase">
                   {COPY.sign}
                 </legend>

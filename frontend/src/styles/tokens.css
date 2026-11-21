@@ -62,6 +62,7 @@
   --za-tier-ascendente: #B98CFF;    --za-tier-ascendente-text: #D8DCE8;
   --za-tier-leggendaria-aura: linear-gradient(135deg, #7AF0FF, #C89BFF, #FF9BD2, #FFE38A);
   --za-tier-ascendente-aura: linear-gradient(135deg, #FF5A8A, #FFE38A, #7AF0FF, #B98CFF);
+  --za-tier-leggendaria-glow: #FF9BD2;  --za-tier-ascendente-glow: #7AF0FF;  /* luce olografica attorno alla carta (aura in Collezione) */
 
   /* ---------- Colore · elementi (branding del team, D-030, 20/11; prima Q-36) ----------
      Sempre insieme allo stemma dell'elemento: il colore non è mai l'unico segnale.

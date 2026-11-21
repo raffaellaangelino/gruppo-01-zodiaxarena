@@ -62,6 +62,36 @@
     }
   }
 
+  /* Aura della rarità: il bagliore stampato sul bordo dell'illustrazione prosegue fuori dalla
+     carta e sfuma (segue gli angoli arrotondati), così non finisce netto sul bordo dell'immagine */
+  .game-card--aura-common {
+    --card-aura: var(--za-tier-comune);
+    --card-aura-2: transparent;
+  }
+  .game-card--aura-rare {
+    --card-aura: var(--za-tier-rara);
+    --card-aura-2: var(--za-tier-rara);
+  }
+  .game-card--aura-epic {
+    --card-aura: var(--za-tier-epica);
+    --card-aura-2: var(--za-tier-epica);
+  }
+  /* La Leggendaria e l'Ascendente hanno la cornice olografica: due luci, come i suoi colori */
+  .game-card--aura-legendary {
+    --card-aura: var(--za-tier-leggendaria-glow);
+    --card-aura-2: var(--za-tier-leggendaria);
+  }
+  .game-card--aura-ascendant {
+    --card-aura: var(--za-tier-ascendente-glow);
+    --card-aura-2: var(--za-tier-ascendente);
+  }
+  .game-card--aura .game-card__image {
+    box-shadow:
+      var(--za-card-shadow),
+      0 0 3px 0 color-mix(in srgb, var(--card-aura) 70%, transparent),
+      0 0 14px 1px color-mix(in srgb, var(--card-aura-2) 38%, transparent);
+  }
+
   /* Scelta: filo acceso (il fermaglio lo aggiunge GameCard.tsx) */
   .game-card--selected {
     box-shadow: var(--za-card-selected);
