@@ -39,25 +39,30 @@ export interface ActiveDeck {
 /**
  * Dati della Home: `GET /api/home` (contratto API §3.2).
  * Un solo endpoint per tutta la Home, caricato all'ingresso con il riepilogo del giocatore.
+ * Finché il backend non lo ha, la Home li compone dalle API che esistono (`features/home/compose`)
+ * e le parti senza fonte valgono `null`: non si mostrano, invece di numeri finti.
  */
 export interface HomeSummary {
-  /** Sfide premiate oggi: le prime 5 del giorno danno ricompense. */
-  rewardedChallenges: Progress
+  /** Sfide premiate oggi: le prime 5 del giorno danno ricompense. `null` finché il backend non le ha. */
+  rewardedChallenges: Progress | null
   /** "Ti aspettano": sfide ricevute, Rotoli da guardare, scambi ricevuti. */
   waiting: WaitingItem[]
-  deck: ActiveDeck
-  /** Missioni del giorno. */
-  missions: Progress
+  /** Il Cielo in uso; `null` se il giocatore non ne ha. */
+  deck: ActiveDeck | null
+  /** Missioni del giorno; `null` finché il backend non le ha. */
+  missions: Progress | null
+  /** Pacchetti; `null` finché il backend non ha il Negozio. */
   packs: {
     /** Pacchetti base acquistabili con il saldo attuale. */
     affordable: number
     /** Stelle aperte dall'ultimo Sole, su quante ne garantiscono uno. */
     sunCounter: Progress
-  }
+  } | null
+  /** Luna piena; `null` finché il backend non la manda. */
   fullMoon: {
     /** Inizio della prossima luna piena (cambio di Fazione). */
     nextAt: string
     /** Vero se la finestra di cambio è aperta adesso. */
     windowOpen: boolean
-  }
+  } | null
 }
