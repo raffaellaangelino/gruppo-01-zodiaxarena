@@ -17,6 +17,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /*
+   * Tailwind 4 lascia i pulsanti con il cursore normale: nel gioco tutto ciò che si può premere
+   * mostra la manina, così si capisce al passaggio del mouse. Spenti: il cursore normale.
+   */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary,
+  select:not(:disabled) {
+    cursor: pointer;
+  }
+
   a {
     color: var(--za-gold);
   }
@@ -24,5 +35,16 @@
   :focus-visible {
     outline: none;
     box-shadow: var(--za-focus-ring);
+  }
+
+  /* Autocompilazione del browser: Chrome colora il campo con il suo sfondo e ignora
+     background-color. Si rimanda il cambio di colore all'infinito e si fissa il testo,
+     così il campo resta quello del design system. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--za-text);
+    caret-color: var(--za-text);
+    transition: background-color 600000s 0s;
   }
 }

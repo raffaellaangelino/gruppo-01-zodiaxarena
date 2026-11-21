@@ -1,0 +1,91 @@
+/* =====================================================================
+   Pulsante terziario: contorno a incavo e l'icona dell'azione davanti al testo
+   (FOUNDATIONS §4, D-020; generatore gen_s.py → btn("terziario"), variante "icona").
+   La forma la disegna TertiaryButton.tsx; qui gli stati, dai token.
+   ===================================================================== */
+
+@layer components {
+  .tertiary {
+    /* Il testo è inciso sul pulsante: niente ombre ereditate dalla scena (es. text-shadow-scene) */
+    text-shadow: none;
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--za-space-2);
+    padding-inline: var(--za-space-4);
+    border: 0;
+    background: none;
+    color: var(--za-gold-bright);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color var(--za-dur-fast) var(--za-ease-out);
+  }
+  .tertiary:focus-visible {
+    box-shadow: none; /* il focus è il filo interno a incavo */
+  }
+
+  .tertiary__fill {
+    fill: transparent;
+  }
+  .tertiary__edge {
+    stroke: var(--za-line);
+  }
+  .tertiary__inner {
+    stroke: var(--za-line);
+    opacity: 0;
+  }
+  .tertiary__label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--za-space-2);
+    white-space: nowrap;
+  }
+
+  @media (hover: hover) {
+    .tertiary:hover {
+      color: var(--za-text);
+    }
+    .tertiary:hover .tertiary__fill {
+      fill: rgba(235, 207, 147, 0.08);
+    }
+    .tertiary:hover .tertiary__edge,
+    .tertiary:hover .tertiary__inner {
+      stroke: var(--tertiary-gold);
+    }
+    .tertiary:hover .tertiary__inner {
+      opacity: 0.6;
+    }
+  }
+
+  .tertiary:focus-visible .tertiary__inner {
+    opacity: 0.6;
+  }
+
+  .tertiary:active .tertiary__fill {
+    fill: var(--za-medallion-core);
+  }
+  .tertiary:active .tertiary__edge {
+    stroke: var(--tertiary-gold);
+  }
+
+  /* Rischio (Rifiuta, Ritira): rosso, mai d'oro */
+  .tertiary--risk {
+    color: var(--za-danger-soft);
+    --tertiary-gold: var(--za-danger-soft);
+  }
+  .tertiary--risk .tertiary__edge,
+  .tertiary--risk .tertiary__inner {
+    stroke: color-mix(in srgb, var(--za-danger) 70%, transparent);
+  }
+  @media (hover: hover) {
+    .tertiary--risk:hover {
+      color: var(--za-danger-soft);
+    }
+    .tertiary--risk:hover .tertiary__fill {
+      fill: color-mix(in srgb, var(--za-danger) 10%, transparent);
+    }
+  }
+}

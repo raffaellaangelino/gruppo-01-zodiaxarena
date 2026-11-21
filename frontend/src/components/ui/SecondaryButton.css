@@ -1,0 +1,79 @@
+/* =====================================================================
+   Pulsante secondario (Lastra): stati del fondo e dei fili.
+   La forma a incavo la disegna SecondaryButton.tsx; qui solo i materiali.
+   Riferimento: FOUNDATIONS §4 (pulsanti), COMPONENTS (Secondario); generatore gen_s.py → btn("secondario").
+   ===================================================================== */
+
+@layer components {
+  .secondary-button {
+    /* Il testo è inciso sul pulsante: niente ombre ereditate dalla scena (es. text-shadow-scene) */
+    text-shadow: none;
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding-inline: var(--za-space-6);
+    border: 0;
+    background: none;
+    color: var(--za-gold-bright);
+    cursor: pointer;
+    transition: transform var(--za-dur-instant) var(--za-ease-out);
+  }
+
+  /* Il focus è l'anello a incavo disegnato nell'SVG, non il riquadro globale */
+  .secondary-button:focus-visible {
+    box-shadow: none;
+  }
+
+  .secondary-button__plate {
+    fill: var(--za-btn-plate);
+    stroke: var(--secondary-gold);
+  }
+  .secondary-button__inner {
+    stroke: var(--secondary-gold);
+    stroke-opacity: 0.7;
+  }
+  .secondary-button__focus {
+    stroke: var(--za-gold-bright);
+    opacity: 0;
+  }
+  .secondary-button:focus-visible .secondary-button__focus {
+    opacity: 1;
+  }
+
+  .secondary-button__label {
+    position: relative;
+    letter-spacing: 0.08em;
+    margin-right: -0.08em; /* compensa la spaziatura dopo l'ultima lettera: testo centrato */
+    white-space: nowrap;
+  }
+
+  /* Hover: la lastra si schiarisce (solo con un puntatore vero) */
+  @media (hover: hover) {
+    .secondary-button:hover:not(:disabled) .secondary-button__plate {
+      fill: var(--za-surface-2);
+    }
+  }
+
+  /* Premuto: la lastra si scurisce e il pulsante scende di 1 px */
+  .secondary-button:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  .secondary-button:active:not(:disabled) .secondary-button__plate {
+    fill: var(--za-medallion-core);
+  }
+
+  /* Disattivato: filo spento, testo spento */
+  .secondary-button:disabled {
+    cursor: not-allowed;
+    color: var(--za-text-disabled);
+  }
+  .secondary-button:disabled .secondary-button__plate {
+    fill: rgba(16, 23, 43, 0.4);
+    stroke: var(--za-line-soft);
+  }
+  .secondary-button:disabled .secondary-button__inner {
+    stroke: var(--za-line-soft);
+  }
+}

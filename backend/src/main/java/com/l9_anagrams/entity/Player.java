@@ -1,14 +1,27 @@
 package com.l9_anagrams.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
 import com.l9_anagrams.enums.God;
+import com.l9_anagrams.enums.OnboardingStep;
+
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 @Table(name = "player")
@@ -17,11 +30,11 @@ import com.l9_anagrams.enums.God;
 public class Player {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @MapsId
+    @JoinColumn(name = "id")
     private AppUser appUser;
 
     @Column(nullable = false, unique = true)
@@ -42,13 +55,15 @@ public class Player {
     @JoinColumn(name = "sun_sign_id")
     private Sign sunSign;
 
-    private LocalDate birthDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "onboarding_step")
+    private OnboardingStep onboardingStep;
 
     @OneToMany(mappedBy = "player")
     private List<PlayerCard> playerCards = new ArrayList<>();
 
-    @OneToOne(mappedBy = "player")
-    private Deck deck;
+    @OneToMany(mappedBy = "player")
+    private List<Deck> decks = new ArrayList<>();
 
     public Player() {
 

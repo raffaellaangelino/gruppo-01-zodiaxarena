@@ -1,0 +1,38 @@
+/* =====================================================================
+   Arena del Rotolo: la carta in campo e i suoi movimenti.
+   Riferimento: tavola Sfide-Rotolo (gen_ar.py → card_on_pool), ux/challenge-replay.md
+   (momenti dedicati, riduzione del movimento).
+   ===================================================================== */
+
+@layer components {
+  .arena-card {
+    flex: none;
+    transform-origin: 50% 100%;
+  }
+
+  .arena-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--za-card-radius);
+    box-shadow: 0 22px 30px -12px rgba(255, 214, 107, 0.5);
+  }
+
+  /* Caduta: ruota sulla base verso l'esterno (resta sulla pozza, non copre il nome e lascia
+     libero il centro) e si spegne */
+  .arena-card--fallen {
+    filter: brightness(0.5) saturate(0.55);
+  }
+  .arena-card--fallen-left {
+    transform: rotate(-8deg);
+  }
+  .arena-card--fallen-right {
+    transform: rotate(8deg);
+  }
+  .arena-card--fallen .arena-card__image {
+    box-shadow: none;
+  }
+
+  /* I movimenti (ingresso, colpo, caduta, danno, PV) partono da `useKeyframes`, con i tempi di
+     features/matches/motion.ts: qui solo gli stati. Con "riduci movimento" restano solo gli stati. */
+}

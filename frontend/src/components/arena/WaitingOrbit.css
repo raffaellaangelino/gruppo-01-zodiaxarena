@@ -1,0 +1,28 @@
+/* Orbita dell'attesa: la luce che gira e il VS (gen_ar.attesa). */
+@layer components {
+  .waiting-orbit__vs {
+    font-family: var(--za-font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    fill: var(--za-nav-ink-active);
+  }
+
+  .waiting-orbit__light {
+    stroke: var(--za-nav-ink-active);
+    filter: drop-shadow(0 0 6px rgba(255, 214, 107, 0.8));
+    animation: waiting-orbit 2.4s linear infinite;
+  }
+
+  @keyframes waiting-orbit {
+    to {
+      stroke-dashoffset: calc(-1 * var(--orbit-length));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .waiting-orbit__light {
+      animation: none;
+    }
+  }
+}

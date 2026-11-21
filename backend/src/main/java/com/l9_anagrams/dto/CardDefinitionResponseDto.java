@@ -8,7 +8,7 @@ import com.l9_anagrams.enums.House;
 public record CardDefinitionResponseDto(
 		Long id,
 		CardType type,
-		House house,
+		@JsonInclude(JsonInclude.Include.NON_NULL) House house, // absent for ASCENDANT
 		SignResponseDto sign,
 		@JsonInclude(JsonInclude.Include.NON_NULL) PlanetResponseDto planet, // absent for ASCENDANT
 		String imgId) {

@@ -20,6 +20,8 @@ public class SecurityConfig {
 
 	private static final String[] PUBLIC_ENDPOINTS = {
 			"/actuator/health",
+			// Spring inoltra qui gli errori: se è protetto, ogni errore diventa 401
+			"/error",
 	};
 
 	@Bean

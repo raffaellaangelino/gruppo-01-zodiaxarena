@@ -1,0 +1,599 @@
+{
+  "id": 88,
+  "me": "A",
+  "playedAt": "2026-11-19T21:00:00",
+  "players": {
+    "A": {
+      "id": 7,
+      "nickname": "Lyra",
+      "god": "EFESTO"
+    },
+    "B": {
+      "id": 43,
+      "nickname": "Orione",
+      "god": "DEMETRA"
+    }
+  },
+  "result": {
+    "seed": 4242,
+    "outcome": "PLAYER_A_WINS",
+    "reason": "KO",
+    "playerAPv": 6,
+    "playerBPv": 0,
+    "roundsPlayed": 3,
+    "playerACreaturesRemaining": 5,
+    "playerBCreaturesRemaining": 5,
+    "playerAResidualDefense": 4,
+    "playerBResidualDefense": 0,
+    "tieBreaker": null,
+    "log": [
+      {
+        "type": "match_started",
+        "round": 0,
+        "player": null,
+        "card": null,
+        "details": {
+          "seed": 4242
+        }
+      },
+      {
+        "type": "deck_shuffled",
+        "round": 0,
+        "player": "A",
+        "card": null,
+        "details": {
+          "cards": [
+            "Bilancia / Mercurio / Casa I",
+            "Capricorno / Saturno / Casa I",
+            "Leone / Sole / Casa I",
+            "Toro / Venere / Casa I",
+            "Sagittario / Giove / Casa I",
+            "Ariete / Marte / Casa I",
+            "Pesci / Luna / Casa I"
+          ]
+        }
+      },
+      {
+        "type": "deck_shuffled",
+        "round": 0,
+        "player": "B",
+        "card": null,
+        "details": {
+          "cards": [
+            "Vergine / Giove / Casa I",
+            "Gemelli / Mercurio / Casa I",
+            "Acquario / Saturno / Casa I",
+            "Toro / Sole / Casa I",
+            "Scorpione / Marte / Casa I",
+            "Leone / Venere / Casa I",
+            "Cancro / Luna / Casa I"
+          ]
+        }
+      },
+      {
+        "type": "card_drawn",
+        "round": 1,
+        "player": "A",
+        "card": "Bilancia / Mercurio / Casa I",
+        "details": {
+          "cardsRemaining": 6
+        }
+      },
+      {
+        "type": "card_entered_play",
+        "round": 1,
+        "player": "A",
+        "card": "Bilancia / Mercurio / Casa I",
+        "details": {
+          "baseAttack": 10,
+          "baseDefense": 10,
+          "attackBonuses": [
+            {
+              "amount": 2,
+              "source": "planet Mercurio"
+            }
+          ],
+          "defenseBonuses": [
+            {
+              "amount": 0,
+              "source": "planet Mercurio"
+            },
+            {
+              "amount": 2,
+              "source": "Casa I"
+            }
+          ],
+          "attack": 12,
+          "defense": 12,
+          "airAttackDice": [3, 2],
+          "airDefenseDice": [2, 3]
+        }
+      },
+      {
+        "type": "card_drawn",
+        "round": 1,
+        "player": "B",
+        "card": "Vergine / Giove / Casa I",
+        "details": {
+          "cardsRemaining": 6
+        }
+      },
+      {
+        "type": "card_entered_play",
+        "round": 1,
+        "player": "B",
+        "card": "Vergine / Giove / Casa I",
+        "details": {
+          "baseAttack": 10,
+          "baseDefense": 10,
+          "attackBonuses": [
+            {
+              "amount": 4,
+              "source": "planet Giove"
+            }
+          ],
+          "defenseBonuses": [
+            {
+              "amount": 2,
+              "source": "planet Giove"
+            },
+            {
+              "amount": 1,
+              "source": "DEMETRA"
+            },
+            {
+              "amount": 2,
+              "source": "Casa I"
+            }
+          ],
+          "attack": 14,
+          "defense": 15
+        }
+      },
+      {
+        "type": "round_started",
+        "round": 1,
+        "player": null,
+        "card": null,
+        "details": {
+          "playerAPv": 10,
+          "playerBPv": 10,
+          "playerACard": "Bilancia / Mercurio / Casa I",
+          "playerBCard": "Vergine / Giove / Casa I"
+        }
+      },
+      {
+        "type": "attack",
+        "round": 1,
+        "player": "A",
+        "card": "Bilancia / Mercurio / Casa I",
+        "details": {
+          "defender": "Vergine / Giove / Casa I",
+          "contributions": [
+            {
+              "amount": 10,
+              "source": "sign or Air roll"
+            },
+            {
+              "amount": 2,
+              "source": "planet Mercurio"
+            }
+          ],
+          "total": 12
+        }
+      },
+      {
+        "type": "attack",
+        "round": 1,
+        "player": "B",
+        "card": "Vergine / Giove / Casa I",
+        "details": {
+          "defender": "Bilancia / Mercurio / Casa I",
+          "contributions": [
+            {
+              "amount": 10,
+              "source": "sign or Air roll"
+            },
+            {
+              "amount": 4,
+              "source": "planet Giove"
+            },
+            {
+              "amount": 1,
+              "source": "vantaggio elemento"
+            },
+            {
+              "amount": 1,
+              "source": "DEMETRA"
+            }
+          ],
+          "total": 16
+        }
+      },
+      {
+        "type": "damage_taken",
+        "round": 1,
+        "player": "A",
+        "card": "Bilancia / Mercurio / Casa I",
+        "details": {
+          "requested": 16,
+          "reductions": [],
+          "applied": 16,
+          "defenseBefore": 12,
+          "defenseAfter": -4
+        }
+      },
+      {
+        "type": "damage_taken",
+        "round": 1,
+        "player": "B",
+        "card": "Vergine / Giove / Casa I",
+        "details": {
+          "requested": 12,
+          "reductions": [],
+          "applied": 12,
+          "defenseBefore": 15,
+          "defenseAfter": 3
+        }
+      },
+      {
+        "type": "card_defeated",
+        "round": 1,
+        "player": "A",
+        "card": "Bilancia / Mercurio / Casa I",
+        "details": {
+          "mutualDeath": false
+        }
+      },
+      {
+        "type": "pv_damage",
+        "round": 1,
+        "player": "A",
+        "card": "Bilancia / Mercurio / Casa I",
+        "details": {
+          "excess": 4,
+          "reductions": [],
+          "applied": 4,
+          "remainingPv": 6
+        }
+      },
+      {
+        "type": "card_drawn",
+        "round": 2,
+        "player": "A",
+        "card": "Capricorno / Saturno / Casa I",
+        "details": {
+          "cardsRemaining": 5
+        }
+      },
+      {
+        "type": "card_entered_play",
+        "round": 2,
+        "player": "A",
+        "card": "Capricorno / Saturno / Casa I",
+        "details": {
+          "baseAttack": 12,
+          "baseDefense": 8,
+          "attackBonuses": [
+            {
+              "amount": 2,
+              "source": "planet Saturno"
+            }
+          ],
+          "defenseBonuses": [
+            {
+              "amount": 4,
+              "source": "planet Saturno"
+            },
+            {
+              "amount": 2,
+              "source": "Casa I"
+            }
+          ],
+          "attack": 14,
+          "defense": 14
+        }
+      },
+      {
+        "type": "round_started",
+        "round": 2,
+        "player": null,
+        "card": null,
+        "details": {
+          "playerAPv": 6,
+          "playerBPv": 10,
+          "playerACard": "Capricorno / Saturno / Casa I",
+          "playerBCard": "Vergine / Giove / Casa I"
+        }
+      },
+      {
+        "type": "attack",
+        "round": 2,
+        "player": "A",
+        "card": "Capricorno / Saturno / Casa I",
+        "details": {
+          "defender": "Vergine / Giove / Casa I",
+          "contributions": [
+            {
+              "amount": 12,
+              "source": "sign or Air roll"
+            },
+            {
+              "amount": 2,
+              "source": "planet Saturno"
+            }
+          ],
+          "total": 14
+        }
+      },
+      {
+        "type": "attack",
+        "round": 2,
+        "player": "B",
+        "card": "Vergine / Giove / Casa I",
+        "details": {
+          "defender": "Capricorno / Saturno / Casa I",
+          "contributions": [
+            {
+              "amount": 10,
+              "source": "sign or Air roll"
+            },
+            {
+              "amount": 4,
+              "source": "planet Giove"
+            },
+            {
+              "amount": 1,
+              "source": "DEMETRA"
+            }
+          ],
+          "total": 15
+        }
+      },
+      {
+        "type": "damage_taken",
+        "round": 2,
+        "player": "A",
+        "card": "Capricorno / Saturno / Casa I",
+        "details": {
+          "requested": 15,
+          "reductions": [],
+          "applied": 15,
+          "defenseBefore": 14,
+          "defenseAfter": -1
+        }
+      },
+      {
+        "type": "damage_taken",
+        "round": 2,
+        "player": "B",
+        "card": "Vergine / Giove / Casa I",
+        "details": {
+          "requested": 14,
+          "reductions": [],
+          "applied": 14,
+          "defenseBefore": 3,
+          "defenseAfter": -11
+        }
+      },
+      {
+        "type": "card_defeated",
+        "round": 2,
+        "player": "A",
+        "card": "Capricorno / Saturno / Casa I",
+        "details": {
+          "mutualDeath": true
+        }
+      },
+      {
+        "type": "card_defeated",
+        "round": 2,
+        "player": "B",
+        "card": "Vergine / Giove / Casa I",
+        "details": {
+          "mutualDeath": true
+        }
+      },
+      {
+        "type": "card_drawn",
+        "round": 3,
+        "player": "A",
+        "card": "Leone / Sole / Casa I",
+        "details": {
+          "cardsRemaining": 4
+        }
+      },
+      {
+        "type": "card_entered_play",
+        "round": 3,
+        "player": "A",
+        "card": "Leone / Sole / Casa I",
+        "details": {
+          "baseAttack": 12,
+          "baseDefense": 8,
+          "attackBonuses": [
+            {
+              "amount": 9,
+              "source": "planet Sole"
+            }
+          ],
+          "defenseBonuses": [
+            {
+              "amount": 8,
+              "source": "planet Sole"
+            },
+            {
+              "amount": 2,
+              "source": "Casa I"
+            }
+          ],
+          "attack": 21,
+          "defense": 18
+        }
+      },
+      {
+        "type": "card_drawn",
+        "round": 3,
+        "player": "B",
+        "card": "Gemelli / Mercurio / Casa I",
+        "details": {
+          "cardsRemaining": 5
+        }
+      },
+      {
+        "type": "card_entered_play",
+        "round": 3,
+        "player": "B",
+        "card": "Gemelli / Mercurio / Casa I",
+        "details": {
+          "baseAttack": 12,
+          "baseDefense": 8,
+          "attackBonuses": [
+            {
+              "amount": 2,
+              "source": "planet Mercurio"
+            }
+          ],
+          "defenseBonuses": [
+            {
+              "amount": 0,
+              "source": "planet Mercurio"
+            },
+            {
+              "amount": 2,
+              "source": "Casa I"
+            }
+          ],
+          "attack": 14,
+          "defense": 10,
+          "airAttackDice": [2, 4],
+          "airDefenseDice": [1, 3]
+        }
+      },
+      {
+        "type": "round_started",
+        "round": 3,
+        "player": null,
+        "card": null,
+        "details": {
+          "playerAPv": 6,
+          "playerBPv": 10,
+          "playerACard": "Leone / Sole / Casa I",
+          "playerBCard": "Gemelli / Mercurio / Casa I"
+        }
+      },
+      {
+        "type": "attack",
+        "round": 3,
+        "player": "A",
+        "card": "Leone / Sole / Casa I",
+        "details": {
+          "defender": "Gemelli / Mercurio / Casa I",
+          "contributions": [
+            {
+              "amount": 12,
+              "source": "sign or Air roll"
+            },
+            {
+              "amount": 9,
+              "source": "planet Sole"
+            },
+            {
+              "amount": 1,
+              "source": "Fuoco"
+            },
+            {
+              "amount": 2,
+              "source": "Efesto"
+            },
+            {
+              "amount": 1,
+              "source": "Ascendente"
+            }
+          ],
+          "total": 25
+        }
+      },
+      {
+        "type": "attack",
+        "round": 3,
+        "player": "B",
+        "card": "Gemelli / Mercurio / Casa I",
+        "details": {
+          "defender": "Leone / Sole / Casa I",
+          "contributions": [
+            {
+              "amount": 12,
+              "source": "sign or Air roll"
+            },
+            {
+              "amount": 2,
+              "source": "planet Mercurio"
+            }
+          ],
+          "total": 14
+        }
+      },
+      {
+        "type": "damage_taken",
+        "round": 3,
+        "player": "A",
+        "card": "Leone / Sole / Casa I",
+        "details": {
+          "requested": 14,
+          "reductions": [],
+          "applied": 14,
+          "defenseBefore": 18,
+          "defenseAfter": 4
+        }
+      },
+      {
+        "type": "damage_taken",
+        "round": 3,
+        "player": "B",
+        "card": "Gemelli / Mercurio / Casa I",
+        "details": {
+          "requested": 25,
+          "reductions": [],
+          "applied": 25,
+          "defenseBefore": 10,
+          "defenseAfter": -15
+        }
+      },
+      {
+        "type": "card_defeated",
+        "round": 3,
+        "player": "B",
+        "card": "Gemelli / Mercurio / Casa I",
+        "details": {
+          "mutualDeath": false
+        }
+      },
+      {
+        "type": "pv_damage",
+        "round": 3,
+        "player": "B",
+        "card": "Gemelli / Mercurio / Casa I",
+        "details": {
+          "excess": 15,
+          "reductions": [],
+          "applied": 10,
+          "remainingPv": 0
+        }
+      },
+      {
+        "type": "match_ended",
+        "round": 3,
+        "player": null,
+        "card": null,
+        "details": {
+          "outcome": "PLAYER_A_WINS",
+          "reason": "KO",
+          "tieBreaker": null,
+          "playerAPv": 6,
+          "playerBPv": 0
+        }
+      }
+    ]
+  }
+}
