@@ -62,8 +62,6 @@ export const MATCH_COPY = {
     play: 'Riprendi',
     pause: 'Pausa',
     restart: 'Riguarda da capo',
-    stay: 'Resta nel Rotolo',
-    verdictSoon: 'Tra poco si apre il Verdetto. Premi Pausa per restare nel Rotolo.',
     /** @param speed Velocità attuale. */
     speed: (speed: number) => `Velocità ${speed}×, passa a ${speed === 1 ? 2 : 1}×`,
     /** @param turn Turno. @param round Round. @param total Round della partita. */

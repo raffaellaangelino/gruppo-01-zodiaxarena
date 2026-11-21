@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { MockDataNotice } from '@/app/shell/MockDataNotice'
 import { PATHS, matchVerdictPath } from '@/app/paths'
 import { ArenaBackdrop } from '@/components/arena/ArenaBackdrop'
@@ -19,7 +19,6 @@ import { RoundTrack } from '@/features/matches/components/arena/RoundTrack'
 import { StatBreakdown } from '@/features/matches/components/arena/StatBreakdown'
 import { VerdictCta } from '@/features/matches/components/arena/VerdictCta'
 import { useReplay } from '@/features/matches/hooks/useReplay'
-import { MOTION } from '@/features/matches/motion'
 import { ReplayMotionContext } from '@/features/matches/hooks/useReplayMotion'
 import { MATCH_COPY } from '@/features/matches/messages'
 import { MATCH_IS_SAMPLE, useMarkMatchSeen, useMatch } from '@/features/matches/queries'
@@ -59,8 +58,7 @@ function MatchReplay({ match }: { match: Match }) {
   useMarkMatchSeen(match.id)
   const steps = useMemo(() => buildReplay(match), [match])
   const controls = useReplay(steps)
-  const { step, atEnd, index, seek, pause, holdEnd, animate, speed, awaitingVerdict } = controls
-  const navigate = useNavigate()
+  const { step, atEnd, index, seek, pause, animate, speed } = controls
   const [chronicleOpen, setChronicleOpen] = useState(false)
   const [breakdown, setBreakdown] = useState<{ side: MatchSide; stat: OpenStat } | null>(null)
 
@@ -87,18 +85,6 @@ function MatchReplay({ match }: { match: Match }) {
       hpLoss: change.fell[side] && step.hpLost[side] > 0 ? step.hpLost[side] : null,
     }
   }
-
-  // Fine arrivata da sola: dopo il filo tagliato si passa al Verdetto, sostituendo il Rotolo
-  // nella cronologia ("indietro" porta alle Sfide, non a un Rotolo che ripartirebbe).
-  // Qualsiasi comando toccato nel frattempo lo ferma (awaitingVerdict torna false).
-  useEffect(() => {
-    if (!awaitingVerdict) return
-    const timer = window.setTimeout(
-      () => void navigate(verdict, { replace: true }),
-      MOTION.end.autoVerdict / speed,
-    )
-    return () => window.clearTimeout(timer)
-  }, [awaitingVerdict, navigate, verdict, speed])
 
   // Esc chiude il calcolo aperto.
   useEffect(() => {
@@ -161,11 +147,7 @@ function MatchReplay({ match }: { match: Match }) {
         <ArenaTopBar
           backTo={PATHS.challenges}
           backLabel={COPY.exit}
-          action={
-            <SecondaryLink to={verdict} replace>
-              {MATCH_COPY.skip}
-            </SecondaryLink>
-          }
+          action={<SecondaryLink to={verdict}>{MATCH_COPY.skip}</SecondaryLink>}
         />
 
         {/* Mobile e tablet: in colonna, l'avversario in alto e chi guarda in basso.
@@ -194,13 +176,7 @@ function MatchReplay({ match }: { match: Match }) {
                 roundChanged={index > 0 && steps[index - 1].round !== step.round}
                 advantageNow={step.kind === 'advantage'}
               >
-                {atEnd && (
-                  <VerdictCta
-                    to={verdict}
-                    countdown={awaitingVerdict}
-                    className="mt-3 hidden xl:inline-flex"
-                  />
-                )}
+                {atEnd && <VerdictCta to={verdict} className="mt-3 hidden xl:inline-flex" />}
               </RoundSeal>
             </div>
             <div className={`xl:absolute xl:-translate-x-1/2 ${CARD_TOP} ${POOL_X.opponent}`}>
@@ -209,13 +185,7 @@ function MatchReplay({ match }: { match: Match }) {
           </div>
 
           {/* Mobile e tablet: tra le carte non c'è spazio, il pulsante ha una riga sua */}
-          {atEnd && (
-            <VerdictCta
-              to={verdict}
-              countdown={awaitingVerdict}
-              className="order-2 mt-2 inline-flex xl:hidden"
-            />
-          )}
+          {atEnd && <VerdictCta to={verdict} className="order-2 mt-2 inline-flex xl:hidden" />}
 
           <div className={`order-3 xl:absolute xl:top-[9.3%] xl:-translate-x-1/2 ${POOL_X.me}`}>
             {plate(me)}
@@ -238,10 +208,7 @@ function MatchReplay({ match }: { match: Match }) {
             steps={steps}
             index={index}
             open={chronicleOpen}
-            onToggle={() => {
-              holdEnd()
-              setChronicleOpen((o) => !o)
-            }}
+            onToggle={() => setChronicleOpen((o) => !o)}
             onSeek={seek}
             className={`order-4 w-full max-w-[27.5rem] xl:absolute xl:bottom-6 xl:left-6 xl:z-10 ${
               chronicleOpen ? 'h-64 xl:h-71' : 'h-36 xl:h-49'

@@ -16,7 +16,7 @@ export function ArenaBackdrop({ glow = false }: ArenaBackdropProps) {
     <div aria-hidden="true" className="fixed inset-0 -z-10 bg-scene-base">
       <img src={arenaUrl} alt="" fetchPriority="high" className="size-full object-cover" />
       <div className="absolute inset-0 bg-(--za-arena-veil)" />
-      {glow && <div className="absolute inset-0 bg-(image:--za-arena-glow)" />}
+      {glow && <div data-arena-glow="" className="absolute inset-0 bg-(image:--za-arena-glow)" />}
     </div>
   )
 }

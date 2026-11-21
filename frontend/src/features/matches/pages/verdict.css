@@ -1,0 +1,205 @@
+/* =====================================================================
+   Verdetto: l'ingresso come momento (livello di ornamento 4: luce, raggiera; FOUNDATIONS).
+   Racconta l'esito in ordine: perché è finita → l'esito si rivela → la frase di Atropo →
+   i giocatori salgono sulle pozze (chi perde si spegne, su chi vince la raggiera) → i PV
+   scendono al valore finale → il filo dei momenti decisivi → le azioni.
+   Ogni pezzo dice da quando parte con --d (in ms); durate ed easing dai token.
+   Parte una volta, all'apertura della pagina. Con "riduci movimento": solo brevi dissolvenze.
+   ===================================================================== */
+
+@layer components {
+  /* Tempi della sequenza: un solo posto */
+  .verdict {
+    --verdict-summary: 120ms;
+    --verdict-word: 280ms;
+    --verdict-phrase: 900ms;
+    --verdict-players: 1000ms;
+    --verdict-outcome: 1500ms;
+    --verdict-moments: 1800ms;
+    --verdict-actions: 2400ms;
+  }
+
+  .verdict-fade,
+  .verdict-rise,
+  .verdict-word,
+  .verdict-thread,
+  .verdict-pop {
+    animation-delay: var(--d, 0ms);
+    animation-fill-mode: both;
+  }
+
+  .verdict-fade {
+    animation-name: verdict-fade;
+    animation-duration: var(--za-dur-slow);
+    animation-timing-function: var(--za-ease-out);
+  }
+
+  .verdict-rise {
+    animation-name: verdict-rise;
+    animation-duration: var(--za-dur-slow);
+    animation-timing-function: var(--za-ease-out);
+  }
+
+  /* L'esito si rivela: da grande, largo e sfocato a nitido, come un sigillo che si posa */
+  .verdict-word {
+    animation-name: verdict-word;
+    animation-duration: var(--za-dur-reveal);
+    animation-timing-function: var(--za-ease-out);
+  }
+
+  /* Il filo dei momenti si stende da sinistra */
+  .verdict-thread {
+    transform-origin: left center;
+    animation-name: verdict-thread;
+    animation-duration: 700ms;
+    animation-timing-function: var(--za-ease-inout);
+  }
+
+  /* Il rombo di ogni momento si accende */
+  .verdict-pop {
+    animation-name: verdict-pop;
+    animation-duration: var(--za-dur-base);
+    animation-timing-function: var(--za-ease-out);
+  }
+
+  /* La luce dal trono (vittoria) sale insieme all'esito */
+  .verdict [data-arena-glow] {
+    animation: verdict-fade var(--za-dur-reveal) var(--za-ease-out) var(--verdict-word) both;
+  }
+
+  /* Chi perde: il medaglione parte acceso e si spegne quando l'esito è chiaro */
+  .verdict-loser [data-arena-medallion] {
+    animation: verdict-dim var(--za-dur-reveal) var(--za-ease-out) var(--verdict-outcome) both;
+  }
+
+  /* Chi vince: un anello di luce e una raggiera si allargano dal medaglione, una volta */
+  .verdict-winner [data-arena-medallion] {
+    position: relative;
+  }
+  .verdict-winner [data-arena-medallion]::before,
+  .verdict-winner [data-arena-medallion]::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .verdict-winner [data-arena-medallion]::before {
+    box-shadow:
+      0 0 0 2px rgba(255, 231, 160, 0.9),
+      0 0 24px rgba(255, 214, 107, 0.7);
+    animation: verdict-ring var(--za-dur-reveal) var(--za-ease-out) var(--verdict-outcome) both;
+  }
+  .verdict-winner [data-arena-medallion]::after {
+    inset: -40%;
+    background: repeating-conic-gradient(
+      from 0deg,
+      rgba(255, 214, 107, 0.4) 0deg 4deg,
+      rgba(255, 214, 107, 0) 4deg 22.5deg
+    );
+    mask: radial-gradient(circle, transparent 38%, #000 42%, transparent 70%);
+    animation: verdict-rays 1400ms var(--za-ease-out) var(--verdict-outcome) both;
+  }
+
+  @keyframes verdict-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes verdict-rise {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
+
+  @keyframes verdict-word {
+    from {
+      opacity: 0;
+      transform: scale(1.15);
+      letter-spacing: 0.3em;
+      filter: blur(8px);
+    }
+    60% {
+      opacity: 1;
+      filter: blur(0);
+    }
+  }
+
+  @keyframes verdict-thread {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  /* Il rombo ruota con la proprietà `rotate` (Tailwind 4): qui basta la scala */
+  @keyframes verdict-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+    70% {
+      opacity: 1;
+      transform: scale(1.35);
+    }
+  }
+
+  @keyframes verdict-dim {
+    from {
+      opacity: 1;
+      filter: none;
+    }
+  }
+
+  @keyframes verdict-ring {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+
+  @keyframes verdict-rays {
+    from {
+      opacity: 0;
+      transform: scale(0.6) rotate(0deg);
+    }
+    35% {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.25) rotate(25deg);
+    }
+  }
+
+  /* Riduci movimento: niente scale, sfocature, raggiere né attese in fila; tutto compare
+     quasi subito con brevi dissolvenze */
+  @media (prefers-reduced-motion: reduce) {
+    .verdict {
+      --verdict-summary: 0ms;
+      --verdict-word: 0ms;
+      --verdict-phrase: 0ms;
+      --verdict-players: 0ms;
+      --verdict-outcome: 0ms;
+      --verdict-moments: 0ms;
+      --verdict-actions: 0ms;
+    }
+    .verdict-rise,
+    .verdict-word,
+    .verdict-thread,
+    .verdict-pop {
+      animation-name: verdict-fade;
+      animation-duration: var(--za-dur-base);
+    }
+    .verdict-winner [data-arena-medallion]::before,
+    .verdict-winner [data-arena-medallion]::after {
+      animation: none;
+    }
+  }
+}

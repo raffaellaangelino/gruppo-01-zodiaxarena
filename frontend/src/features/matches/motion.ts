@@ -41,12 +41,6 @@ export const MOTION = {
     cut: 700,
     ctaDelay: 500,
     cta: 360,
-    /**
-     * Se la partita è arrivata alla fine da sola, si passa al Verdetto dopo questo tempo
-     * (dall'inizio dell'ultimo momento): si vedono il filo tagliato e l'ultima riga, poi il
-     * pulsante con il filo che si riempie.
-     */
-    autoVerdict: 3000,
   },
 } as const
 

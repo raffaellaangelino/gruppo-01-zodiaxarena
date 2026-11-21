@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { ElementEmblem } from '@/components/game/ElementEmblem'
 import type { Faction } from '@/domain/game'
 import { ELEMENT_LABELS, GOD_LABELS } from '@/domain/labels'
@@ -14,6 +15,8 @@ export interface ArenaPlayerProps {
   /** Chi ha perso: medaglione spento (Verdetto). */
   dimmed?: boolean
   className?: string
+  /** Stile in più (es. il ritardo di un'animazione d'ingresso). */
+  style?: CSSProperties
 }
 
 /**
@@ -28,10 +31,12 @@ export function ArenaPlayer({
   hp,
   dimmed = false,
   className = '',
+  style,
 }: ArenaPlayerProps) {
   return (
     <div
       className={`flex w-56 flex-col items-center gap-3 text-center text-shadow-scene ${className}`}
+      style={style}
     >
       <p className="flex flex-col items-center gap-0.5">
         <span className="type-h2 text-text">
@@ -46,6 +51,7 @@ export function ArenaPlayer({
       </p>
       <span
         aria-hidden="true"
+        data-arena-medallion=""
         className={`flex size-28 items-center justify-center rounded-full bg-(image:--za-medallion-fill) shadow-(--za-arena-medallion-ring) ${dimmed ? 'opacity-60 grayscale-[0.6]' : ''}`}
       >
         {faction ? (
