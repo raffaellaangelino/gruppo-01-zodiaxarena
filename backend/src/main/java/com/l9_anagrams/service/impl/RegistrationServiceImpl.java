@@ -89,7 +89,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 		requirePastBirthDate(request.birthDate());
 
 		String email = request.email().trim().toLowerCase(Locale.ROOT);
-		String nickName = request.nickName().trim().toLowerCase(Locale.ROOT);
+		// Il nickname si salva come scritto ("Lyra"); l'unicità ignora le maiuscole
+		String nickName = request.nickName().trim();
 		if (!NICKNAME_PATTERN.matcher(nickName).matches()) {
 			throw new IllegalArgumentException("Nickname must be 3-16 letters, numbers, or underscores");
 		}

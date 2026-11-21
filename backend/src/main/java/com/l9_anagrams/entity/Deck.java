@@ -64,7 +64,8 @@ public class Deck {
     @Version
     private Long version;
 
-    @Column(nullable = false)
+    // Default sulla colonna: senza, ddl-auto=update non riesce ad aggiungerla su tabelle con mazzi già salvati
+    @Column(nullable = false, columnDefinition = "datetime(6) default current_timestamp(6)")
     private Instant updatedAt;
 
     @PrePersist

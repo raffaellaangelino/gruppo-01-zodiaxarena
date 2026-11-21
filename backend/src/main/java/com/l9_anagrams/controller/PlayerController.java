@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.l9_anagrams.auth.userdetails.AppUserPrincipal;
 import com.l9_anagrams.dto.FactionChoiceRequestDto;
 import com.l9_anagrams.dto.PlayerResponseDto;
+import com.l9_anagrams.dto.PlayerSearchResponseDto;
+import com.l9_anagrams.service.PlayerSearchService;
 import com.l9_anagrams.service.PlayerService;
 import com.l9_anagrams.exception.ApiErrorResponse;
 
@@ -32,9 +35,11 @@ import jakarta.validation.Valid;
 @SecurityRequirement(name = "bearerAuth")
 public class PlayerController {
     private final PlayerService playerService;
+    private final PlayerSearchService playerSearchService;
 
-    public PlayerController(PlayerService playerService) {
+    public PlayerController(PlayerService playerService, PlayerSearchService playerSearchService) {
         this.playerService = playerService;
+        this.playerSearchService = playerSearchService;
     }
 
     @GetMapping("")
@@ -67,6 +72,19 @@ public class PlayerController {
             @AuthenticationPrincipal AppUserPrincipal user,
             @Valid @RequestBody FactionChoiceRequestDto request) {
         return ResponseEntity.ok(playerService.chooseInitialFaction(user.email(), request.god()));
+    }
+
+    // Percorso letterale: ha la precedenza su /{id}
+    @GetMapping("/search")
+    @Operation(summary = "Search players", description = "Players whose nickname contains q (case-insensitive, from the 3rd character, max 20), excluding the caller. pendingChallengeId is set when a challenge between the two is already pending.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Matching players", content = @Content(schema = @Schema(implementation = PlayerSearchResponseDto.class))),
+            @ApiResponse(responseCode = "401", description = "Authentication required", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
+    })
+    public ResponseEntity<PlayerSearchResponseDto> search(
+            @AuthenticationPrincipal AppUserPrincipal user,
+            @RequestParam(name = "q", required = false) String q) {
+        return ResponseEntity.ok(playerSearchService.search(user.email(), q));
     }
 
     @GetMapping("/{id}")

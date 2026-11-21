@@ -14,6 +14,7 @@ import com.l9_anagrams.entity.ChallengeDeckSnapshot;
 import com.l9_anagrams.entity.Deck;
 import com.l9_anagrams.entity.Player;
 import com.l9_anagrams.entity.PlayerCard;
+import com.l9_anagrams.exception.ApiErrorCode;
 import com.l9_anagrams.exception.ResourceNotFoundException;
 import com.l9_anagrams.exception.RuleViolationException;
 import com.l9_anagrams.repo.DeckRepo;
@@ -32,6 +33,11 @@ public class ChallengeDeckService {
 	public ChallengeDeckSnapshot snapshotOwnedDeck(Player player, Long deckId) {
 		Deck deck = deckRepo.findByIdAndPlayerId(deckId, player.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Mazzo non trovato"));
+
+		// La copia salva la Fazione del momento (D-015): senza Dio scelto non si gioca
+		if (player.getGod() == null) {
+			throw new RuleViolationException(ApiErrorCode.DECK_INVALID, List.of("FACTION_MISSING"));
+		}
 
 		DeckValidationDto validation = deckService.validateDeck(player, deck);
 		if (!validation.valid()) {

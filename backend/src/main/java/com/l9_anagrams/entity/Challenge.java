@@ -18,7 +18,7 @@ public class Challenge {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "challenger_id", nullable = false)
 	private Player challenger;
 
@@ -30,7 +30,8 @@ public class Challenge {
 	@Column(nullable = false)
 	private ChallengeStatus status;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	// La copia del mazzo nasce insieme alla sfida: si salva con lei (come in Match)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "challenger_deck_snapshot_id", nullable = false)
 	private ChallengeDeckSnapshot challengerDeckSnapshot;
 

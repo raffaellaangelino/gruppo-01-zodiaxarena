@@ -17,9 +17,18 @@ public record PlayerResponseDto(
 		SignResponseDto sunSign,
 		int cardCount,
 		List<Long> deckIds,
-		PlayerOnboardingDto onboarding) {
+		PlayerOnboardingDto onboarding,
+		Pending pending) {
+
+	/** Contatori sulle voci della barra (contratto §3.1). challenges = sfide "Da giocare". */
+	public record Pending(long challenges) {
+	}
 
 	public static PlayerResponseDto from(Player player) {
+		return from(player, 0);
+	}
+
+	public static PlayerResponseDto from(Player player, long challengesToPlay) {
 		return new PlayerResponseDto(
 				player.getId(),
 				player.getAppUser() != null ? player.getAppUser().getId() : null,
@@ -31,6 +40,7 @@ public record PlayerResponseDto(
 				player.getSunSign() != null ? SignResponseDto.from(player.getSunSign()) : null,
 				player.getPlayerCards().size(),
 				player.getDecks().stream().map(d -> d.getId()).toList(),
-				new PlayerOnboardingDto(player.getOnboardingStep() == null, player.getOnboardingStep()));
+				new PlayerOnboardingDto(player.getOnboardingStep() == null, player.getOnboardingStep()),
+				new Pending(challengesToPlay));
 	}
 }

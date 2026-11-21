@@ -3,10 +3,8 @@ package com.l9_anagrams.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.l9_anagrams.dto.ChallengeCreatedDto;
 import com.l9_anagrams.dto.ChallengeItemDto;
@@ -24,6 +22,8 @@ import com.l9_anagrams.exception.ApiErrorCode;
 import com.l9_anagrams.exception.ConflictException;
 import com.l9_anagrams.exception.ResourceNotFoundException;
 import com.l9_anagrams.integration.engine.client.EngineClient;
+import com.l9_anagrams.integration.engine.exception.EngineClientException;
+import com.l9_anagrams.integration.engine.exception.EngineErrors;
 import com.l9_anagrams.integration.engine.mapper.ChallengeEngineMapper;
 import com.l9_anagrams.repo.ChallengeRepo;
 import com.l9_anagrams.repo.MatchRepo;
@@ -114,8 +114,6 @@ public class ChallengeService {
 					.toList();
 		} else if ("SENT".equalsIgnoreCase(box)) {
 			items = challengeRepo.findByChallengerIdOrderByCreatedAtDesc(player.getId()).stream()
-					.filter(challenge -> challenge.getStatus() == ChallengeStatus.PENDING
-							|| challenge.getStatus() != ChallengeStatus.PENDING)
 					.map(challenge -> ChallengeItemDto.from(challenge, challenge.getChallenged(), "SENT"))
 					.toList();
 		} else {
@@ -147,58 +145,64 @@ public class ChallengeService {
 		match.setChallengedDeckSnapshot(deckService.snapshotOwnedDeck(challenged, deckId));
 		match = matchRepo.save(match);
 
+		// L'errore annulla la transazione: la sfida resta PENDING e si può riaccettare
+		JsonNode result;
 		try {
-			JsonNode result = engineClient.playMatch(
+			result = engineClient.playMatch(
 					engineMapper.toParticipant(challenge.getChallenger(), challenge.getChallengerDeckSnapshot()),
 					engineMapper.toParticipant(challenged, match.getChallengedDeckSnapshot()),
 					java.util.Optional.empty());
+		} catch (EngineClientException exception) {
+			notifyMatchFailed(challenge, match);
+			throw EngineErrors.toApiException(exception);
+		}
 
+		MatchOutcome outcome;
+		try {
 			JsonNode outcomeNode = result.get("outcome");
 			if (outcomeNode == null) {
 				throw new IllegalArgumentException("Engine response has no outcome");
 			}
-			MatchOutcome outcome = mapOutcome(outcomeNode.asString());
-			JsonNode seedNode = result.get("seed");
-			if (seedNode != null && seedNode.isIntegralNumber()) {
-				match.setEngineSeed(seedNode.longValue());
-			}
-			match.setEnginePayload(result.toString());
-			match.setOutcome(outcome);
-			match.setStatus(MatchStatus.READY);
-			match.setCompletedAt(LocalDateTime.now());
-			matchRepo.save(match);
-
-			challenge.setStatus(ChallengeStatus.PLAYED);
-			challenge.setUpdatedAt(LocalDateTime.now());
-			challenge.setChallengedReadAt(null);
-			challengeRepo.save(challenge);
-
-			sseRegistry.send(challenge.getChallenger().getId(), "MATCH_READY",
-					new ChallengeEventDto(challenge.getId(), match.getId(), MatchStatus.READY.name()));
-			sseRegistry.send(challenged.getId(), "MATCH_READY",
-					new ChallengeEventDto(challenge.getId(), match.getId(), MatchStatus.READY.name()));
-			return new MatchCreatedDto(match.getId());
-		} catch (com.l9_anagrams.integration.engine.exception.EngineClientException exception) {
-			match.setStatus(MatchStatus.ENGINE_FAILED);
-			matchRepo.save(match);
-			sseRegistry.send(challenge.getChallenger().getId(), "MATCH_FAILED",
-					new ChallengeEventDto(challenge.getId(), match.getId(), MatchStatus.ENGINE_FAILED.name()));
-			sseRegistry.send(challenged.getId(), "MATCH_FAILED",
-					new ChallengeEventDto(challenge.getId(), match.getId(), MatchStatus.ENGINE_FAILED.name()));
-			throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "ENGINE_UNAVAILABLE");
+			outcome = mapOutcome(outcomeNode.asString());
 		} catch (RuntimeException exception) {
-			match.setStatus(MatchStatus.ENGINE_FAILED);
-			matchRepo.save(match);
-			sseRegistry.send(challenge.getChallenger().getId(), "MATCH_FAILED",
-					new ChallengeEventDto(challenge.getId(), match.getId(), MatchStatus.ENGINE_FAILED.name()));
-			throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "INVALID_ENGINE_RESPONSE");
+			notifyMatchFailed(challenge, match);
+			throw EngineErrors.invalidResponse(exception.getMessage());
 		}
+
+		JsonNode seedNode = result.get("seed");
+		if (seedNode != null && seedNode.isIntegralNumber()) {
+			match.setEngineSeed(seedNode.longValue());
+		}
+		match.setEnginePayload(result.toString());
+		match.setOutcome(outcome);
+		match.setStatus(MatchStatus.READY);
+		match.setCompletedAt(LocalDateTime.now());
+		matchRepo.save(match);
+
+		challenge.setStatus(ChallengeStatus.PLAYED);
+		challenge.setUpdatedAt(LocalDateTime.now());
+		challenge.setChallengedReadAt(null);
+		challenge.setChallengerReadAt(null);
+		challengeRepo.save(challenge);
+
+		sseRegistry.send(challenge.getChallenger().getId(), "MATCH_READY",
+				new ChallengeEventDto(challenge.getId(), match.getId(), MatchStatus.READY.name()));
+		sseRegistry.send(challenged.getId(), "MATCH_READY",
+				new ChallengeEventDto(challenge.getId(), match.getId(), MatchStatus.READY.name()));
+		return new MatchCreatedDto(match.getId());
 	}
 
-	private MatchOutcome mapOutcome(String outcome) {
+	private void notifyMatchFailed(Challenge challenge, Match match) {
+		ChallengeEventDto event = new ChallengeEventDto(challenge.getId(), match.getId(), MatchStatus.ENGINE_FAILED.name());
+		sseRegistry.send(challenge.getChallenger().getId(), "MATCH_FAILED", event);
+		sseRegistry.send(challenge.getChallenged().getId(), "MATCH_FAILED", event);
+	}
+
+	/** Esito dell'engine (enum GameOutcome): A = sfidante (player1), B = sfidato (player2). */
+	static MatchOutcome mapOutcome(String outcome) {
 		return switch (outcome) {
-			case "PLAYER1_WINS", "CHALLENGER_WINS" -> MatchOutcome.CHALLENGER_WIN;
-			case "PLAYER2_WINS", "CHALLENGED_WINS" -> MatchOutcome.CHALLENGED_WIN;
+			case "PLAYER_A_WINS", "PLAYER1_WINS", "CHALLENGER_WINS" -> MatchOutcome.CHALLENGER_WIN;
+			case "PLAYER_B_WINS", "PLAYER2_WINS", "CHALLENGED_WINS" -> MatchOutcome.CHALLENGED_WIN;
 			case "DRAW" -> MatchOutcome.DRAW;
 			default -> throw new IllegalArgumentException("Unknown engine outcome: " + outcome);
 		};

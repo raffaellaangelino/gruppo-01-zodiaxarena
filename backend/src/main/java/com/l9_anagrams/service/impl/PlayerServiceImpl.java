@@ -11,6 +11,7 @@ import com.l9_anagrams.exception.ConflictException;
 import com.l9_anagrams.exception.ResourceNotFoundException;
 import com.l9_anagrams.enums.God;
 import com.l9_anagrams.enums.OnboardingStep;
+import com.l9_anagrams.repo.ChallengeRepo;
 import com.l9_anagrams.repo.PlayerRepo;
 import com.l9_anagrams.service.PlayerService;
 import java.time.LocalDateTime;
@@ -19,9 +20,11 @@ import java.time.LocalDateTime;
 public class PlayerServiceImpl implements PlayerService {
 
 	private final PlayerRepo playerRepo;
+	private final ChallengeRepo challengeRepo;
 
-	public PlayerServiceImpl(PlayerRepo playerRepo) {
+	public PlayerServiceImpl(PlayerRepo playerRepo, ChallengeRepo challengeRepo) {
 		this.playerRepo = playerRepo;
+		this.challengeRepo = challengeRepo;
 	}
 
 	@Override
@@ -34,7 +37,8 @@ public class PlayerServiceImpl implements PlayerService {
 	@Override
 	@Transactional(readOnly = true)
 	public PlayerResponseDto getMe(String email) {
-		return PlayerResponseDto.from(currentPlayer(email));
+		Player player = currentPlayer(email);
+		return PlayerResponseDto.from(player, challengeRepo.countToPlay(player.getId()));
 	}
 
 	@Override

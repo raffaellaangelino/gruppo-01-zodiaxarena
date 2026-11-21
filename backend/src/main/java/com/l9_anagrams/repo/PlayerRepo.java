@@ -1,5 +1,6 @@
 package com.l9_anagrams.repo;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -25,6 +26,9 @@ public interface PlayerRepo extends JpaRepository<Player, Long> {
     Optional<Player> findByNickName(String nickName);
 
     boolean existsByNickName(String nickName);
+
+    // Ricerca avversari: nickname che contiene il testo, escluso chi cerca
+    List<Player> findTop20ByNickNameContainingIgnoreCaseAndIdNotOrderByNickNameAsc(String text, Long excludedId);
 
     boolean existsByNickNameIgnoreCase(String nickName);
 

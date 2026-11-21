@@ -30,6 +30,11 @@ public class GlobalExceptionHandler {
 		return build(HttpStatus.CONFLICT, exception.getCode(), exception.getMessage(), Map.of());
 	}
 
+	@ExceptionHandler(ApiException.class)
+	public ResponseEntity<ApiErrorResponse> api(ApiException exception) {
+		return build(exception.getStatus(), exception.getCode(), exception.getMessage(), Map.of());
+	}
+
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<ApiErrorResponse> integrity(DataIntegrityViolationException exception) {
 		return build(HttpStatus.CONFLICT, ApiErrorCode.CONFLICT,
