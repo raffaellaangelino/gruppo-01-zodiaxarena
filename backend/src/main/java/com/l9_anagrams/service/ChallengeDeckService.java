@@ -2,6 +2,7 @@ package com.l9_anagrams.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.l9_anagrams.entity.ChallengeDeckCardSnapshot;
 import com.l9_anagrams.entity.ChallengeDeckSnapshot;
 import com.l9_anagrams.entity.Deck;
 import com.l9_anagrams.entity.Player;
+import com.l9_anagrams.entity.PlayerCard;
 import com.l9_anagrams.exception.ResourceNotFoundException;
 import com.l9_anagrams.exception.RuleViolationException;
 import com.l9_anagrams.repo.DeckRepo;
@@ -42,11 +44,15 @@ public class ChallengeDeckService {
 		snapshot.setAscendantCardDefinition(
 				deck.getAscendant() == null ? null : deck.getAscendant().getCardDefinition());
 
+		// Deck.playerCards è un Set: ordine stabile per id della copia
+		List<PlayerCard> deckCards = deck.getPlayerCards().stream()
+				.sorted(Comparator.comparing(PlayerCard::getId))
+				.toList();
 		List<ChallengeDeckCardSnapshot> cards = new ArrayList<>();
-		for (int position = 0; position < deck.getPlayerCards().size(); position++) {
+		for (int position = 0; position < deckCards.size(); position++) {
 			ChallengeDeckCardSnapshot card = new ChallengeDeckCardSnapshot();
 			card.setDeckSnapshot(snapshot);
-			card.setCardDefinition(deck.getPlayerCards().get(position).getCardDefinition());
+			card.setCardDefinition(deckCards.get(position).getCardDefinition());
 			card.setPosition(position);
 			cards.add(card);
 		}

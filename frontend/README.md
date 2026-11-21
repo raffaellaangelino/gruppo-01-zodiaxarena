@@ -5,15 +5,16 @@ Parla solo con il backend, attraverso le API REST sotto `/api`.
 
 ## Stack
 
-| Strumento             | Uso                                                              |
-| --------------------- | ---------------------------------------------------------------- |
-| React 19 + TypeScript | Interfaccia                                                      |
-| Vite                  | Server di sviluppo e build                                       |
-| Tailwind CSS 4        | Classi di stile, collegate ai design token del gioco             |
-| oxlint                | Controllo del codice, anche accessibilità e JSDoc                |
-| Prettier              | Formattazione del codice e ordine delle classi Tailwind          |
-| @fontsource           | Font Cinzel e Nunito in locale, senza chiamate a servizi esterni |
-| nginx                 | Serve la build nel container e inoltra `/api` al backend         |
+| Strumento             | Uso                                                                 |
+| --------------------- | ------------------------------------------------------------------- |
+| React 19 + TypeScript | Interfaccia                                                         |
+| Vite                  | Server di sviluppo e build                                          |
+| Tailwind CSS 4        | Classi di stile, collegate ai design token del gioco                |
+| TanStack Query        | Dati dal server: caricamento, errori, cache condivisa tra le pagine |
+| oxlint                | Controllo del codice, anche accessibilità e JSDoc                   |
+| Prettier              | Formattazione del codice e ordine delle classi Tailwind             |
+| @fontsource           | Font Cinzel e Nunito in locale, senza chiamate a servizi esterni    |
+| nginx                 | Serve la build nel container e inoltra `/api` al backend            |
 
 ## Avvio
 
@@ -60,22 +61,101 @@ Nelle impostazioni di VS Code va aggiunto `"files.associations": { "*.css": "tai
 
 ```
 frontend/
-├── Dockerfile          build con Node, poi nginx
-├── nginx.conf          file statici, inoltro di /api, ritorno a index.html
+├── Dockerfile            build con Node, poi nginx
+├── nginx.conf            file statici, inoltro di /api, ritorno a index.html
 ├── index.html
-├── vite.config.ts      plugin React e Tailwind, alias @/, inoltro di /api in sviluppo
-├── .oxlintrc.json      regole del controllo del codice
-├── .prettierrc.json    regole di formattazione
+├── vite.config.ts        plugin React e Tailwind, alias @/, inoltro di /api (dev e preview)
+├── .oxlintrc.json        regole del controllo del codice
+├── .prettierrc.json      regole di formattazione
 └── src/
-    ├── main.tsx        punto di ingresso: font, stili, App
-    ├── App.tsx
+    ├── main.tsx          punto di ingresso: font, stili, App
+    ├── app/              avvio e guscio dell'applicazione
+    │   ├── App.tsx       provider condivisi (dati del server, sessione, navigazione)
+    │   ├── AppRoutes.tsx mappa delle pagine
+    │   ├── paths.ts      percorsi: mai stringhe sparse nel codice
+    │   ├── queryClient.ts  regole della cache dei dati
+    │   ├── boot/         ingresso nel gioco: BootGate, schermata di caricamento
+    │   ├── PageLoading.tsx · PageErrorBoundary.tsx  attesa ed errore di una pagina
+    │   └── shell/        barre di gioco: GameBar (desktop), MobileHeader e MobileTabBar
+    ├── features/         una cartella per funzione del gioco
+    │   ├── auth/         accesso e sessione
+    │   ├── registration/ registrazione a tre passi (account, segno, conferma)
+    │   ├── onboarding/   primi passi con Ermes: scelta della Fazione
+    │   ├── player/       riepilogo del giocatore (crediti, Fazione, contatori)
+    │   └── home/         Home: scena, "Ti aspettano", Banda e Tessere
+    ├── pages/            pagine che non appartengono a una funzione (segnaposto delle sezioni)
+    ├── components/       componenti riusabili, senza logica di gioco
+    │   ├── ui/           GoldButton/GoldLink, SecondaryButton, TertiaryButton/TertiaryLink, TextField, SelectField, Checkbox, Badge, Icon…
+    │   ├── panels/       TilePanel (Tessera), BandPanel (Banda)
+    │   ├── progress/     Constellation, Meridian, LoadingConstellation, StepIndicator
+    │   ├── game/         CardFan, ElementEmblem, SignMedallion
+    │   ├── layout/       AuthLayout
+    │   ├── brand/        Logo
+    │   └── ornaments/    GoldClasp
+    ├── hooks/            hook generici (useElementSize, useMediaQuery, useDebouncedValue)
+    ├── lib/              funzioni senza React: http, jwt, validazione, plurali, geometria
+    ├── domain/           tipi, nomi italiani e regole fisse del gioco (segni, elementi, Dei)
+    ├── config/           variabili d'ambiente e breakpoint
+    ├── mocks/            dati di esempio, finché il backend non ha le API
+    ├── assets/           immagini (WebP), carte, stemmi, sprite delle icone
     └── styles/
-        ├── index.css   ingresso degli stili: Tailwind, token, tema, stili di base
-        ├── tokens.css  design token (i valori): copia del design system
-        └── theme.css   tema Tailwind: collega le classi ai token
+        ├── index.css     ingresso degli stili: Tailwind, token, tema, stili di base
+        ├── tokens.css    design token (i valori): copia del design system
+        └── theme.css     tema Tailwind: collega le classi ai token
 ```
 
 Tailwind cerca le classi solo in `src/`.
+
+### Dove va il codice
+
+| Cosa                                              | Dove                                 | Regola                                                                           |
+| ------------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------- |
+| Chiamata a un'API                                 | `features/<funzione>/api.ts`         | Solo tramite `request()` di `lib/http.ts`, con percorsi relativi                 |
+| Dati letti da una pagina                          | `features/<funzione>/queries.ts`     | `queryOptions` + hook con `useSuspenseQuery`: la pagina riceve i dati già pronti |
+| Dato di esempio                                   | `mocks/`                             | Solo dentro `api.ts`, mai importato dalle pagine                                 |
+| Componente che legge i dati del giocatore (barre) | `app/shell/`                         | `components/` resta indipendente dal gioco                                       |
+| Stato e comportamento di un modulo                | `features/<funzione>/hooks/`         | Il componente disegna, l'hook decide                                             |
+| Testi mostrati al giocatore per errori e avvisi   | `features/<funzione>/messages.ts`    | Dicono cosa è successo e cosa fare                                               |
+| Componente usato da più funzioni                  | `components/`                        | Non conosce il gioco: riceve tutto dalle proprietà                               |
+| Funzione senza React                              | `lib/`                               | Pura e riusabile                                                                 |
+| Nuovo percorso                                    | `app/paths.ts` e `app/AppRoutes.tsx` | Le pagine riservate stanno sotto `RequireAuth`                                   |
+
+Un file, una responsabilità: tutto ciò che si riusa ha il suo file.
+
+### Dati dal server e dati di esempio
+
+- Ogni funzione definisce le sue richieste in `queries.ts` (chiave della cache e funzione) e un hook per leggerle (`usePlayerSummary`, `useHomeSummary`). Gli hook usano la Suspense di TanStack Query: la pagina riceve i dati già pronti e non gestisce lo stato "in arrivo".
+- Gli endpoint, le richieste e le risposte sono nel **contratto API**, sul Drive del progetto: [Contratto API · frontend e backend](https://docs.google.com/document/d/1uxGZ1eYt0agcypYPsjD7N_ohplPN1JSrCoXyPCYXKBU/edit). I tipi del frontend hanno le stesse forme, e ogni `api.ts` chiama già l'endpoint del contratto.
+- Finché il backend non li ha, le risposte arrivano dai dati di esempio di `src/mocks/`, attivi salvo `VITE_USE_MOCKS=false`; mentre sono attivi compare l'etichetta **"Dati di esempio"**.
+- **Due modi di avviare:** `npm run dev` usa i dati di esempio (si lavora anche senza backend: il giocatore è sempre "Lyra", Fazione Efesto); `npm run dev:backend` usa il backend vero per tutto quello che esiste (`.env.backend`, funziona anche su Windows). Per provare registrazione e scelta della Fazione serve il secondo.
+- Le risposte del backend passano da un traduttore (es. `features/player/dto.ts`) prima di arrivare alle pagine: se il backend cambia un nome (`nickName`, `god`…) si corregge in un punto solo.
+- `GET /api/home` non esiste ancora: la Home usa i dati di esempio anche con `VITE_USE_MOCKS=false` (`HOME_API_AVAILABLE` in `config/env.ts`), così il resto si prova con il backend vero.
+- I codici del gioco arrivano come nel contratto (`FIRE`, `EFESTO`, `LEONE`…); i nomi italiani stanno in `domain/labels.ts`. Le date arrivano in ISO 8601 e diventano parole ("ricevuta oggi", "tra 17 g") con `lib/dates.ts`.
+- All'uscita la cache si svuota: i dati di un giocatore non restano per chi accede dopo.
+
+### Ingresso nel gioco (come nei client di gioco)
+
+- `BootGate` scarica **in parallelo** i dati essenziali (riepilogo del giocatore, Home) prima di mostrare le pagine: la Home compare intera, tutta insieme, con una dissolvenza.
+- Se i dati arrivano in meno di 150 ms non si vede nulla; altrimenti compare la schermata di caricamento (key art, logo, costellazione che si accende) per almeno 400 ms, così non ci sono lampi.
+- Dopo, i dati restano in memoria: cambiare pagina è istantaneo e gli aggiornamenti avvengono in silenzio.
+- Una pagina che ha bisogno dei suoi dati subito aggiunge la sua richiesta a `BOOT_QUERIES` in `app/boot/BootGate.tsx`; le altre mostrano `PageLoading` dentro il guscio.
+- Se il caricamento iniziale fallisce, la schermata mostra l'errore con "Riprova"; se fallisce una pagina, `PageErrorBoundary` mostra l'errore al posto della pagina, lasciando le barre.
+
+### Desktop e mobile
+
+- Sotto i 1280 px (`xl`) il guscio è quello mobile (intestazione e barra in basso), da 1280 quello desktop (barra di gioco).
+- Se cambia solo lo stile si usano i prefissi di Tailwind; se cambiano i contenuti (testi più brevi, componenti diversi) si usa `useMediaQuery(MEDIA.desktop)`, con le media query in `config/breakpoints.ts`.
+
+### Sessione
+
+- Il token JWT dell'accesso sta in `localStorage` (`features/auth/tokenStorage.ts`): si resta connessi anche chiudendo il browser, finché il token non scade.
+- La sessione si chiude da sola alla scadenza del token, quando il backend risponde 401 e quando si esce da un'altra scheda.
+- Le pagine riservate stanno sotto `RequireAuth`: senza sessione portano all'accesso e poi riportano alla pagina richiesta.
+- La registrazione apre la sessione con il token che restituisce il backend. Chi ha appena creato l'account (o non ha ancora scelto) passa da `OnboardingGate` alla scelta della Fazione, poi entra nel gioco.
+
+### Copie dal design system
+
+`styles/tokens.css` e `assets/icons/zodiax-icons.svg` sono copie dei file del design system: si cambiano lì e poi si ricopiano, mai a mano qui.
 
 ## Design system e Tailwind
 

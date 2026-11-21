@@ -1,0 +1,184 @@
+/* =====================================================================
+   Voci della navigazione di gioco: barra desktop (FOUNDATIONS §6b, gen_h.NAV_B_CSS)
+   e barra mobile in basso (§6b-ter, gen_m.TAB_CSS). Stessa grammatica:
+   hover = chiarore tenue; attiva = chiarore pieno che respira, tratto di filo acceso,
+   fermaglio posato sul filo. Il bagliore resta dentro la barra: non esce mai sui contenuti
+   (scelta dell'utente, 11/11, diversa dalle tavole).
+   ===================================================================== */
+
+@layer components {
+  /* ---------------- Desktop: il filo è sotto, il chiarore sale ---------------- */
+  .nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4375rem; /* 7 */
+    height: 100%;
+    padding-inline: var(--za-space-4);
+    color: var(--za-nav-ink);
+    text-decoration: none;
+    font: var(--za-type-button);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition:
+      color 0.2s ease,
+      text-shadow 0.3s ease;
+  }
+  .nav-item::before {
+    content: '';
+    position: absolute;
+    inset: 0; /* il chiarore resta dentro la barra */
+    opacity: 0;
+    pointer-events: none;
+    background: var(--za-nav-dawn);
+    transition: opacity 0.35s ease;
+  }
+  .nav-item::after {
+    content: '';
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    bottom: -7px;
+    height: 2px;
+    pointer-events: none;
+    background: var(--za-nav-thread);
+    box-shadow: 0 0 10px 1px var(--za-nav-glow);
+    clip-path: inset(-12px -12px 0 -12px); /* l'alone sale nella barra, non esce sotto il filo */
+    transform: scaleX(0);
+    transition: transform 0.5s var(--za-ease-out);
+  }
+  .nav-item:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--za-line);
+  }
+  .nav-item:focus-visible::before {
+    opacity: 0.5;
+  }
+  .nav-item[aria-current='page'] {
+    color: var(--za-nav-ink-active);
+    text-shadow: 0 0 14px rgba(255, 214, 107, 0.55);
+  }
+  .nav-item[aria-current='page']::before {
+    opacity: 1;
+    animation: za-nav-dawn 4s ease-in-out infinite;
+  }
+  .nav-item[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+  .nav-item__clasp {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: -17px;
+    margin-left: -11px;
+    animation: za-nav-clasp-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2) 0.15s both;
+  }
+
+  /* ---------------- Mobile: il filo è sopra, il chiarore scende ---------------- */
+  .tab-item {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--za-space-1);
+    height: 4rem; /* 64 */
+    min-width: var(--za-hit-min);
+    color: var(--za-tab-ink);
+    text-decoration: none;
+    font: var(--za-type-caption);
+    letter-spacing: 0.04em;
+  }
+  .tab-item::before {
+    content: '';
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 0; /* il chiarore resta dentro la barra */
+    bottom: 0;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--za-nav-dawn-m);
+  }
+  .tab-item::after {
+    content: '';
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    top: -1px;
+    height: 2px;
+    pointer-events: none;
+    background: var(--za-nav-thread);
+    box-shadow: 0 0 10px 1px var(--za-nav-glow);
+    clip-path: inset(0 -12px -12px -12px); /* l'alone scende nella barra, non esce sopra il filo */
+    transform: scaleX(0);
+  }
+  .tab-item:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--za-line);
+  }
+  .tab-item[aria-current='page'] {
+    color: var(--za-nav-ink-active);
+  }
+  .tab-item[aria-current='page']::before {
+    opacity: 1;
+  }
+  .tab-item[aria-current='page']::after {
+    transform: none;
+  }
+  .tab-item__clasp {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: -12px;
+    margin-left: -11px;
+  }
+  .tab-item__badge {
+    position: absolute;
+    top: var(--za-space-1);
+    left: 50%;
+    margin-left: 6px;
+  }
+
+  /* ---------------- Comune ---------------- */
+  @media (hover: hover) {
+    .nav-item:hover {
+      color: var(--za-text);
+      text-shadow: 0 0 10px rgba(255, 231, 160, 0.25);
+    }
+    .nav-item:hover::before {
+      opacity: 0.5;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-item,
+    .nav-item::before,
+    .nav-item::after,
+    .nav-item__clasp {
+      transition: none;
+      animation: none;
+    }
+  }
+}
+
+@keyframes za-nav-dawn {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes za-nav-clasp-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-45deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}

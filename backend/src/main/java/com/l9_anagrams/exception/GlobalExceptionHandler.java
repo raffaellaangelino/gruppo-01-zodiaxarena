@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,7 +38,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(RuleViolationException.class)
 	public ResponseEntity<ApiErrorResponse> rules(RuleViolationException exception) {
-		return build(HttpStatus.UNPROCESSABLE_CONTENT, ApiErrorCode.RULE_VIOLATION,
+		return build(HttpStatus.UNPROCESSABLE_CONTENT, exception.getCode(),
 				"Game rules violated", Map.of("rules", exception.getViolations()));
 	}
 
@@ -62,6 +63,13 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ApiErrorResponse> invalidArgument(IllegalArgumentException exception) {
 		return build(HttpStatus.BAD_REQUEST, ApiErrorCode.VALIDATION_ERROR, exception.getMessage(), Map.of());
+	}
+
+	/** Due salvataggi contemporanei della stessa riga (@Version, ad esempio sul Deck). */
+	@ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+	public ResponseEntity<ApiErrorResponse> optimisticLock(ObjectOptimisticLockingFailureException exception) {
+		return build(HttpStatus.CONFLICT, ApiErrorCode.CONFLICT,
+				"Data was modified by another request: reload and retry", Map.of());
 	}
 
 	@ExceptionHandler(BadCredentialsException.class)

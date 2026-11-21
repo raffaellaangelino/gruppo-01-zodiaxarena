@@ -1,0 +1,28 @@
+/* Costellazione di caricamento: le stelle si accendono una dopo l'altra, in ciclo. */
+
+@layer components {
+  .loading-constellation__star {
+    opacity: 0.2;
+    animation: za-star-light 2s var(--za-ease-inout) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loading-constellation__star {
+      opacity: 0.6;
+      animation: none;
+    }
+  }
+}
+
+@keyframes za-star-light {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.2;
+  }
+}

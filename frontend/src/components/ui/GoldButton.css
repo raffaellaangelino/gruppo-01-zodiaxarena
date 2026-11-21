@@ -1,0 +1,98 @@
+/* =====================================================================
+   Pulsante d'oro (Sigillo): stati della lastra e dei fili.
+   La forma a incavo la disegna GoldButton.tsx; qui solo i materiali, dai token.
+   Riferimento: FOUNDATIONS §4 (pulsanti), D-020; generatore gen_s.py → btn().
+   ===================================================================== */
+
+@layer components {
+  .gold-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: var(--za-space-3);
+    border: 0;
+    background: none;
+    color: var(--za-btn-ink);
+    text-decoration: none; /* anche quando è un collegamento (GoldLink) */
+    cursor: pointer;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+    transition: transform var(--za-dur-instant) var(--za-ease-out);
+  }
+
+  /* Il focus è l'anello a incavo disegnato nell'SVG, non il riquadro globale */
+  .gold-button:focus-visible {
+    box-shadow: none;
+  }
+
+  .gold-button__plate {
+    position: absolute;
+    inset: 0;
+    background: var(--za-btn-volume), var(--za-btn-sheen), var(--za-btn-gold);
+  }
+
+  .gold-button__edge {
+    stroke: var(--za-btn-edge);
+  }
+
+  .gold-button__highlight {
+    stroke: var(--za-btn-highlight);
+  }
+
+  .gold-button__focus {
+    stroke: var(--za-gold-bright);
+    opacity: 0;
+  }
+
+  .gold-button:focus-visible .gold-button__focus {
+    opacity: 1;
+  }
+
+  .gold-button__label {
+    position: relative;
+    letter-spacing: 0.08em;
+    margin-right: -0.08em; /* compensa la spaziatura dopo l'ultima lettera: testo centrato */
+    white-space: nowrap;
+  }
+
+  /* Hover: la luce si accende (solo con un puntatore vero) */
+  @media (hover: hover) {
+    .gold-button:hover:not(:disabled, [aria-busy='true']) .gold-button__plate {
+      background: var(--za-btn-volume), var(--za-btn-sheen), var(--za-btn-gold-hover);
+    }
+  }
+
+  /* Premuto: la luce si spegne e il pulsante scende di 1 px */
+  .gold-button:active:not(:disabled, [aria-busy='true']) {
+    transform: translateY(1px);
+    filter: none;
+  }
+  .gold-button:active:not(:disabled, [aria-busy='true']) .gold-button__plate {
+    background: var(--za-btn-volume), var(--za-btn-gold-pressed);
+  }
+  .gold-button:active:not(:disabled, [aria-busy='true']) .gold-button__highlight {
+    stroke: transparent;
+  }
+
+  /* Disattivato: oro spento, nessuna luce, nessuna ombra */
+  .gold-button:disabled {
+    cursor: not-allowed;
+    filter: none;
+    color: var(--za-btn-ink-disabled);
+  }
+  .gold-button:disabled .gold-button__plate {
+    background: var(--za-btn-volume), var(--za-btn-gold-disabled);
+  }
+  .gold-button:disabled .gold-button__edge {
+    stroke: var(--za-btn-edge-disabled);
+  }
+  .gold-button:disabled .gold-button__highlight {
+    stroke: transparent;
+  }
+
+  /* In attesa (es. invio del modulo): resta d'oro, senza luce né pressione */
+  .gold-button[aria-busy='true'] {
+    cursor: progress;
+    transform: none;
+  }
+}

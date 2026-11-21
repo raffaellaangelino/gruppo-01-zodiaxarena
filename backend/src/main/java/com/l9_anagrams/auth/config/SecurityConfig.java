@@ -36,6 +36,8 @@ public class SecurityConfig {
 			"/api/auth/register",
 			"/api/auth/register/preview",
 			"/api/auth/nickname-available",
+			// Spring inoltra ogni errore a /error: se fosse protetto, 404/409/422
+			// arriverebbero al client come 401 (contratto §1.2, issue #48)
 			"/error",
 	};
 

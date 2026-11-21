@@ -24,6 +24,7 @@
   /* ---------- Colore · testo ---------- */
   --za-text: #F3EBDD;            /* 15.0:1 su bg · testo principale */
   --za-text-muted: #B7B9CE;      /*  9.2:1 su bg · testo secondario, metadati */
+  --za-text-soft: #D5D2E2;       /* 11.8:1 sulla colonna · etichette dei campi, sottotitoli dei moduli (tavole Accedi, Registrati) */
   --za-text-disabled: #7C819C;   /*  4.6:1 su bg · solo stati disabilitati, mai testo da leggere */
   --za-text-on-gold: #1A1408;    /*  9.7:1 sull'oro · testo dei pulsanti pieni */
 
@@ -37,6 +38,7 @@
   --za-line: rgba(217, 185, 124, 0.55);      /* filo d'oro singolo (separatori importanti, header) */
   --za-line-thin: rgba(235, 207, 147, 0.60); /* filo interno della doppia riga */
   --za-line-soft: rgba(243, 235, 221, 0.10); /* separatori di lista */
+  --za-line-title: linear-gradient(90deg, rgba(217,185,124,0.55), rgba(217,185,124,0.15)); /* filo del titolo con linea */
 
   /* ---------- Colore · stato ---------- */
   --za-success: #7EE0A4;         /* 11.1:1 · vittoria, valido, accreditato */
@@ -69,6 +71,7 @@
   /* ---------- Tipografia ---------- */
   --za-font-display: "Cinzel", "Times New Roman", serif;  /* titoli, etichette, pulsanti, numeri delle carte */
   --za-font-body: "Nunito", system-ui, sans-serif;         /* testo, dati, moduli */
+  --za-font-symbol: "Apple Symbols", "Noto Sans Symbols", "Segoe UI Symbol", sans-serif; /* glifi dei segni (♌), sempre come testo, mai emoji */
   /* Scala (desktop / mobile). Cinzel sempre in maiuscolo sotto i 24 px. */
   --za-type-display: 700 3.875rem/0.96 var(--za-font-display);     /* titolo eroico: 1 per schermata (62 dalla Home definitiva, 10/11) */
   --za-type-display-m: 700 2.25rem/1.0 var(--za-font-display);
@@ -86,9 +89,17 @@
   --za-type-body: 400 1rem/1.5 var(--za-font-body);           /* testo corrente: minimo 16 px (brief, #22) */
   --za-type-body-strong: 700 1rem/1.5 var(--za-font-body);
   --za-type-meta: 600 0.875rem/1.4 var(--za-font-body);           /* metadati, mai testo corrente */
+  --za-type-meta-strong: 700 0.875rem/1.4 var(--za-font-body);    /* etichette dei campi, collegamenti nei moduli (tavole Accedi, Registrati) */
   --za-type-caption: 700 0.75rem/1.3 var(--za-font-body);        /* etichette brevi sotto icone: minimo assoluto */
   --za-type-number: 800 1rem/1 var(--za-font-body);           /* numeri dell'interfaccia: tabular-nums */
-  --za-type-stat: 900 1.5625rem/1 var(--za-font-display);          /* ATK/DEF sulle carte (come gli SVG approvati) */
+  --za-type-stat: 900 1.5625rem/1 var(--za-font-display);
+  --za-type-badge: 800 0.75rem/1 var(--za-font-body);            /* numero dei contatori (badge) */
+  --za-type-lore: 600 1.0625rem/1.5 var(--za-font-body);          /* racconto sotto il titolo della scena (17) */
+  --za-type-lore-m: 600 0.9375rem/1.5 var(--za-font-body);        /* lo stesso su mobile (15) */
+  --za-type-row: 400 0.875rem/1.3 var(--za-font-body);            /* testo delle righe nei pannelli ("Maia ti ha sfidato") */
+  --za-type-row-meta: 400 0.75rem/1.35 var(--za-font-body);       /* stato sotto la riga ("ricevuta oggi"); mai testo da leggere a lungo */
+  --za-type-panel-title: 700 1rem/1.2 var(--za-font-display);    /* titolo con linea dei pannelli ("Ti aspettano"), maiuscolo +0.08em */
+  --za-type-panel-title-m: 700 0.9375rem/1.2 var(--za-font-display);          /* ATK/DEF sulle carte (come gli SVG approvati) */
   --za-tracking-caps: 0.08em;
   --za-tracking-eyebrow: 0.12em;
 
@@ -110,8 +121,10 @@
   --za-line-inner: 1px;      /* filo interno */
 
   /* ---------- Pulsanti · set A Incavo, l'oro delle carte (D-020) ---------- */
-  --za-card-gold: linear-gradient(180deg, #FFF0B3 0%, #E8B04B 45%, #9C6A1C 100%);   /* id="gold" delle carte: anelli, medaglioni */
-  --za-btn-gold: linear-gradient(90deg, #B07A22 0%, #FFE7A0 50%, #B07A22 100%);     /* id="goldH" delle carte: Sigillo */
+  --za-card-gold-light: #FFF0B3;  --za-card-gold-mid: #E8B04B;  --za-card-gold-dark: #9C6A1C;   /* id="gold" delle carte, per gli SVG */
+  --za-card-gold: linear-gradient(180deg, var(--za-card-gold-light) 0%, var(--za-card-gold-mid) 45%, var(--za-card-gold-dark) 100%);   /* anelli, medaglioni */
+  --za-btn-gold-side: #B07A22;  --za-btn-gold-center: #FFE7A0;   /* id="goldH" delle carte, per gli SVG (contorno del terziario) */
+  --za-btn-gold: linear-gradient(90deg, var(--za-btn-gold-side) 0%, var(--za-btn-gold-center) 50%, var(--za-btn-gold-side) 100%);     /* Sigillo */
   --za-btn-gold-hover: linear-gradient(90deg, #C08A2E 0%, #FFF2C6 50%, #C08A2E 100%);
   --za-btn-gold-pressed: linear-gradient(90deg, #94641A 0%, #E9C77E 50%, #94641A 100%);
   --za-btn-volume: linear-gradient(180deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 45%, rgba(58,34,4,0.28) 100%);
@@ -119,6 +132,72 @@
   --za-btn-edge: #7A5216;          /* bordo del Sigillo */
   --za-btn-ink: #2A1405;           /* testo sull'oro (come il nome delle carte) */
   --za-btn-plate: rgba(11,14,53,0.72); /* Lastra: fondo blu notte */
+  --za-btn-highlight: rgba(255,246,214,0.55); /* filo chiaro interno del Sigillo (a 3 px dal bordo), spento da premuto */
+  --za-btn-gold-disabled: linear-gradient(90deg, #55503F 0%, #7C7562 50%, #55503F 100%);
+  --za-btn-edge-disabled: #3D392D;
+  --za-btn-ink-disabled: #2F2B22;
+  --za-btn-clasp-disabled: #4A4636;  /* fermaglio e stella del pulsante eroico spento */
+  --za-btn-star: #FFD66B;            /* stella nel fermaglio del pulsante eroico */
+  --za-coin-face-light: #F6D27A;  --za-coin-face-dark: #B9832C;  --za-coin-engrave: #7A4E12;   /* moneta dei crediti */
+
+  /* ---------- Ornamenti · fermaglio della voce attiva e bordo di gioco (barra, colonna d'accesso) ---------- */
+  --za-clasp-light: #FFE7A0;  --za-clasp-shine: #FFF3C4;  --za-clasp-dark: #C8913A;   /* bordo del fermaglio a rombo; la stella è --za-clasp-light */
+  --za-edge-gold: linear-gradient(180deg, var(--za-card-gold-dark) 0%, var(--za-card-gold-mid) 25%, var(--za-clasp-light) 50%, var(--za-card-gold-mid) 75%, var(--za-card-gold-dark) 100%); /* filo spesso (2 px) */
+  --za-edge-thin: rgba(217,185,124,0.45);   /* filo sottile (1 px), 6 px più all'interno */
+  --za-edge-gold-h: linear-gradient(90deg, var(--za-card-gold-dark) 0%, var(--za-card-gold-mid) 25%, var(--za-clasp-light) 50%, var(--za-card-gold-mid) 75%, var(--za-card-gold-dark) 100%); /* lo stesso filo, orizzontale (barra di gioco) */
+
+  /* ---------- Moduli · campi (tavole Accedi, Registrati) ---------- */
+  --za-field-bg: rgba(10,15,34,0.75);
+  --za-field-border: rgba(243,235,221,0.22);       /* 1 px */
+  --za-field-border-focus: var(--za-card-gold-mid); /* 2 px */
+  --za-field-border-error: rgba(255,138,155,0.9);  /* 2 px */
+  --za-danger-soft: #FF8A9B;     /* 7.8:1 · testo e icona degli errori nei moduli */
+
+  /* ---------- Barra di gioco (FOUNDATIONS §6b, gen_h.header_sinistra; mobile §6b-ter, gen_m) ---------- */
+  --za-bar-h: 4rem;              /* 64 · la fascia utile è 58, sopra il doppio filo */
+  --za-bar-fill: linear-gradient(180deg, rgba(18,24,48,0.84), rgba(10,15,34,0.8));
+  --za-bar-fill-m: linear-gradient(180deg, rgba(18,24,48,0.86), rgba(10,15,34,0.84));
+  --za-bar-shade: linear-gradient(180deg, rgba(6,9,22,0.6) 0%, rgba(6,9,22,0.35) 45%, rgba(6,9,22,0) 100%); /* 150 px sotto la barra, sopra la scena */
+  --za-nav-ink: #CDBF9C;         /* voci della barra (crema-oro) */
+  --za-nav-ink-active: var(--za-clasp-light);
+  --za-tab-ink: #B9AE90;         /* voci della barra mobile in basso */
+  --za-nav-dawn: radial-gradient(60% 105% at 50% 100%, rgba(255,214,107,.46) 0%, rgba(255,214,107,.16) 45%, rgba(255,214,107,0) 78%); /* chiarore che sale dal filo */
+  --za-nav-dawn-m: radial-gradient(60% 80% at 50% 0%, rgba(255,214,107,.40), rgba(255,214,107,.12) 45%, rgba(255,214,107,0) 78%); /* mobile: scende dal filo */
+  --za-nav-thread: linear-gradient(90deg, rgba(255,243,196,0), var(--za-clasp-shine) 30%, var(--za-clasp-shine) 70%, rgba(255,243,196,0)); /* tratto di filo acceso */
+  --za-nav-glow: rgba(255,214,107,.75);
+  --za-glow-selected: drop-shadow(0 0 1px #FFE7A0) drop-shadow(0 0 14px rgba(255,214,107,0.45)); /* alone della Tessera scelta (Fazioni, gen_pf.god_col) */
+  --za-text-warm: #E6DCC8;       /* numero dei crediti */
+  --za-divider-gold: rgba(217,185,124,0.3);   /* separatore verticale nella barra */
+  --za-divider-band: rgba(217,185,124,0.22);  /* separatore tra le celle della Banda */
+
+  /* ---------- Vetro dei pannelli (FOUNDATIONS §4b) ---------- */
+  --za-glass-fill: linear-gradient(180deg, rgba(26,34,64,0.66), rgba(14,20,40,0.56));
+  --za-glass-saturate: 1.15;
+
+  /* ---------- Medaglioni e avatar (Banda, barra) ---------- */
+  --za-medallion-fill: radial-gradient(circle, var(--za-surface-2), #0B0E35);
+  --za-medallion-ring: 0 0 0 1.5px var(--za-gold), 0 0 0 4px rgba(11,14,53,0.8), 0 0 0 5px rgba(232,176,75,0.4);
+  --za-medallion-ring-l: 0 0 0 2px var(--za-gold), 0 0 0 6px rgba(11,14,53,0.9), 0 0 0 7px rgba(232,176,75,0.5); /* medaglione grande del segno (registrazione, 88 px) */
+  --za-avatar-ring: 0 0 0 1.5px var(--za-gold), 0 0 0 3px rgba(11,14,53,0.75), 0 0 0 4px rgba(232,176,75,0.5);
+  --za-medallion-core: #0B0E35;
+
+  /* ---------- Scena della Home (FOUNDATIONS §6c, D-021) ---------- */
+  --za-scene-veil-home: radial-gradient(ellipse 45rem 29.375rem at 19% 52%, rgba(6,9,22,0.74) 0%, rgba(6,9,22,0.5) 48%, rgba(6,9,22,0) 80%),
+    linear-gradient(90deg, rgba(6,9,22,0.55) 0%, rgba(6,9,22,0.2) 30%, rgba(6,9,22,0) 45%),
+    linear-gradient(0deg, rgba(6,9,22,0.85) 0%, rgba(6,9,22,0.35) 14%, rgba(6,9,22,0) 28%);
+  --za-scene-veil-home-m: linear-gradient(180deg, rgba(6,9,22,0) 40%, rgba(6,9,22,0.75) 72%, var(--za-scene-base) 100%);
+  --za-scene-veil-portico: rgba(6,9,22,0.45);   /* pagine interne: il portico attorno all'arena (FOUNDATIONS §6b, sfondo rev. 10/11) */
+  --za-scene-veil-portico-reading: linear-gradient(90deg, rgba(6,9,22,0.55) 0%, rgba(6,9,22,0.8) 22%, rgba(6,9,22,0.8) 82%, rgba(6,9,22,0.55) 100%); /* pagine di testo: velo più fitto al centro */
+  --za-text-shadow-hero: 0 3px 0 #05070F, 0 0 30px rgba(6,9,22,0.9);   /* titolo sulla key art */
+  --za-text-shadow-scene: 0 1px 2px #05070F, 0 0 12px rgba(5,7,15,0.95); /* testo sulla key art */
+  --za-card-thumb-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 5px 10px rgba(0,0,0,0.5); /* carte del ventaglio */
+
+  /* ---------- Accesso · colonna laterale e scena (FOUNDATIONS §6b-decies) ---------- */
+  --za-column-w: 32.5rem;        /* 520 */
+  --za-column-fill: linear-gradient(180deg, rgba(18,24,48,0.94), rgba(10,15,34,0.92));
+  --za-scene-base: #0A0F22;      /* sotto la key art, finché si carica */
+  --za-scene-veil-auth: linear-gradient(90deg, rgba(6,9,22,0.85) 0%, rgba(6,9,22,0.55) 38%, rgba(6,9,22,0.1) 60%, rgba(6,9,22,0.35) 100%);
+  --za-scene-veil-reveal: radial-gradient(ellipse 28.75rem 23.75rem at 50% 52%, rgba(6,9,22,0.78), rgba(6,9,22,0.25) 100%); /* registrazione: velo dietro il segno che appare nella scena */
   --za-btn-h-hero: 3.5rem; --za-btn-h: 2.75rem; --za-btn-h-tertiary: 2.25rem; --za-btn-icon: 2.75rem; /* 56 · 44 · 36 · 44 */
 
   /* ---------- Profondità ---------- */

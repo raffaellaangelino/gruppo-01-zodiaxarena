@@ -30,6 +30,7 @@ public class PlayerServiceImpl implements PlayerService {
 		return playerRepo.findAll().stream().map(PlayerResponseDto::from).toList();
 	}
 
+	// TODO: passare id al posto della mail 
 	@Override
 	@Transactional(readOnly = true)
 	public PlayerResponseDto getMe(String email) {
