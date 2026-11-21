@@ -6,6 +6,9 @@
 /** I quattro elementi (enum di sistema, come `SignType` nel backend). */
 export type Element = 'FIRE' | 'WATER' | 'EARTH' | 'AIR'
 
+/** Tipo di carta: le Creature vanno negli slot dei pianeti, l'Ascendente nel suo slot. */
+export type CardType = 'CREATURE' | 'ASCENDANT'
+
 /** Rarità: decisa dal pianeta; gli Ascendenti hanno la loro. */
 export type Tier = 'COMMON' | 'RARE' | 'EPIC' | 'LEGENDARY' | 'ASCENDANT'
 

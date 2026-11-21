@@ -1,0 +1,39 @@
+/* =====================================================================
+   Finestra modale: posizione, velo e misure su mobile.
+   Riferimento: COMPONENTS (Finestra), tavola Sfide-Nuova (gen_sf.overlay).
+   ===================================================================== */
+
+@layer components {
+  .dialog {
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--za-text);
+    max-height: calc(100dvh - 2rem);
+    overflow: visible;
+  }
+
+  .dialog::backdrop {
+    background: var(--za-scrim);
+    backdrop-filter: blur(3px);
+  }
+
+  /* Lo scorrimento sta dentro la Tessera: fondo e fili restano interi */
+  .dialog__body {
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+  }
+
+  /* Mobile: a tutto schermo, il contenuto scorre */
+  @media (width < 48rem) {
+    .dialog,
+    .dialog__panel,
+    .dialog__body {
+      max-width: none;
+      width: 100%;
+      height: 100dvh;
+      max-height: 100dvh;
+    }
+  }
+}

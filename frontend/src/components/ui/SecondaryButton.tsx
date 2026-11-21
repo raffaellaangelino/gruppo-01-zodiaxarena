@@ -1,4 +1,5 @@
 import { useId, useState, type ComponentPropsWithoutRef, type CSSProperties } from 'react'
+import { Link, type LinkProps } from 'react-router'
 import { useElementSize } from '@/hooks/useElementSize'
 import { buttonNotchRadius, notchPath } from '@/lib/notchPath'
 import './SecondaryButton.css'
@@ -13,6 +14,32 @@ export interface SecondaryButtonProps extends ComponentPropsWithoutRef<'button'>
 }
 
 const SIZE_CLASSES = { m: 'h-11', l: 'h-14' } as const
+
+/** Proprietà di {@link SecondaryLink}. */
+export type SecondaryLinkProps = LinkProps & Pick<SecondaryButtonProps, 'size'>
+
+/**
+ * Collegamento con l'aspetto del pulsante secondario: per le azioni secondarie che portano a
+ * un'altra pagina (es. "Riguarda il Rotolo", "Modifica il Cielo").
+ */
+export function SecondaryLink({
+  size = 'm',
+  className = '',
+  children,
+  ...rest
+}: SecondaryLinkProps) {
+  const [element, setElement] = useState<HTMLAnchorElement | null>(null)
+  return (
+    <Link
+      ref={setElement}
+      className={`secondary-button type-button no-underline ${SIZE_CLASSES[size]} ${className}`}
+      {...rest}
+    >
+      <SecondaryOrnament element={element} />
+      <span className="secondary-button__label">{children}</span>
+    </Link>
+  )
+}
 
 /**
  * Pulsante secondario del design system (Lastra): blu notte a incavo con il doppio filo d'oro,

@@ -8,6 +8,7 @@ export function playerSummaryMock(): PlayerSummary {
     sign: 'LEONE',
     credits: 340,
     faction: { god: 'EFESTO', element: 'FIRE' },
+    deckIds: [1],
     unreadNotifications: 1,
     pending: { challenges: 2, trades: 1, replays: 1 },
     onboarding: { completed: true, currentStep: null },

@@ -1,4 +1,4 @@
-import type { Element, GodCode, PlanetCode, SignCode } from '@/domain/game'
+import type { Element, GodCode, PlanetCode, SignCode, Tier } from '@/domain/game'
 
 /**
  * Nomi in italiano dei codici del gioco: l'API usa codici stabili, l'interfaccia mostra
@@ -124,4 +124,27 @@ export const SIGN_GLYPHS: Record<SignCode, string> = {
   CAPRICORNO: '♑︎',
   ACQUARIO: '♒︎',
   PESCI: '♓︎',
+}
+
+/** Rarità come la stampano le carte (gli Ascendenti sono "Ultra-rara"). */
+export const TIER_LABELS: Record<Tier, string> = {
+  COMMON: 'Comune',
+  RARE: 'Rara',
+  EPIC: 'Epica',
+  LEGENDARY: 'Leggendaria',
+  ASCENDANT: 'Ultra-rara',
+}
+
+/**
+ * Nome di una carta come è stampato sopra: "Sole in Leone" per una Creatura,
+ * "Ascendente Leone" per un Ascendente.
+ *
+ * @param planet Pianeta della Creatura, oppure `null` per un Ascendente.
+ * @param sign Segno della carta.
+ * @returns Il nome.
+ */
+export function cardName(planet: PlanetCode | null, sign: SignCode): string {
+  return planet
+    ? `${PLANET_LABELS[planet]} in ${SIGN_LABELS[sign]}`
+    : `Ascendente ${SIGN_LABELS[sign]}`
 }

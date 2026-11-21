@@ -19,6 +19,8 @@ export interface PlayerSummary {
   credits: number
   /** Fazione scelta; `null` finché non la sceglie (primo passo con Ermes). */
   faction: Faction | null
+  /** I mazzi del giocatore (in fase 1 uno solo, "Primo cielo" dalla registrazione): servono per sfidare. */
+  deckIds: number[]
   /** Novità senza un'azione da fare (la campanella). */
   unreadNotifications: number
   /** Cose da fare, contate sulla loro voce della barra. */

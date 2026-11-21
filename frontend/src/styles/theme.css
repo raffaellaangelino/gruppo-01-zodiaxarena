@@ -132,6 +132,8 @@
   --shadow-raised: var(--za-shadow-raised);
   --shadow-overlay: var(--za-shadow-overlay);
   --shadow-card-thumb: var(--za-card-thumb-shadow);
+  --shadow-card: var(--za-card-shadow);
+  --shadow-card-selected: var(--za-card-selected);
   --shadow-medallion: var(--za-medallion-ring);
   --shadow-medallion-l: var(--za-medallion-ring-l);
   --shadow-avatar: var(--za-avatar-ring);

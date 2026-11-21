@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { PATHS } from '@/app/paths'
 import { CardFan } from '@/components/game/CardFan'
+import { DeckValidity } from '@/components/game/DeckValidity'
 import { ElementEmblem } from '@/components/game/ElementEmblem'
 import { Constellation } from '@/components/progress/Constellation'
 import { Meridian } from '@/components/progress/Meridian'
@@ -63,17 +64,7 @@ export function buildHighlights(
       category: 'Il tuo Cielo',
       title: home.deck.name,
       ariaLabel: `Il tuo Cielo: ${home.deck.name}, ${home.deck.valid ? 'valido' : 'da correggere'}`,
-      status: home.deck.valid ? (
-        <span className="inline-flex items-center gap-1 font-extrabold text-success">
-          <Icon name="conferma" size={14} />
-          Valido
-        </span>
-      ) : (
-        <span className="inline-flex items-center gap-1 font-extrabold text-danger">
-          <Icon name="avviso" size={14} />
-          Da correggere
-        </span>
-      ),
+      status: <DeckValidity valid={home.deck.valid} />,
     },
     {
       key: 'missions',
