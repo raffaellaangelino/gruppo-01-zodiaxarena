@@ -107,7 +107,8 @@ const numbers = (value: unknown): number[] =>
 
 /**
  * Traduce un evento dell'engine; gli eventi che non servono alla cronaca (mescolata, pescata,
- * inizio e fine) restano fuori: inizio e fine stanno già nel risultato.
+ * inizio e fine) restano fuori: inizio e fine stanno già nel risultato, l'ordine dei mazzi in
+ * `Match.decks`.
  *
  * @param event Evento dell'engine.
  * @param deckLeft Carte rimaste nel mazzo dopo l'ultima pescata di quel lato.
@@ -196,8 +197,14 @@ export function toMatch(dto: MatchDto): Match {
   const outcome: MatchOutcome = winner === null ? 'DRAW' : winner === dto.me ? 'WIN' : 'LOSS'
 
   const deckLeft: Record<MatchSide, number | null> = { A: null, B: null }
+  const decks: Record<MatchSide, MatchCard[]> = { A: [], B: [] }
   const events: MatchEvent[] = []
   for (const event of result.log) {
+    if (event.type === 'deck_shuffled' && event.player) {
+      const cards = event.details.cards
+      if (Array.isArray(cards)) decks[event.player] = cards.map((c) => parseEngineCard(String(c)))
+      continue
+    }
     if (event.type === 'card_drawn' && event.player) {
       deckLeft[event.player] = num(event.details.cardsRemaining)
       continue
@@ -221,6 +228,7 @@ export function toMatch(dto: MatchDto): Match {
     rounds: result.roundsPlayed,
     finalHp: { A: result.playerAPv, B: result.playerBPv },
     tieBreaker: result.tieBreaker,
+    decks,
     events,
   }
 }

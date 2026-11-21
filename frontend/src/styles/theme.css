@@ -67,6 +67,7 @@
   --color-def: var(--za-def);
   --color-atk-card: var(--za-atk-card);
   --color-def-card: var(--za-def-card);
+  --color-stat-hurt: var(--za-stat-hurt);
 
   /* ---------- Colore · tier (*-text = variante leggibile come testo) ---------- */
   --color-tier-comune: var(--za-tier-comune);

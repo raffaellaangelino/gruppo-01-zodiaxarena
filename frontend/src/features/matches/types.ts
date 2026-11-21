@@ -93,5 +93,7 @@ export interface Match {
   finalHp: Record<MatchSide, number>
   /** Criterio dello spareggio, se c'è stato. */
   tieBreaker: string | null
+  /** I mazzi nell'ordine in cui l'engine li ha mescolati: l'ordine di pesca (segnalini del Rotolo). */
+  decks: Record<MatchSide, MatchCard[]>
   events: MatchEvent[]
 }
