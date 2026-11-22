@@ -153,7 +153,7 @@ function SkyEditor({ deckId, faction }: { deckId: number; faction: Faction | nul
         : null
 
   return (
-    <div className="mt-6 grid gap-8 pb-10 xl:grid-cols-[minmax(0,1fr)_27rem]">
+    <div className="mt-8 grid gap-7 pb-10 xl:grid-cols-[minmax(0,1fr)_30rem]">
       <div className="flex min-w-0 flex-col gap-4">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
           {editingName ? (
@@ -169,7 +169,7 @@ function SkyEditor({ deckId, faction }: { deckId: number; faction: Faction | nul
               className="rounded-md h-10 min-w-0 border border-field-border bg-field-bg px-3 font-display text-[1.25rem] font-bold text-text"
             />
           ) : (
-            <h2 className="flex items-center gap-2 font-display text-[1.375rem] font-bold tracking-[0.08em] text-text uppercase">
+            <h2 className="flex items-center gap-2 font-display text-[1.25rem] font-bold tracking-[0.08em] text-text uppercase">
               {name || saved.name}
               <button
                 type="button"

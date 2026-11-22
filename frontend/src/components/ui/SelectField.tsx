@@ -18,6 +18,11 @@ export interface SelectFieldProps extends Omit<ComponentPropsWithoutRef<'select'
   options: SelectOption[]
   /** Campo non valido: bordo rosso. Il messaggio lo scrive il gruppo sotto i campi. */
   invalid?: boolean
+  /**
+   * `field` (base): campo dei moduli, etichetta sopra, alto 44. `filter`: filtro di una lista
+   * (tavola Collezione-Cielo, "Ordina: ATK"): pillola alta 36 con il nome dentro e la scelta in oro.
+   */
+  variant?: 'field' | 'filter'
 }
 
 /**
@@ -31,6 +36,7 @@ export function SelectField({
   placeholder,
   options,
   invalid = false,
+  variant = 'field',
   id,
   className = '',
   value,
@@ -41,6 +47,35 @@ export function SelectField({
   const ring = invalid
     ? 'inset-ring-2 inset-ring-field-border-error'
     : 'inset-ring inset-ring-field-border focus-within:inset-ring-2 focus-within:inset-ring-field-border-focus'
+
+  if (variant === 'filter') {
+    return (
+      <div
+        className={`relative flex h-9 items-center gap-1 rounded-pill pr-9 pl-4 inset-ring inset-ring-field-border focus-within:inset-ring-2 focus-within:inset-ring-field-border-focus ${className}`}
+      >
+        <label htmlFor={selectId} className="shrink-0 text-text type-meta-strong">
+          {label}:
+        </label>
+        <select
+          id={selectId}
+          value={value}
+          className="field-sizing-content h-full min-w-0 cursor-pointer appearance-none bg-transparent text-gold-bright shadow-none outline-none type-meta-strong"
+          {...selectProps}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value} className="bg-surface text-text">
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <Icon
+          name="espandi"
+          size={14}
+          className="pointer-events-none absolute right-3.5 text-text-muted"
+        />
+      </div>
+    )
+  }
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>

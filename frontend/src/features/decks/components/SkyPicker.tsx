@@ -130,7 +130,7 @@ export function SkyPicker({
           {COPY.title(title)}
         </h2>
 
-        <div className="flex flex-wrap items-end gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           {!isAscendant && (
             <SelectField
               label={COPY.element}
@@ -141,7 +141,7 @@ export function SkyPicker({
                 { value: 'ALL', label: COPY.allElements },
                 ...SKY_ELEMENTS.map((el) => ({ value: el, label: ELEMENT_LABELS[el] })),
               ]}
-              className="w-40"
+              variant="filter"
             />
           )}
           <SelectField
@@ -154,7 +154,7 @@ export function SkyPicker({
               { value: 'atk', label: COPY.sortAtk },
               { value: 'def', label: COPY.sortDef },
             ]}
-            className="w-40"
+            variant="filter"
           />
         </div>
 
