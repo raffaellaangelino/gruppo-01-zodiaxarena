@@ -9,12 +9,22 @@
  */
 export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
 
-/**
- * `GET /api/home` non esiste ancora nel backend (contratto API §3.2): finché non arriva, la Home
- * usa i dati di esempio anche con `VITE_USE_MOCKS=false`, così il resto si prova con il backend
- * vero. Quando l'endpoint esiste, si mette a `true`.
- */
-export const HOME_API_AVAILABLE = false
+/** Login e registrazione sono attivi. */
+export const AUTH_ENABLED = true
 
-/** Vero se una parte dell'interfaccia mostra dati di esempio: accende l'etichetta. */
-export const SHOWS_SAMPLE_DATA = USE_MOCKS || !HOME_API_AVAILABLE
+/**
+ * Endpoint del contratto API che il backend in `dev` non ha ancora. Finché valgono `false`, la
+ * parte che li usa resta sui dati di esempio (o fa a meno di quel dato) anche con
+ * `VITE_USE_MOCKS=false`, così il resto si prova con il backend vero. Quando un endpoint arriva,
+ * si mette a `true` qui e basta: le pagine non cambiano.
+ */
+export const BACKEND_READY = {
+  /** `GET /api/home` (contratto §3.2): dati della Home. */
+  home: false,
+  /** `GET /api/players/search?q=` (§10.1): cercare l'avversario. */
+  playerSearch: true,
+  /** `GET /api/decks/{id}` (§5.1, più mazzi per giocatore): il tuo Cielo con le carte. */
+  myDeck: true,
+  /** `GET /api/matches/{id}` (§8.2): una partita giocata. */
+  match: true,
+} as const

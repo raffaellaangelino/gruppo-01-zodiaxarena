@@ -67,6 +67,7 @@
   --color-def: var(--za-def);
   --color-atk-card: var(--za-atk-card);
   --color-def-card: var(--za-def-card);
+  --color-stat-hurt: var(--za-stat-hurt);
 
   /* ---------- Colore · tier (*-text = variante leggibile come testo) ---------- */
   --color-tier-comune: var(--za-tier-comune);
@@ -85,6 +86,10 @@
   --color-el-acqua: var(--za-el-acqua);
   --color-el-terra: var(--za-el-terra);
   --color-el-aria: var(--za-el-aria);
+  --color-el-fuoco-fill: var(--za-el-fuoco-fill);
+  --color-el-acqua-fill: var(--za-el-acqua-fill);
+  --color-el-terra-fill: var(--za-el-terra-fill);
+  --color-el-aria-fill: var(--za-el-aria-fill);
 
   /* ---------- Colore · campi dei moduli ---------- */
   --color-field-bg: var(--za-field-bg);
@@ -132,6 +137,8 @@
   --shadow-raised: var(--za-shadow-raised);
   --shadow-overlay: var(--za-shadow-overlay);
   --shadow-card-thumb: var(--za-card-thumb-shadow);
+  --shadow-card: var(--za-card-shadow);
+  --shadow-card-selected: var(--za-card-selected);
   --shadow-medallion: var(--za-medallion-ring);
   --shadow-medallion-l: var(--za-medallion-ring-l);
   --shadow-avatar: var(--za-avatar-ring);
@@ -217,6 +224,7 @@
 
 @utility type-display {
   font: var(--za-type-display);
+  letter-spacing: 0.02em;
 }
 @utility type-display-m {
   font: var(--za-type-display-m);

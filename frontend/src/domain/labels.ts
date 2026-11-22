@@ -1,4 +1,4 @@
-import type { Element, GodCode, PlanetCode, SignCode } from '@/domain/game'
+import type { Element, GodCode, PlanetCode, SignCode, Tier } from '@/domain/game'
 
 /**
  * Nomi in italiano dei codici del gioco: l'API usa codici stabili, l'interfaccia mostra
@@ -108,6 +108,17 @@ export const SIGN_IN: Record<SignCode, string> = {
 }
 
 /**
+ * Abilità di ogni elemento, come le applica l'engine (`RuleAbilities.ElementAbility`,
+ * `EarthDamageAbility`; i dadi d'Aria nel calcolo d'ingresso). Il frontend le descrive soltanto.
+ */
+export const ELEMENT_ABILITY: Record<Element, string> = {
+  FIRE: '+1 ATK quando attacca.',
+  WATER: '+1 DEF quando entra in campo.',
+  EARTH: 'Se cade, il giocatore perde 1 PV in meno.',
+  AIR: 'ATK e DEF si tirano con i dadi (2d4×2) quando entra in campo.',
+}
+
+/**
  * Glifi dei segni, con il selettore di variante testo (U+FE0E): restano segni d'oro,
  * mai emoji colorate. Si scrivono con il font `font-symbol`.
  */
@@ -124,4 +135,41 @@ export const SIGN_GLYPHS: Record<SignCode, string> = {
   CAPRICORNO: '♑︎',
   ACQUARIO: '♒︎',
   PESCI: '♓︎',
+}
+
+/**
+ * Glifi dei pianeti (tavola Collezione-Cielo, sopratitolo della casella), in variante testo
+ * come i segni: si scrivono con `font-symbol`.
+ */
+export const PLANET_GLYPHS: Record<PlanetCode, string> = {
+  SOLE: '☉︎',
+  LUNA: '☽︎',
+  MARTE: '♂︎',
+  GIOVE: '♃︎',
+  SATURNO: '♄︎',
+  MERCURIO: '☿︎',
+  VENERE: '♀︎',
+}
+
+/** Rarità come la stampano le carte (gli Ascendenti sono "Ultra-rara"). */
+export const TIER_LABELS: Record<Tier, string> = {
+  COMMON: 'Comune',
+  RARE: 'Rara',
+  EPIC: 'Epica',
+  LEGENDARY: 'Leggendaria',
+  ASCENDANT: 'Ultra-rara',
+}
+
+/**
+ * Nome di una carta come è stampato sopra: "Sole in Leone" per una Creatura,
+ * "Ascendente Leone" per un Ascendente.
+ *
+ * @param planet Pianeta della Creatura, oppure `null` per un Ascendente.
+ * @param sign Segno della carta.
+ * @returns Il nome.
+ */
+export function cardName(planet: PlanetCode | null, sign: SignCode): string {
+  return planet
+    ? `${PLANET_LABELS[planet]} in ${SIGN_LABELS[sign]}`
+    : `Ascendente ${SIGN_LABELS[sign]}`
 }

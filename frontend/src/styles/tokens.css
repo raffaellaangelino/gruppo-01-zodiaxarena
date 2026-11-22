@@ -2,7 +2,7 @@
    Non modificare qui: i token cambiano prima nel design system e poi si ricopiano. */
 
 /* =====================================================================
-   Zodiax Arena · Design token · v0.3 (2026-11-11)
+   Zodiax Arena · Design token · v0.4 (2026-11-20, colori e titolo del branding, D-030)
    Fonte: direzione artistica D-018 (tela "Direzione artistica · Home desktop"),
    colori delle carte approvate (assets/Carte, Logo e Icone/out/*.svg).
    Regole d'uso e motivazioni: design/system/FOUNDATIONS.md.
@@ -22,9 +22,9 @@
   --za-panel-fill: linear-gradient(180deg, var(--za-surface-2) 0%, var(--za-surface) 40%);
 
   /* ---------- Colore · testo ---------- */
-  --za-text: #F3EBDD;            /* 15.0:1 su bg · testo principale */
-  --za-text-muted: #B7B9CE;      /*  9.2:1 su bg · testo secondario, metadati */
-  --za-text-soft: #D5D2E2;       /* 11.8:1 sulla colonna · etichette dei campi, sottotitoli dei moduli (tavole Accedi, Registrati) */
+  --za-text: #FFF8EC;            /* 16.2:1 su bg · testo principale (Avorio del branding, D-030) */
+  --za-text-muted: #A8A3CF;      /*  7.6:1 su bg · testo secondario, metadati (branding, D-030) */
+  --za-text-soft: #EFE6FF;       /* 14.6:1 su bg · Lilla nebbia del branding (D-030): etichette dei campi, sottotitoli, testi lunghi */
   --za-text-disabled: #7C819C;   /*  4.6:1 su bg · solo stati disabilitati, mai testo da leggere */
   --za-text-on-gold: #1A1408;    /*  9.7:1 sull'oro · testo dei pulsanti pieni */
 
@@ -39,11 +39,12 @@
   --za-line-thin: rgba(235, 207, 147, 0.60); /* filo interno della doppia riga */
   --za-line-soft: rgba(243, 235, 221, 0.10); /* separatori di lista */
   --za-line-title: linear-gradient(90deg, rgba(217,185,124,0.55), rgba(217,185,124,0.15)); /* filo del titolo con linea */
+  --za-tab-underline: linear-gradient(90deg, rgba(255,243,196,0), #FFF3C4 25%, #FFF3C4 75%, rgba(255,243,196,0)); /* scheda attiva (gen_sf.tabs) */
 
   /* ---------- Colore · stato ---------- */
   --za-success: #7EE0A4;         /* 11.1:1 · vittoria, valido, accreditato */
   --za-danger: #FF6B7F;          /*  6.5:1 · sconfitta, errore, non valido */
-  --za-warning: #F2B85B;         /* 10.0:1 · in scadenza, attenzione */
+  --za-warning: #FFC46B;         /* 11.3:1 · in scadenza, attenzione (come nelle tavole, scelta dell'utente 20/11) */
   --za-info: var(--za-gold-bright);
 
   /* ---------- Colore · statistiche (dalle carte: #FF5A4E e #5C8BFF, schiariti per il testo) ---------- */
@@ -51,6 +52,7 @@
   --za-def: #6FA8FF;             /* 7.4:1 */
   --za-atk-card: #FF5A4E;        /* solo riempimenti, come sulle carte */
   --za-def-card: #5C8BFF;
+  --za-stat-hurt: #FFA49C;       /* DEF sotto quella d'ingresso nel Rotolo (tavola Sfide-Rotolo) */
 
   /* ---------- Colore · tier (dalle carte; *-text = variante leggibile come testo) ---------- */
   --za-tier-comune: #8A8A9E;        --za-tier-comune-text: #9097AD;  /* 6.1:1 */
@@ -60,20 +62,23 @@
   --za-tier-ascendente: #B98CFF;    --za-tier-ascendente-text: #D8DCE8;
   --za-tier-leggendaria-aura: linear-gradient(135deg, #7AF0FF, #C89BFF, #FF9BD2, #FFE38A);
   --za-tier-ascendente-aura: linear-gradient(135deg, #FF5A8A, #FFE38A, #7AF0FF, #B98CFF);
+  --za-tier-leggendaria-glow: #FF9BD2;  --za-tier-ascendente-glow: #7AF0FF;  /* luce olografica attorno alla carta (aura in Collezione) */
 
-  /* ---------- Colore · elementi (Q-36, approvati dall'utente il 07/11; presi dalle icone approvate) ----------
-     Sempre insieme allo stemma dell'elemento: il colore non è mai l'unico segnale. */
-  --za-el-fuoco: #FF6E40;        /* 6.4:1 */
-  --za-el-acqua: #62A8F2;        /* 7.1:1 · azzurro dei riflessi dell'icona blu, più chiaro della Rara (Q-36, 07/11) */
-  --za-el-terra: #A6CC5C;        /* 9.7:1 · verde germoglio delle foglie dell'icona, lontano dal verde del successo */
-  --za-el-aria: #C7B8FF;         /* 9.9:1 · lilla delle nuvole dell'icona, più chiaro del viola dell'Epica */
+  /* ---------- Colore · elementi (branding del team, D-030, 20/11; prima Q-36) ----------
+     Sempre insieme allo stemma dell'elemento: il colore non è mai l'unico segnale.
+     --za-el-* per testo e linee su notte; --za-el-*-fill pieni, per icone e barre. */
+  --za-el-fuoco: #F2604A;        --za-el-fuoco-fill: #D82C23;
+  --za-el-acqua: #6E95F0;        --za-el-acqua-fill: #2F63CD;
+  --za-el-terra: #C5D27A;        --za-el-terra-fill: #96A753;
+  --za-el-aria: #D9CBE0;         --za-el-aria-fill: #B8A2A9;
 
   /* ---------- Tipografia ---------- */
   --za-font-display: "Cinzel", "Times New Roman", serif;  /* titoli, etichette, pulsanti, numeri delle carte */
+  --za-font-hero: "Cinzel Decorative", "Cinzel", serif;    /* solo il titolo eroico (D-030) */
   --za-font-body: "Nunito", system-ui, sans-serif;         /* testo, dati, moduli */
   --za-font-symbol: "Apple Symbols", "Noto Sans Symbols", "Segoe UI Symbol", sans-serif; /* glifi dei segni (♌), sempre come testo, mai emoji */
   /* Scala (desktop / mobile). Cinzel sempre in maiuscolo sotto i 24 px. */
-  --za-type-display: 700 3.875rem/0.96 var(--za-font-display);     /* titolo eroico: 1 per schermata (62 dalla Home definitiva, 10/11) */
+  --za-type-display: 900 3.5rem/1.08 var(--za-font-hero);         /* titolo eroico: 1 per schermata (56, Cinzel Decorative, D-030; tracking 0.02em) */
   --za-type-display-m: 700 2.25rem/1.0 var(--za-font-display);
   --za-type-h1: 700 2rem/1.1 var(--za-font-display);
   --za-type-h1-m: 700 1.625rem/1.1 var(--za-font-display);
@@ -191,6 +196,11 @@
   --za-text-shadow-hero: 0 3px 0 #05070F, 0 0 30px rgba(6,9,22,0.9);   /* titolo sulla key art */
   --za-text-shadow-scene: 0 1px 2px #05070F, 0 0 12px rgba(5,7,15,0.95); /* testo sulla key art */
   --za-card-thumb-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 5px 10px rgba(0,0,0,0.5); /* carte del ventaglio */
+  --za-card-shadow: 0 6px 14px rgba(0,0,0,0.45); /* carta M e L (gen_c.CARD_CSS) */
+  --za-card-selected: 0 0 0 2px #FFF3C4, 0 0 0 5px rgba(16,23,43,0.9), 0 0 0 6px #E8B04B, 0 0 18px rgba(255,214,107,0.45); /* carta scelta: filo acceso */
+  --za-card-hover-glow: radial-gradient(60% 55% at 50% 100%, rgba(255,214,107,0.35), rgba(255,214,107,0) 70%); /* chiarore da sotto, come la barra */
+  --za-card-missing: grayscale(1) brightness(0.42) contrast(0.9); /* carta non posseduta: l'illustrazione vera, spenta */
+  --za-card-radius: 6% / 4.3%; /* angoli della carta, in proporzione */
 
   /* ---------- Accesso · colonna laterale e scena (FOUNDATIONS §6b-decies) ---------- */
   --za-column-w: 32.5rem;        /* 520 */
@@ -198,6 +208,11 @@
   --za-scene-base: #0A0F22;      /* sotto la key art, finché si carica */
   --za-scene-veil-auth: linear-gradient(90deg, rgba(6,9,22,0.85) 0%, rgba(6,9,22,0.55) 38%, rgba(6,9,22,0.1) 60%, rgba(6,9,22,0.35) 100%);
   --za-scene-veil-reveal: radial-gradient(ellipse 28.75rem 23.75rem at 50% 52%, rgba(6,9,22,0.78), rgba(6,9,22,0.25) 100%); /* registrazione: velo dietro il segno che appare nella scena */
+  --za-arena-medallion-ring: 0 0 0 2px var(--za-gold), 0 0 0 7px rgba(11,14,53,0.9), 0 0 0 8px rgba(232,176,75,0.5), 0 18px 24px -10px rgba(255,214,107,0.55); /* giocatore sulla pozza di luce (gen_ar.standing) */
+  --za-arena-veil: rgba(6,9,22,0.2); /* arena dietro l'attesa e il Verdetto (gen_ar.arena dim) */
+  --za-arena-glow: radial-gradient(circle at 50% 28%, rgba(255,214,107,0.32), rgba(255,214,107,0.08) 32%, rgba(255,214,107,0) 60%); /* luce dal trono nella vittoria (gen_ar.arena light) */
+  --za-verdict-thread: linear-gradient(90deg, rgba(232,176,75,0), rgba(232,176,75,0.7) 12%, rgba(232,176,75,0.7) 88%, rgba(232,176,75,0)); /* filo dei momenti decisivi del Verdetto */
+  --za-verdict-loss: #C9D3F0; /* parola "Sconfitta": argento freddo, non rosso */
   --za-btn-h-hero: 3.5rem; --za-btn-h: 2.75rem; --za-btn-h-tertiary: 2.25rem; --za-btn-icon: 2.75rem; /* 56 · 44 · 36 · 44 */
 
   /* ---------- Profondità ---------- */

@@ -1,0 +1,122 @@
+/* =====================================================================
+   Landing (S01): movimento sobrio, solo dove dice qualcosa (FOUNDATIONS §7).
+   - le sezioni compaiono una volta, salendo appena, quando entrano in vista;
+   - nell'apertura la mano di carte viene servita e si apre a ventaglio;
+   - il Sole del segno scelto si gira come una carta pescata;
+   - il Dio scelto entra in dissolvenza;
+   - in "Come si gioca" il filo della costellazione si traccia e le stelle si accendono.
+   Con "riduci movimento" tutto compare subito.
+   ===================================================================== */
+
+@layer components {
+  /* Comparsa delle sezioni */
+  .landing-reveal {
+    opacity: 0;
+    transform: translateY(1.25rem);
+    transition:
+      opacity var(--za-dur-slow) var(--za-ease-out),
+      transform var(--za-dur-slow) var(--za-ease-out);
+  }
+  .landing-reveal[data-visible='true'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Apertura: testo che sale in sequenza */
+  .landing-rise {
+    animation: landing-rise 0.7s var(--za-ease-out) both;
+    animation-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  /* La mano di carte: servita dal basso, poi aperta; al passaggio la carta si alza */
+  .landing-hand__card {
+    position: absolute;
+    bottom: 0;
+    transform-origin: 50% 120%;
+    transform: rotate(var(--r)) translateY(var(--y));
+    transition: translate var(--za-dur-base) var(--za-ease-out);
+    animation: landing-deal 0.9s var(--za-ease-out) both;
+    animation-delay: calc(300ms + var(--i, 0) * 80ms);
+  }
+  .landing-hand__card:hover {
+    translate: 0 -0.75rem;
+  }
+
+  /* Il Sole del segno scelto: si gira come una carta pescata */
+  .landing-flip {
+    animation: landing-flip var(--za-dur-slow) var(--za-ease-out) both;
+  }
+
+  /* Il Dio scelto */
+  .landing-fade {
+    animation: landing-fade var(--za-dur-base) var(--za-ease-out) both;
+  }
+
+  /* Costellazione dei tre passi */
+  .landing-thread {
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 1.2s var(--za-ease-inout) 0.15s;
+  }
+  [data-visible='true'] .landing-thread {
+    transform: none;
+  }
+  .landing-star {
+    opacity: 0.35;
+    transition: opacity var(--za-dur-slow) var(--za-ease-out);
+    transition-delay: calc(0.2s + var(--i, 0) * 0.4s);
+  }
+  [data-visible='true'] .landing-star {
+    opacity: 1;
+  }
+  @media (width >= 48rem) {
+    .landing-thread {
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing-reveal,
+    .landing-thread,
+    .landing-star {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .landing-rise,
+    .landing-hand__card,
+    .landing-flip,
+    .landing-fade {
+      animation: none;
+    }
+  }
+}
+
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@keyframes landing-deal {
+  from {
+    opacity: 0;
+    transform: rotate(0deg) translateY(60%);
+  }
+}
+
+@keyframes landing-flip {
+  from {
+    opacity: 0;
+    transform: perspective(60rem) rotateY(-70deg) scale(0.96);
+  }
+}
+
+@keyframes landing-fade {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}

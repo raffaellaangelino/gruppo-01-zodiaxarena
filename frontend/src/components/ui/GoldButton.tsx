@@ -11,8 +11,11 @@ interface GoldCommonProps {
    * Uno solo per schermata (FOUNDATIONS §4).
    */
   hero?: boolean
-  /** Misura: `l` = 56 px con testo 22 (eroico), `m` = 44 px con testo 15 (primario). */
-  size?: 'l' | 'm'
+  /**
+   * Misura: `l` = 56 px con testo 22 (eroico), `m` = 44 px con testo 15 (primario), `s` = 36 px
+   * con testo 13 (dentro una barra alta 64, dove `m` occuperebbe quasi tutta la fascia).
+   */
+  size?: 'l' | 'm' | 's'
 }
 
 /** Proprietà di {@link GoldButton}. */
@@ -24,7 +27,11 @@ export interface GoldButtonProps extends GoldCommonProps, ComponentPropsWithoutR
 /** Proprietà di {@link GoldLink}. */
 export type GoldLinkProps = GoldCommonProps & LinkProps
 
-const SIZE_CLASSES = { l: 'h-14 type-button-l', m: 'h-11 type-button' } as const
+const SIZE_CLASSES = {
+  l: 'h-14 type-button-l',
+  m: 'h-11 type-button',
+  s: 'h-9 type-button text-[0.8125rem]! tracking-[0.1em] px-5',
+} as const
 
 /**
  * Pulsante d'oro del design system (Sigillo): lastra nell'oro delle carte con angoli a incavo,

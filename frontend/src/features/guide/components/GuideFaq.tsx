@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from 'react'
-import { BandPanel } from '@/components/panels/BandPanel'
+import { TilePanel } from '@/components/panels/TilePanel'
 import { Coin } from '@/components/ui/Coin'
 import { Icon } from '@/components/ui/Icon'
-import { TertiaryButton } from '@/components/ui/TertiaryButton'
+import { SecondaryButton } from '@/components/ui/SecondaryButton'
 
 const FAQ_TOPICS = [
   'Account e accesso',
@@ -23,8 +23,29 @@ const PACKS = [
     guarantee: '—',
   },
   {
+    // Economia del 12/11 (DECISIONS): 300 crediti, 4 Stelle, nessuna garanzia
     name: 'Zenit',
-    price: 250,
+    price: 300,
+    rarities: [
+      'common',
+      'common',
+      'common',
+      'rare',
+      'rare',
+      'rare',
+      'star',
+      'star',
+      'star',
+      'star',
+    ],
+    summary: '3 Comuni · 3 Rare · 4 Stelle',
+    guarantee: '—',
+  },
+  {
+    // 12 carte con un Ascendente garantito, una volta per ciclo lunare (composizione della tela,
+    // da confermare con il team)
+    name: 'Luna Piena',
+    price: 600,
     rarities: [
       'common',
       'common',
@@ -34,17 +55,12 @@ const PACKS = [
       'common',
       'rare',
       'rare',
+      'rare',
       'epic',
       'star',
+      'ascendant',
     ],
-    summary: '6 Comuni · 2 Rare · 1 Epica · 1 Stella',
-    guarantee: '1 Epica garantita',
-  },
-  {
-    name: 'Luna Piena',
-    price: 600,
-    rarities: ['common', 'common', 'common', 'rare', 'rare', 'rare', 'epic', 'ascendant', 'star'],
-    summary: '3 Comuni · 3 Rare · 1 Epica · 1 Ascendente · 1 Stella',
+    summary: '6 Comuni · 3 Rare · 1 Epica · 1 Ascendente · 1 Stella',
     guarantee: '1 Ascendente garantito',
   },
 ]
@@ -244,18 +260,24 @@ export function GuideFaq({ search }: { search: string }) {
           )}
         </div>
 
-        <BandPanel className="guide-faq-contact" aria-label="Contatta l’assistenza">
-          <Icon name="aiuto" size={18} />
-          <p>Non trovi la risposta? Scrivici: ti rispondiamo per email.</p>
-          <TertiaryButton
-            size="s"
-            onClick={() => {
-              window.location.href = 'mailto:'
-            }}
-          >
-            Scrivici
-          </TertiaryButton>
-        </BandPanel>
+        {/* Riga d'azione della tavola FAQ (gen_gd): segno, frase, un'azione, tutto su una fila */}
+        <TilePanel as="div" variant="row" aria-label="Contatta l’assistenza" className="mt-6">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 py-3.5 pr-5 pl-6.5">
+            <Icon name="aiuto" size={24} className="shrink-0 text-gold-bright" />
+            <p className="min-w-0 flex-1 basis-56 text-text type-body">
+              <b>Non trovi la risposta?</b> Scrivici: ti rispondiamo per email.
+            </p>
+            <SecondaryButton
+              type="button"
+              className="h-10! w-full text-[0.8125rem]! sm:w-38"
+              onClick={() => {
+                window.location.href = 'mailto:'
+              }}
+            >
+              Scrivici
+            </SecondaryButton>
+          </div>
+        </TilePanel>
       </section>
     </div>
   )

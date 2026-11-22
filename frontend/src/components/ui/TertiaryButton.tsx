@@ -17,6 +17,8 @@ interface TertiaryCommonProps {
   icon?: IconName
   /** Misura: `s` = 32 px (righe fitte desktop), `m` = 36 px (predefinita). */
   size?: 's' | 'm'
+  /** `risk`: azione che toglie qualcosa (Rifiuta, Ritira): rossa, mai d'oro (gen_s.btn, tono "rischio"). */
+  tone?: 'default' | 'risk'
   children: ReactNode
 }
 
@@ -27,6 +29,7 @@ export type TertiaryButtonProps = TertiaryCommonProps & ComponentPropsWithoutRef
 export type TertiaryLinkProps = TertiaryCommonProps & LinkProps
 
 const SIZE_CLASSES = { s: 'h-8', m: 'h-9' } as const
+const TONE_CLASSES = { default: '', risk: 'tertiary--risk' } as const
 
 /**
  * Pulsante terziario: contorno a incavo con l'icona dell'azione davanti al testo (variante
@@ -36,6 +39,7 @@ const SIZE_CLASSES = { s: 'h-8', m: 'h-9' } as const
 export function TertiaryButton({
   icon,
   size = 'm',
+  tone = 'default',
   type = 'button',
   className = '',
   children,
@@ -46,7 +50,7 @@ export function TertiaryButton({
     <button
       ref={setElement}
       type={type}
-      className={`tertiary type-label ${SIZE_CLASSES[size]} ${className}`}
+      className={`tertiary type-label ${SIZE_CLASSES[size]} ${TONE_CLASSES[tone]} ${className}`}
       {...rest}
     >
       <TertiaryOrnament element={element} />
@@ -59,6 +63,7 @@ export function TertiaryButton({
 export function TertiaryLink({
   icon,
   size = 'm',
+  tone = 'default',
   className = '',
   children,
   ...rest
@@ -67,7 +72,7 @@ export function TertiaryLink({
   return (
     <Link
       ref={setElement}
-      className={`tertiary type-label ${SIZE_CLASSES[size]} ${className}`}
+      className={`tertiary type-label ${SIZE_CLASSES[size]} ${TONE_CLASSES[tone]} ${className}`}
       {...rest}
     >
       <TertiaryOrnament element={element} />

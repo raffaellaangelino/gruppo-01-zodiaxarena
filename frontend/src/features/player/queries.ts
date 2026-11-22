@@ -8,6 +8,9 @@ import { fetchPlayerSummary } from '@/features/player/api'
 export const playerSummaryQuery = queryOptions({
   queryKey: ['player', 'summary'],
   queryFn: ({ signal }) => fetchPlayerSummary(signal),
+  // I contatori della barra (sfide arrivate nel frattempo) si aggiornano da soli,
+  // finché non arrivano gli eventi in tempo reale. Come le liste delle sfide.
+  refetchInterval: 30_000,
 })
 
 /**

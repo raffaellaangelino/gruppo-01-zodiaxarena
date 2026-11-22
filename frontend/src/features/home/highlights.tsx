@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
 import { PATHS } from '@/app/paths'
 import { CardFan } from '@/components/game/CardFan'
+import { DeckValidity } from '@/components/game/DeckValidity'
 import { ElementEmblem } from '@/components/game/ElementEmblem'
 import { Constellation } from '@/components/progress/Constellation'
 import { Meridian } from '@/components/progress/Meridian'
-import { Icon } from '@/components/ui/Icon'
+import { Icon, type IconName } from '@/components/ui/Icon'
 import { Medallion } from '@/components/ui/Medallion'
 import type { HomeSummary } from '@/features/home/types'
 import type { PlayerSummary } from '@/features/player/types'
@@ -36,6 +37,8 @@ export type HighlightLayout = 'band' | 'band-narrow' | 'tile'
 /**
  * Prepara i quattro riquadri della Home: Il tuo Cielo, Missioni, Pacchetti, Fazione
  * (FOUNDATIONS §6c e §6b-ter). Stessa anatomia nei due formati: visuale, categoria, titolo, stato.
+ * Quello che il backend non manda ancora (missioni, pacchetti, luna piena) non si inventa: il
+ * riquadro resta un collegamento alla sua sezione, con "In arrivo".
  *
  * @param home Dati della Home.
  * @param player Riepilogo del giocatore (per la Fazione).
@@ -50,74 +53,68 @@ export function buildHighlights(
   const band = layout !== 'tile'
   const fanStep = layout === 'band' ? 25 : layout === 'band-narrow' ? 18 : 11
   const medal = band ? 50 : 46
-  const sunWithin = home.packs.sunCounter.total - home.packs.sunCounter.done
+  const { deck, missions, packs, fullMoon } = home
   const { faction } = player
   const god = faction ? GOD_LABELS[faction.god] : null
-  const moonDays = daysUntil(home.fullMoon.nextAt)
+  const moonDays = fullMoon && daysUntil(fullMoon.nextAt)
+  const soon = <span>{SOON}</span>
+  const icon = (name: IconName) => (
+    <Medallion size={medal}>
+      <Icon name={name} size={24} className="text-gold-bright" />
+    </Medallion>
+  )
 
   return [
-    {
-      key: 'deck',
-      to: PATHS.deck,
-      visual: <CardFan cards={home.deck.cards} cardWidth={band ? 40 : 34} step={fanStep} />,
-      category: 'Il tuo Cielo',
-      title: home.deck.name,
-      ariaLabel: `Il tuo Cielo: ${home.deck.name}, ${home.deck.valid ? 'valido' : 'da correggere'}`,
-      status: home.deck.valid ? (
-        <span className="inline-flex items-center gap-1 font-extrabold text-success">
-          <Icon name="conferma" size={14} />
-          Valido
-        </span>
-      ) : (
-        <span className="inline-flex items-center gap-1 font-extrabold text-danger">
-          <Icon name="avviso" size={14} />
-          Da correggere
-        </span>
-      ),
-    },
+    deck
+      ? {
+          key: 'deck',
+          to: PATHS.deck,
+          visual: <CardFan cards={deck.cards} cardWidth={band ? 40 : 34} step={fanStep} />,
+          category: 'Il tuo Cielo',
+          title: deck.name,
+          ariaLabel: `Il tuo Cielo: ${deck.name}, ${deck.valid ? 'valido' : 'da correggere'}`,
+          status: <DeckValidity valid={deck.valid} />,
+        }
+      : {
+          key: 'deck',
+          to: PATHS.deck,
+          visual: icon('mazzo'),
+          category: 'Il tuo Cielo',
+          title: 'Nessun Cielo',
+          ariaLabel: 'Il tuo Cielo: ancora da comporre',
+          status: <span>Componi il tuo Cielo</span>,
+        },
     {
       key: 'missions',
       to: PATHS.missions,
-      visual: (
-        <Medallion size={medal}>
-          <Icon name="missione" size={24} className="text-gold-bright" />
-        </Medallion>
-      ),
+      visual: icon('missione'),
       category: 'Oggi',
       title: 'Missioni',
-      ariaLabel: `Missioni di oggi: ${home.missions.done} di ${home.missions.total}`,
-      status: (
+      ariaLabel: missions
+        ? `Missioni di oggi: ${missions.done} di ${missions.total}`
+        : `Missioni: ${SOON.toLowerCase()}`,
+      status: missions ? (
         <>
-          <Constellation progress={home.missions} width={band ? 52 : 46} />
+          <Constellation progress={missions} width={band ? 52 : 46} />
           <span>
-            {home.missions.done} di {home.missions.total}
+            {missions.done} di {missions.total}
           </span>
         </>
-      ),
-    },
-    {
-      key: 'packs',
-      to: PATHS.shop,
-      visual: <Meridian progress={home.packs.sunCounter} size={medal} />,
-      category: 'Negozio',
-      title: band ? 'Apri un pacchetto' : 'Pacchetti',
-      ariaLabel: `Negozio: puoi aprire ${plural(home.packs.affordable, 'pacchetto', 'pacchetti')}, Sole garantito entro ${plural(sunWithin, 'pacchetto', 'pacchetti')}`,
-      status: band ? (
-        <span>
-          Puoi aprirne <b className="text-text">{home.packs.affordable}</b> · Sole entro{' '}
-          <b className="text-tier-leggendaria-text">{sunWithin}</b>
-        </span>
       ) : (
-        <>
-          <span>
-            Puoi aprirne <b className="text-text">{home.packs.affordable}</b>
-          </span>
-          <span>
-            Sole entro <b className="text-tier-leggendaria-text">{sunWithin}</b>
-          </span>
-        </>
+        soon
       ),
     },
+    packs
+      ? packsHighlight(packs, band, medal)
+      : {
+          key: 'packs',
+          to: PATHS.shop,
+          visual: icon('pacchetto'),
+          category: 'Negozio',
+          title: 'Pacchetti',
+          ariaLabel: `Negozio: ${SOON.toLowerCase()}`,
+          status: soon,
+        },
     {
       key: 'faction',
       to: PATHS.faction,
@@ -133,19 +130,63 @@ export function buildHighlights(
       category: 'La tua Fazione',
       title: god?.name ?? 'Da scegliere',
       ariaLabel: faction
-        ? `La tua Fazione: ${god?.name}, ${god?.effect}, luna piena tra ${plural(moonDays, 'giorno', 'giorni')}`
+        ? `La tua Fazione: ${god?.name}, ${god?.effect}${moonDays === null ? '' : `, luna piena tra ${plural(moonDays, 'giorno', 'giorni')}`}`
         : 'La tua Fazione: da scegliere',
       status: faction ? (
         <>
-          <span>{band ? `${god?.effect} ·` : god?.effect}</span>
-          <span className="inline-flex items-center gap-1">
-            <Icon name="luna-piena" size={14} className="text-gold-bright" />
-            {band ? `tra ${moonDays} g` : `luna piena tra ${moonDays} g`}
-          </span>
+          <span>{band && moonDays !== null ? `${god?.effect} ·` : god?.effect}</span>
+          {moonDays !== null && (
+            <span className="inline-flex items-center gap-1">
+              <Icon name="luna-piena" size={14} className="text-gold-bright" />
+              {band ? `tra ${moonDays} g` : `luna piena tra ${moonDays} g`}
+            </span>
+          )}
         </>
       ) : (
         <span>Scegli il Dio che ti guida</span>
       ),
     },
   ]
+}
+
+/** Stato dei riquadri la cui sezione non ha ancora dati dal backend. */
+const SOON = 'In arrivo'
+
+/**
+ * Il riquadro del Negozio con i dati dei pacchetti.
+ *
+ * @param packs Pacchetti acquistabili e contatore del Sole.
+ * @param band Banda desktop (una riga) o Tessera mobile (due righe).
+ * @param medal Misura della meridiana.
+ * @returns Il riquadro.
+ */
+function packsHighlight(
+  packs: NonNullable<HomeSummary['packs']>,
+  band: boolean,
+  medal: number,
+): Highlight {
+  const sunWithin = packs.sunCounter.total - packs.sunCounter.done
+  return {
+    key: 'packs',
+    to: PATHS.shop,
+    visual: <Meridian progress={packs.sunCounter} size={medal} />,
+    category: 'Negozio',
+    title: band ? 'Apri un pacchetto' : 'Pacchetti',
+    ariaLabel: `Negozio: puoi aprire ${plural(packs.affordable, 'pacchetto', 'pacchetti')}, Sole garantito entro ${plural(sunWithin, 'pacchetto', 'pacchetti')}`,
+    status: band ? (
+      <span>
+        Puoi aprirne <b className="text-text">{packs.affordable}</b> · Sole entro{' '}
+        <b className="text-tier-leggendaria-text">{sunWithin}</b>
+      </span>
+    ) : (
+      <>
+        <span>
+          Puoi aprirne <b className="text-text">{packs.affordable}</b>
+        </span>
+        <span>
+          Sole entro <b className="text-tier-leggendaria-text">{sunWithin}</b>
+        </span>
+      </>
+    ),
+  }
 }

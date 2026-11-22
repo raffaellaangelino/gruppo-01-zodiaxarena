@@ -6,6 +6,8 @@
 
 @layer components {
   .tertiary {
+    /* Il testo è inciso sul pulsante: niente ombre ereditate dalla scena (es. text-shadow-scene) */
+    text-shadow: none;
     position: relative;
     display: inline-flex;
     flex: none;
@@ -67,5 +69,23 @@
   }
   .tertiary:active .tertiary__edge {
     stroke: var(--tertiary-gold);
+  }
+
+  /* Rischio (Rifiuta, Ritira): rosso, mai d'oro */
+  .tertiary--risk {
+    color: var(--za-danger-soft);
+    --tertiary-gold: var(--za-danger-soft);
+  }
+  .tertiary--risk .tertiary__edge,
+  .tertiary--risk .tertiary__inner {
+    stroke: color-mix(in srgb, var(--za-danger) 70%, transparent);
+  }
+  @media (hover: hover) {
+    .tertiary--risk:hover {
+      color: var(--za-danger-soft);
+    }
+    .tertiary--risk:hover .tertiary__fill {
+      fill: color-mix(in srgb, var(--za-danger) 10%, transparent);
+    }
   }
 }

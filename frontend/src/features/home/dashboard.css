@@ -1,0 +1,82 @@
+@layer components {
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .dashboard-card {
+    min-width: 0;
+    border: 1px solid var(--za-line);
+    border-radius: 14px;
+    background: var(--za-glass-fill);
+    box-shadow: var(--za-shadow-panel);
+  }
+
+  .dashboard-progress {
+    height: 0.375rem;
+    overflow: hidden;
+    border-radius: var(--za-radius-pill);
+    background: var(--za-line-soft);
+  }
+
+  .dashboard-progress > span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--za-gold-fill);
+  }
+
+  .dashboard-mission + .dashboard-mission {
+    border-top: 1px solid var(--za-line-soft);
+  }
+
+  @media (width >= 56rem) {
+    .dashboard-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-card--wide {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (width >= 80rem) {
+    .dashboard-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .dashboard-card--credits {
+      grid-column: span 3;
+    }
+
+    .dashboard-card--faction {
+      grid-column: span 5;
+    }
+
+    .dashboard-card--pending {
+      grid-column: span 4;
+    }
+
+    .dashboard-card--missions {
+      grid-column: span 5;
+    }
+
+    .dashboard-card--match {
+      grid-column: span 4;
+    }
+
+    .dashboard-card--quick {
+      grid-column: span 3;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dashboard-card,
+    .dashboard-progress > span {
+      transition: none;
+      animation: none;
+    }
+  }
+}

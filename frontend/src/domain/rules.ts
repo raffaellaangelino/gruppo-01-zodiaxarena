@@ -1,4 +1,4 @@
-import type { Element, GodCode, SignCode } from '@/domain/game'
+import type { Element, GodCode, PlanetCode, SignCode, Tier } from '@/domain/game'
 
 /**
  * Relazioni fisse tra i codici del gioco (regolamento): l'elemento di ogni segno e il Dio
@@ -40,6 +40,18 @@ export const ELEMENT_GOD: Record<Element, GodCode> = {
   AIR: 'ERA',
 }
 
+/**
+ * Ciclo degli elementi (regolamento, "Ciclo delle fazioni"): l'Acqua spegne il Fuoco, il Fuoco
+ * cuoce la Terra, la Terra ferma i venti, i venti sollevano le onde. Fuoco–Aria e Acqua–Terra
+ * sono coppie neutre. Chi batte l'altro prende +1 ATK (lo calcola l'engine).
+ */
+export const ELEMENT_BEATS: Record<Element, Element> = {
+  WATER: 'FIRE',
+  FIRE: 'EARTH',
+  EARTH: 'AIR',
+  AIR: 'WATER',
+}
+
 /** I Dei nell'ordine delle tavole (Fuoco, Acqua, Terra, Aria). */
 export const GODS: readonly GodCode[] = ['EFESTO', 'POSEIDONE', 'DEMETRA', 'ERA']
 
@@ -62,4 +74,26 @@ export function signsOf(element: Element): SignCode[] {
 export function toSignCode(name: string): SignCode | null {
   const code = name.trim().toUpperCase()
   return code in SIGN_ELEMENT ? (code as SignCode) : null
+}
+
+/** Rarità decisa dal pianeta (regolamento: Sole Leggendario, Luna e Marte Epici, Giove e Saturno Rari, Mercurio e Venere Comuni). */
+export const PLANET_TIER: Record<PlanetCode, Tier> = {
+  SOLE: 'LEGENDARY',
+  LUNA: 'EPIC',
+  MARTE: 'EPIC',
+  GIOVE: 'RARE',
+  SATURNO: 'RARE',
+  MERCURIO: 'COMMON',
+  VENERE: 'COMMON',
+}
+
+/**
+ * Codice di un pianeta a partire dal nome che usa il backend (es. `"Sole"` → `SOLE`).
+ *
+ * @param name Nome del pianeta, come in `Planet.name`.
+ * @returns Il codice, oppure `null` se il nome non è un pianeta conosciuto.
+ */
+export function toPlanetCode(name: string): PlanetCode | null {
+  const code = name.trim().toUpperCase()
+  return code in PLANET_TIER ? (code as PlanetCode) : null
 }
