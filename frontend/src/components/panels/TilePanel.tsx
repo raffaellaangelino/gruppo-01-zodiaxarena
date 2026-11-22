@@ -13,15 +13,21 @@ export interface TilePanelProps {
   as?: 'section' | 'div' | 'article'
   /** Nome accessibile del pannello, se non ha un titolo visibile collegato. */
   'aria-label'?: string
+  /**
+   * `tile`: Tessera (incavo 14, filo 2), il contenitore dei blocchi di contenuto. `row`: Riga
+   * (incavo 9, filo 1.5), per un elemento in riga fuori dai pannelli: un avviso, una richiesta.
+   */
+  variant?: 'tile' | 'row'
+  /** Solo per la Riga: rombo con stella sul bordo sinistro, quando c'è qualcosa da fare o da sapere. */
+  mark?: boolean
   className?: string
 }
 
-/** Raggio dell'incavo (14), distanza del filo interno (6), raggio dell'arco interno (20). */
-const R = 14
-const D = 6
-const RI = R + D
-const E = Math.sqrt(RI * RI - D * D)
-const CORNER = RI + 4
+/** Misure per variante: raggio dell'incavo, distanza del filo interno, filo esterno. */
+const GEOMETRY = {
+  tile: { r: 14, d: 6, w: 2 },
+  row: { r: 9, d: 4, w: 1.5 },
+} as const
 
 const CORNERS = [
   { key: 'tl', style: { top: 0, left: 0 } },
@@ -33,16 +39,26 @@ const CORNERS = [
 /**
  * Tessera del design system: pannello con la doppia riga d'oro e gli angoli a incavo.
  * È il contenitore dei blocchi di contenuto ("Ti aspettano", le Tessere della Home mobile).
+ * Con `variant="row"` è la Riga, la stessa forma in piccolo (gen_a.notch_frame 9 · 4 · 1.5).
  */
 export function TilePanel({
   children,
   glass = false,
   as: Tag = 'section',
+  variant = 'tile',
+  mark = false,
   className = '',
   ...aria
 }: TilePanelProps) {
+  const { r: R, d: D, w: W } = GEOMETRY[variant]
+  const RI = R + D
+  const E = Math.sqrt(RI * RI - D * D)
+  const CORNER = RI + 4
   return (
-    <Tag className={`tile-panel ${className}`} {...aria}>
+    <Tag
+      className={`tile-panel ${variant === 'row' ? 'tile-panel--row' : ''} ${className}`}
+      {...aria}
+    >
       <div aria-hidden="true" className={`tile-panel__fill ${glass ? 'glass' : ''}`} />
       <div className="tile-panel__content">{children}</div>
       {(['top', 'bottom', 'left', 'right'] as const).map((side) => (
@@ -71,10 +87,10 @@ export function TilePanel({
           style={style}
         >
           <path
-            d={`M${R} 1 A${R - 1} ${R - 1} 0 0 1 1 ${R}`}
+            d={`M${R} ${W / 2} A${R - W / 2} ${R - W / 2} 0 0 1 ${W / 2} ${R}`}
             fill="none"
             stroke="var(--za-gold-bright)"
-            strokeWidth={2}
+            strokeWidth={W}
           />
           <path
             d={`M${E.toFixed(1)} ${D} A${RI} ${RI} 0 0 1 ${D} ${E.toFixed(1)}`}
@@ -84,6 +100,31 @@ export function TilePanel({
           />
         </svg>
       ))}
+      {mark && (
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          className="tile-panel__mark"
+          width={18}
+          height={18}
+          viewBox="0 0 18 18"
+        >
+          <rect
+            x={3.5}
+            y={3.5}
+            width={11}
+            height={11}
+            transform="rotate(45 9 9)"
+            fill="var(--za-bg)"
+            stroke="var(--za-gold-bright)"
+            strokeWidth={1.4}
+          />
+          <path
+            d="M9 5.6 L9.8 8.2 L12.4 9 L9.8 9.8 L9 12.4 L8.2 9.8 L5.6 9 L8.2 8.2 Z"
+            fill="var(--za-gold-bright)"
+          />
+        </svg>
+      )}
     </Tag>
   )
 }

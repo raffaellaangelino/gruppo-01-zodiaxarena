@@ -3,12 +3,18 @@
   padding: calc(var(--shell-top) + 1.5rem) 2rem 2rem;
 }
 
+/* Sulle pagine pubbliche il piede segue il contenuto: niente altezza minima di uno schermo */
+.public-shell .guide-page {
+  min-height: 0;
+}
+
 .guide-page__inner {
   width: min(100%, 80rem);
   margin-inline: auto;
 }
 
 .guide-header {
+  min-height: 2.5rem; /* la riga della ricerca: la stessa testata anche dove non c'è (Privacy) */
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) 15rem;
   align-items: center;
@@ -459,26 +465,6 @@
   color: var(--za-text);
 }
 
-.guide-faq-contact {
-  display: flex;
-  min-height: 3.75rem;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  color: var(--za-gold-bright);
-}
-
-.guide-faq-contact > p {
-  flex: 1;
-  color: var(--za-text-soft);
-  font: var(--za-type-caption);
-}
-
-.guide-faq-contact .tertiary {
-  width: 8rem;
-}
-
 .guide-search {
   display: flex;
   min-width: 0;
@@ -595,31 +581,22 @@
 
 .guide-card-overview {
   display: grid;
-  grid-template-columns: minmax(9rem, 12rem) minmax(0, 1fr);
+  grid-template-columns: 14.75rem minmax(0, 1fr); /* la carta della tavola: 236 */
   align-items: start;
   gap: clamp(1.5rem, 4vw, 3rem);
   margin-top: 1rem;
 }
 
 .guide-card {
-  overflow: hidden;
-  aspect-ratio: 5 / 7;
-  padding: 0.25rem;
-  border: 1px solid var(--za-tier-leggendaria);
-  border-radius: 0.55rem;
-  background: linear-gradient(135deg, #ffe7a0, #9c6a1c 45%, #e8b04b);
-  box-shadow:
-    0 0 0 2px rgba(11, 14, 53, 0.85),
-    0 0 0 3px #d9b97c,
-    var(--za-shadow-raised);
+  position: relative;
+  margin: 0;
 }
 
-.guide-card img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 0.35rem;
-  object-fit: cover;
+/* Numero sulla carta: centrato sul punto, con un'ombra che lo stacca dall'illustrazione */
+.guide-card .guide-card__pin {
+  position: absolute; /* più specifica di .guide-number, che è relative */
+  margin: -0.875rem 0 0 -0.875rem;
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 80%));
 }
 
 .guide-facts {
@@ -628,7 +605,7 @@
 
 .guide-fact {
   display: grid;
-  grid-template-columns: 1.5rem minmax(0, 1fr);
+  grid-template-columns: 1.75rem minmax(0, 1fr); /* il numero a rombo: 28 */
   gap: 0.75rem;
   padding: 0.7rem 0;
   border-bottom: 1px solid var(--za-line-soft);
@@ -638,21 +615,30 @@
   padding-top: 0.1rem;
 }
 
-.guide-fact__number {
-  display: grid;
-  width: 1rem;
-  height: 1rem;
-  place-items: center;
-  margin-top: 0.1rem;
-  border: 1px solid var(--za-gold);
-  color: var(--za-gold-bright);
-  font: var(--za-type-caption);
-  transform: rotate(45deg);
+/* Numero a rombo (gen_gd.num): rombo blu notte con il filo d'oro, cifra Cinzel crema */
+.guide-number {
+  position: relative;
+  display: flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
 }
 
-.guide-fact__number > span {
-  display: block;
-  transform: rotate(-45deg);
+.guide-number::before {
+  position: absolute;
+  inset: 0.25rem;
+  transform: rotate(45deg);
+  background: var(--za-bg);
+  box-shadow: inset 0 0 0 1.5px var(--za-gold);
+  content: '';
+}
+
+.guide-number > span {
+  position: relative;
+  color: var(--za-nav-ink-active);
+  font: 700 0.8125rem/1 var(--za-font-display);
 }
 
 .guide-fact h3,
@@ -673,42 +659,12 @@
   margin-top: 1.5rem;
 }
 
-.guide-example {
-  display: flex;
-  min-height: 2.75rem;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.75rem;
-  padding: 0.65rem 1rem;
-}
-
-.guide-example__label {
-  flex: none;
-  color: var(--za-gold);
-  font: var(--za-type-label);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.guide-example p {
-  color: var(--za-text-muted);
-  font: var(--za-type-caption);
-}
-
-.guide-example p strong:first-child {
-  color: var(--za-text);
-}
-
 .guide-atk {
   color: var(--za-atk);
 }
 
 .guide-def {
   color: var(--za-def);
-}
-
-.guide-example__def {
-  margin-left: 1rem;
 }
 
 .guide-house {
@@ -723,37 +679,33 @@
   border-top: 1px solid var(--za-line-soft);
 }
 
-.guide-pagination > div {
+.guide-pagination__side {
   display: grid;
   gap: 0.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
 }
 
 .guide-pagination__next {
+  justify-items: end;
   text-align: right;
 }
 
 .guide-pagination__chapter {
-  padding: 0;
-  border: 0;
-  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--za-gold-bright);
-  cursor: pointer;
   font: var(--za-type-button);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
-.guide-pagination__chapter:hover {
+.guide-pagination__side:hover .guide-pagination__chapter {
   color: var(--za-text);
-}
-
-.guide-pagination__chapter:disabled {
-  color: var(--za-text-disabled);
-  cursor: default;
-}
-
-.guide-pagination__chapter:disabled:hover {
-  color: var(--za-text-disabled);
 }
 
 .guide-summary-points,
@@ -1068,18 +1020,6 @@
     min-width: 38rem;
   }
 
-  .guide-faq-contact {
-    flex-wrap: wrap;
-  }
-
-  .guide-faq-contact > p {
-    flex-basis: calc(100% - 2rem);
-  }
-
-  .guide-faq-contact .tertiary {
-    margin-left: 2rem;
-  }
-
   .guide-chapters {
     overflow: auto hidden;
     padding-bottom: 0.25rem;
@@ -1115,14 +1055,9 @@
   }
 
   .guide-fact {
-    grid-template-columns: 1rem minmax(0, 1fr);
+    grid-template-columns: 1.75rem minmax(0, 1fr);
     gap: 0.5rem;
     padding-block: 0.5rem;
-  }
-
-  .guide-example {
-    flex-wrap: wrap;
-    gap: 0.5rem;
   }
 
   .guide-battle {
@@ -1167,16 +1102,23 @@
     padding-inline: 0.75rem;
   }
 
+  /* Pagine pubbliche: gli stessi margini della landing */
+  .public-shell .guide-page {
+    padding-inline: 1rem;
+  }
+
+  /* Carta sopra la legenda: i numeri a rombo restano leggibili sulla carta */
   .guide-card-overview {
-    grid-template-columns: 6rem minmax(0, 1fr);
-    gap: 0.75rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .guide-card {
+    width: 11rem;
+    margin-inline: auto;
   }
 
   .guide-fact p {
     font-size: 0.6875rem;
-  }
-
-  .guide-example__def {
-    margin-left: 0;
   }
 }

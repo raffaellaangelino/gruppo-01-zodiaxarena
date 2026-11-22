@@ -21,6 +21,25 @@
     position: relative;
   }
 
+  /* Riga (FOUNDATIONS §4, gen_col.riga): stessa forma della Tessera, più piccola. Incavo 9, filo
+     interno a 4 dal bordo, filo esterno 1.5. */
+  .tile-panel--row {
+    --tile-r: var(--za-notch-row); /* 9 */
+    --tile-d: var(--za-notch-row-inset); /* 4 */
+    --tile-e: 12.37px; /* √((9+4)² − 4²) */
+    --za-line-outer: 1.5px;
+  }
+
+  /* Segno di stato sul bordo sinistro della Riga: c'è qualcosa da fare o da sapere */
+  .tile-panel__mark {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: -9px;
+    margin-top: -9px;
+    pointer-events: none;
+  }
+
   .tile-panel__fill,
   .tile-panel__content {
     -webkit-mask: var(--tile-mask);

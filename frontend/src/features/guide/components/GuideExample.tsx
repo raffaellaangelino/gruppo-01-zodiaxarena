@@ -1,16 +1,25 @@
-import { BandPanel } from '@/components/panels/BandPanel'
+import { TilePanel } from '@/components/panels/TilePanel'
 
+/**
+ * L'esempio dei valori della carta (tavola gen_gd, "gli esempi in una Riga"): una Riga del design
+ * system, tutto su una fila con 24 px tra le parti; su schermi stretti le formule vanno a capo.
+ */
 export function GuideExample() {
   return (
-    <BandPanel className="guide-example" aria-label="Esempio dei valori della carta">
-      <span className="guide-example__label">Esempio</span>
-      <p>
-        <strong>Sole in Leone</strong>
-        <span> · ATK 12 del Leone + 9 del Sole = </span>
-        <strong className="guide-atk">21</strong>
-        <span className="guide-example__def">DEF 8 + 8 = </span>
-        <strong className="guide-def">16</strong>
+    <TilePanel as="div" variant="row" aria-label="Esempio dei valori della carta" className="mt-4">
+      <p className="flex flex-wrap items-center gap-x-6 gap-y-2 px-6 py-4 text-text type-body">
+        <span className="text-[0.8125rem]! type-button tracking-[0.1em] text-gold uppercase">
+          Esempio
+        </span>
+        <span>
+          <b>Sole in Leone</b> · ATK{' '}
+          <span className="text-text-muted">12 del Leone + 9 del Sole =</span>{' '}
+          <b className="guide-atk">21</b>
+        </span>
+        <span>
+          DEF <span className="text-text-muted">8 + 8 =</span> <b className="guide-def">16</b>
+        </span>
       </p>
-    </BandPanel>
+    </TilePanel>
   )
 }

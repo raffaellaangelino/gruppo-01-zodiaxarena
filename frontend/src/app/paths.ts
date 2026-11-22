@@ -5,6 +5,8 @@ export const PATHS = {
   register: '/registrati',
   welcomeFaction: '/benvenuto/fazione',
   guide: '/guida',
+  /** Regolamento pubblico (S14): la Guida per chi non è ancora entrato, aperta dalla landing. */
+  rules: '/regolamento',
   privacy: '/privacy',
   collection: '/collezione',
   deck: '/collezione/cielo',
