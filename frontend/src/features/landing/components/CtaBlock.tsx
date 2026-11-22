@@ -4,6 +4,7 @@ import { Coin } from '@/components/ui/Coin'
 import { GoldLink } from '@/components/ui/GoldButton'
 import { Icon } from '@/components/ui/Icon'
 import { LANDING_COPY } from '@/features/landing/messages'
+import { AUTH_ENABLED } from '@/config/env'
 
 const COPY = LANDING_COPY
 
@@ -28,9 +29,11 @@ export function CtaBlock({ label, withLogin = false }: CtaBlockProps) {
   ]
   return (
     <div className="flex w-full flex-col items-center gap-4">
-      <GoldLink hero size="l" to={PATHS.register} className="w-full max-w-80">
-        {label}
-      </GoldLink>
+      {AUTH_ENABLED && (
+        <GoldLink hero size="l" to={PATHS.register} className="w-full max-w-80">
+          {label}
+        </GoldLink>
+      )}
       <div className="flex flex-col items-center gap-2 md:flex-row md:gap-4">
         <span className="type-label tracking-[0.14em] text-gold uppercase">{COPY.gifts.label}</span>
         <span aria-hidden="true" className="hidden h-3 w-px bg-line-soft md:block" />
@@ -48,7 +51,7 @@ export function CtaBlock({ label, withLogin = false }: CtaBlockProps) {
           ))}
         </ul>
       </div>
-      {withLogin && (
+      {AUTH_ENABLED && withLogin && (
         <p className="mt-1 text-text-soft type-meta">
           {COPY.hero.hasAccount}{' '}
           <Link to={PATHS.login} className="text-gold-bright type-meta-strong">

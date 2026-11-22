@@ -20,6 +20,8 @@ export const PATHS = {
   /** Modello del percorso: per un link usare {@link matchVerdictPath}. */
   matchVerdict: '/partite/:matchId/verdetto',
   trades: '/scambi',
+  tradesSent: '/scambi/inviati',
+  newTrade: '/scambi/nuovo',
   shop: '/negozio',
   missions: '/missioni',
   faction: '/fazione',

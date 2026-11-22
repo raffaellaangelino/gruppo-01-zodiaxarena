@@ -23,11 +23,15 @@ import { FactionPage } from '@/features/onboarding/pages/FactionPage'
 import { RegisterPage } from '@/features/registration/pages/RegisterPage'
 import { CollectionPage } from '@/features/collection/pages/CollectionPage'
 import { SkyPage } from '@/features/decks/pages/SkyPage'
+import { TradesLayout } from '@/features/trades/components/TradesLayout'
+import { TradesReceivedPage } from '@/features/trades/pages/TradesReceivedPage'
+import { TradesSentPage } from '@/features/trades/pages/TradesSentPage'
+import { NewTradePage } from '@/features/trades/pages/NewTradePage'
 import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
+import { AUTH_ENABLED } from '@/config/env'
 
 /** Sezioni non ancora costruite: tengono il posto finché arriva la loro issue. */
 const PLACEHOLDERS: { path: string; title: string }[] = [
-  { path: PATHS.trades, title: 'Scambi' },
   { path: PATHS.shop, title: 'Negozio' },
   { path: PATHS.missions, title: 'Missioni' },
   { path: PATHS.faction, title: 'La tua Fazione' },
@@ -48,8 +52,14 @@ export function AppRoutes() {
       <Route path={PATHS.privacy} element={<PrivacyPage />} />
       <Route path={PATHS.rules} element={<PublicGuidePage />} />
       <Route element={<GuestOnly />}>
-        <Route path={PATHS.login} element={<LoginPage />} />
-        <Route path={PATHS.register} element={<RegisterPage />} />
+        <Route
+          path={PATHS.login}
+          element={AUTH_ENABLED ? <LoginPage /> : <Navigate to={PATHS.home} replace />}
+        />
+        <Route
+          path={PATHS.register}
+          element={AUTH_ENABLED ? <RegisterPage /> : <Navigate to={PATHS.home} replace />}
+        />
       </Route>
       <Route element={<RequireAuth />}>
         <Route
@@ -76,6 +86,11 @@ export function AppRoutes() {
                 <Route path={PATHS.challenges} element={<ChallengesToPlayPage />} />
                 <Route path={PATHS.challengesSent} element={<ChallengesSentPage />} />
                 <Route path={PATHS.newChallenge} element={<NewChallengePage />} />
+              </Route>
+              <Route element={<TradesLayout />}>
+                <Route path={PATHS.trades} element={<TradesReceivedPage />} />
+                <Route path={PATHS.tradesSent} element={<TradesSentPage />} />
+                <Route path={PATHS.newTrade} element={<NewTradePage />} />
               </Route>
               {PLACEHOLDERS.map(({ path, title }) => (
                 <Route key={path} path={path} element={<SectionPlaceholder title={title} />} />

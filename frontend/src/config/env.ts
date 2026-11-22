@@ -7,7 +7,10 @@
  * missioni, Fazione). Attivi salvo `VITE_USE_MOCKS=false`. Quando sono attivi, l'interfaccia
  * lo segnala con un'etichetta visibile (`MockDataNotice`).
  */
-export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
+export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === 'true'
+
+/** Login e registrazione sono attivi. */
+export const AUTH_ENABLED = true
 
 /**
  * Endpoint del contratto API che il backend in `dev` non ha ancora. Finché valgono `false`, la

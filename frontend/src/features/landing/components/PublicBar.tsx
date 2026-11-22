@@ -8,6 +8,7 @@ import { LANDING_COPY } from '@/features/landing/messages'
 import { LANDING_SECTION_IDS, LANDING_SECTIONS } from '@/features/landing/sections'
 import { useActiveSection } from '@/features/landing/useActiveSection'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { AUTH_ENABLED } from '@/config/env'
 
 const COPY = LANDING_COPY.bar
 
@@ -28,14 +29,16 @@ export function PublicBar() {
   if (!isDesktop) {
     return (
       <MobileBarFrame logoTo={PATHS.home}>
-        <div className="flex items-center gap-4">
-          <Link to={PATHS.login} className={LOGIN_CLASS}>
-            {COPY.login}
-          </Link>
-          <GoldLink size="s" to={PATHS.register}>
-            {COPY.play}
-          </GoldLink>
-        </div>
+        {AUTH_ENABLED && (
+          <div className="flex items-center gap-4">
+            <Link to={PATHS.login} className={LOGIN_CLASS}>
+              {COPY.login}
+            </Link>
+            <GoldLink size="s" to={PATHS.register}>
+              {COPY.play}
+            </GoldLink>
+          </div>
+        )}
       </MobileBarFrame>
     )
   }
@@ -57,15 +60,17 @@ export function PublicBar() {
       </nav>
       {/* Come la destra della barra di gioco: elementi più piccoli delle voci, un filo che li separa,
           margine visibile di 32 come il logo a sinistra */}
-      <div className="mr-2.5 ml-auto flex items-center gap-6">
-        <Link to={PATHS.login} className={LOGIN_CLASS}>
-          {COPY.login}
-        </Link>
-        <span aria-hidden="true" className="h-7.5 w-px bg-divider-gold" />
-        <GoldLink size="s" to={PATHS.register}>
-          {COPY.play}
-        </GoldLink>
-      </div>
+      {AUTH_ENABLED && (
+        <div className="mr-2.5 ml-auto flex items-center gap-6">
+          <Link to={PATHS.login} className={LOGIN_CLASS}>
+            {COPY.login}
+          </Link>
+          <span aria-hidden="true" className="h-7.5 w-px bg-divider-gold" />
+          <GoldLink size="s" to={PATHS.register}>
+            {COPY.play}
+          </GoldLink>
+        </div>
+      )}
     </DesktopBarFrame>
   )
 }
