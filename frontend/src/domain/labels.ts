@@ -137,6 +137,20 @@ export const SIGN_GLYPHS: Record<SignCode, string> = {
   PESCI: '♓︎',
 }
 
+/**
+ * Glifi dei pianeti (tavola Collezione-Cielo, sopratitolo della casella), in variante testo
+ * come i segni: si scrivono con `font-symbol`.
+ */
+export const PLANET_GLYPHS: Record<PlanetCode, string> = {
+  SOLE: '☉︎',
+  LUNA: '☽︎',
+  MARTE: '♂︎',
+  GIOVE: '♃︎',
+  SATURNO: '♄︎',
+  MERCURIO: '☿︎',
+  VENERE: '♀︎',
+}
+
 /** Rarità come la stampano le carte (gli Ascendenti sono "Ultra-rara"). */
 export const TIER_LABELS: Record<Tier, string> = {
   COMMON: 'Comune',
