@@ -26,6 +26,7 @@ export const PATHS = {
   missions: '/missioni',
   faction: '/fazione',
   profile: '/profilo',
+  playerProfile: '/profilo/giocatore/:playerId',
   notifications: '/notifiche',
 } as const
 

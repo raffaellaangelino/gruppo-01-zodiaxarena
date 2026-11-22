@@ -4,7 +4,6 @@ import { BootGate } from '@/app/boot/BootGate'
 import { PATHS } from '@/app/paths'
 import { AppShell } from '@/app/shell/AppShell'
 import { GuestOnly } from '@/features/auth/components/GuestOnly'
-import { LogoutButton } from '@/features/auth/components/LogoutButton'
 import { RequireAuth } from '@/features/auth/components/RequireAuth'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { ChallengesLayout } from '@/features/challenges/components/ChallengesLayout'
@@ -28,6 +27,8 @@ import { TradesReceivedPage } from '@/features/trades/pages/TradesReceivedPage'
 import { TradesSentPage } from '@/features/trades/pages/TradesSentPage'
 import { NewTradePage } from '@/features/trades/pages/NewTradePage'
 import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
+import { ProfilePage } from '@/features/player/pages/ProfilePage'
+import { FriendProfilePage } from '@/features/player/pages/FriendProfilePage'
 import { AUTH_ENABLED } from '@/config/env'
 
 /** Sezioni non ancora costruite: tengono il posto finché arriva la loro issue. */
@@ -97,11 +98,11 @@ export function AppRoutes() {
               ))}
               <Route
                 path={PATHS.profile}
-                element={
-                  <SectionPlaceholder title="Profilo">
-                    <LogoutButton />
-                  </SectionPlaceholder>
-                }
+                element={<ProfilePage />}
+              />
+              <Route
+                path={PATHS.playerProfile}
+                element={<FriendProfilePage />}
               />
             </Route>
           </Route>
