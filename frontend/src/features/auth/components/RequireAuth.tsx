@@ -1,4 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router'
+import { AUTH_ENABLED } from '@/config/env'
 import { PATHS } from '@/app/paths'
 import type { LoginRedirectState } from '@/features/auth/types'
 import { useAuth } from '@/features/auth/useAuth'
@@ -12,6 +13,8 @@ import { LandingPage } from '@/features/landing/pages/LandingPage'
 export function RequireAuth() {
   const { isAuthenticated } = useAuth()
   const location = useLocation()
+
+  if (!AUTH_ENABLED) return <Outlet />
 
   if (!isAuthenticated) {
     if (location.pathname === PATHS.home) return <LandingPage />

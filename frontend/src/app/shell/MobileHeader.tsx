@@ -1,5 +1,6 @@
 import { CreditsLink, NotificationsLink, ProfileLink } from '@/app/shell/PlayerLinks'
 import { MobileBarFrame } from '@/app/shell/BarFrame'
+import { MobileMenu } from '@/app/shell/MobileMenu'
 import type { PlayerSummary } from '@/features/player/types'
 
 /** Proprietà di {@link MobileHeader}. */
@@ -18,6 +19,7 @@ export function MobileHeader({ player }: MobileHeaderProps) {
         <CreditsLink player={player} density="mobile" />
         <NotificationsLink player={player} density="mobile" />
         <ProfileLink player={player} density="mobile" />
+        <MobileMenu player={player} />
       </div>
     </MobileBarFrame>
   )
