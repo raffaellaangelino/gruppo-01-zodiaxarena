@@ -9,6 +9,7 @@ import { MobileTabBar } from '@/app/shell/MobileTabBar'
 import { MockDataNotice } from '@/app/shell/MockDataNotice'
 import { MEDIA } from '@/config/breakpoints'
 import { USE_MOCKS } from '@/config/env'
+import { SHOP_SAMPLE } from '@/features/shop/api'
 import { usePlayerSummary } from '@/features/player/queries'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import './shell.css'
@@ -24,9 +25,10 @@ export function AppShell() {
   const isDesktop = useMediaQuery(MEDIA.desktop)
   const { pathname } = useLocation()
   // Con i dati di esempio attivi tutto è finto (tranne la Guida, che non ha dati). Con il backend
-  // vero la Home, finché non c'è il suo endpoint, si compone dalle API che esistono e nasconde il
-  // resto (`features/home/compose`): niente di finto da segnalare.
-  const showsSampleData = USE_MOCKS && pathname !== PATHS.guide
+  // vero la Home si compone dalle API che esistono (`features/home/compose`); il Negozio, finché
+  // manca `/api/shop`, usa i dati di esempio e lo dice.
+  const showsSampleData =
+    (USE_MOCKS && pathname !== PATHS.guide) || (SHOP_SAMPLE && pathname === PATHS.shop)
 
   return (
     <div className="app-shell min-h-dvh">

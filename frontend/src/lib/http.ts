@@ -61,6 +61,8 @@ export interface RequestOptions {
   token?: string | null
   /** Per annullare la richiesta (es. quando il componente si smonta). */
   signal?: AbortSignal
+  /** Header in più (es. `Idempotency-Key` per gli acquisti, contratto §6.2). */
+  headers?: Record<string, string>
 }
 
 /** Chiamato quando una richiesta con token riceve 401: la sessione non è più valida. */
@@ -103,7 +105,7 @@ export function setUnauthorizedHandler(handler: UnauthorizedHandler | null): voi
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, signal } = options
   const token = options.token === undefined ? tokenProvider() : options.token
-  const headers: Record<string, string> = { Accept: 'application/json' }
+  const headers: Record<string, string> = { Accept: 'application/json', ...options.headers }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
   if (token) headers.Authorization = `Bearer ${token}`
 

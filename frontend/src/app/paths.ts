@@ -21,6 +21,8 @@ export const PATHS = {
   matchVerdict: '/partite/:matchId/verdetto',
   trades: '/scambi',
   shop: '/negozio',
+  /** Modello del percorso: per un link usare {@link packOpeningPath}. */
+  packOpening: '/negozio/apertura/:openingId',
   missions: '/missioni',
   faction: '/fazione',
   profile: '/profilo',
@@ -65,4 +67,14 @@ export function matchPath(matchId: number): string {
  */
 export function matchVerdictPath(matchId: number): string {
   return `/partite/${matchId}/verdetto`
+}
+
+/**
+ * L'apertura di un pacchetto (rivelazione e riepilogo).
+ *
+ * @param openingId Apertura.
+ * @returns Il percorso.
+ */
+export function packOpeningPath(openingId: number): string {
+  return `/negozio/apertura/${openingId}`
 }

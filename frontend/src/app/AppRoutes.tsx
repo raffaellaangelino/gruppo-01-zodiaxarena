@@ -16,6 +16,8 @@ import { MatchReplayPage } from '@/features/matches/pages/MatchReplayPage'
 import { MatchVerdictPage } from '@/features/matches/pages/MatchVerdictPage'
 import { HomePage } from '@/features/home/pages/HomePage'
 import { GuidePage } from '@/features/guide/pages/GuidePage'
+import { PackOpeningPage } from '@/features/shop/pages/PackOpeningPage'
+import { ShopPage } from '@/features/shop/pages/ShopPage'
 import { PublicGuidePage } from '@/features/landing/pages/PublicGuidePage'
 import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
 import { OnboardingGate } from '@/features/onboarding/components/OnboardingGate'
@@ -28,7 +30,6 @@ import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 /** Sezioni non ancora costruite: tengono il posto finché arriva la loro issue. */
 const PLACEHOLDERS: { path: string; title: string }[] = [
   { path: PATHS.trades, title: 'Scambi' },
-  { path: PATHS.shop, title: 'Negozio' },
   { path: PATHS.missions, title: 'Missioni' },
   { path: PATHS.faction, title: 'La tua Fazione' },
   { path: PATHS.notifications, title: 'Notifiche' },
@@ -66,12 +67,14 @@ export function AppRoutes() {
               <Route path={PATHS.playChallenge} element={<PlayChallengePage />} />
               <Route path={PATHS.match} element={<MatchReplayPage />} />
               <Route path={PATHS.matchVerdict} element={<MatchVerdictPage />} />
+              <Route path={PATHS.packOpening} element={<PackOpeningPage />} />
             </Route>
             <Route element={<AppShell />}>
               <Route path={PATHS.home} element={<HomePage />} />
               <Route path={PATHS.guide} element={<GuidePage />} />
               <Route path={PATHS.collection} element={<CollectionPage />} />
               <Route path={PATHS.deck} element={<SkyPage />} />
+              <Route path={PATHS.shop} element={<ShopPage />} />
               <Route element={<ChallengesLayout />}>
                 <Route path={PATHS.challenges} element={<ChallengesToPlayPage />} />
                 <Route path={PATHS.challengesSent} element={<ChallengesSentPage />} />

@@ -1,0 +1,241 @@
+/* =====================================================================
+   Apertura del pacchetto (X02, tavole Negozio-Apertura e -Riepilogo, FOUNDATIONS §6b-octies).
+   La carta si gira davvero (due facce, rotazione sull'asse verticale); la Stella, prima di
+   girarsi, lascia filtrare dal dorso la luce del suo tier. Con "riduci movimento": dissolvenza.
+   ===================================================================== */
+
+@layer components {
+  /* Raggiera tenue dietro le carte, centrata sulla fila; ruota lentissima */
+  .pack-burst {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 81rem;
+    height: 81rem;
+    margin: -40.5rem 0 0 -40.5rem;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+      from 0deg,
+      rgb(255 231 160 / 7%) 0deg 4deg,
+      rgb(255 231 160 / 0%) 4deg 15deg
+    );
+    mask: radial-gradient(closest-side, #000 15%, transparent 100%);
+    pointer-events: none;
+    animation: pack-burst-spin 120s linear infinite;
+  }
+
+  /* Le carte arrivano una dopo l'altra, salendo in scia */
+  .pack-deal {
+    animation: pack-deal 0.8s var(--za-ease-out) both;
+    animation-delay: calc(0.15s + var(--i, 0) * 0.09s);
+  }
+
+  .pack-card {
+    position: relative;
+    width: var(--pack-card-w);
+    aspect-ratio: var(--za-card-ratio);
+    perspective: 75rem;
+    transform-origin: 50% 100%;
+    transition:
+      translate 0.6s var(--za-ease-out),
+      scale 0.6s var(--za-ease-out);
+  }
+
+  .pack-card__inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    /* Gira con un'accelerazione morbida e si assesta appena oltre, come una carta vera */
+    transition: transform 0.9s cubic-bezier(0.25, 1.08, 0.35, 1);
+  }
+
+  .pack-card[data-revealed='true'] .pack-card__inner {
+    transform: rotateY(180deg);
+  }
+
+  /* Mentre gira la carta si solleva dal tavolo e si riappoggia */
+  .pack-card[data-revealed='true'] {
+    animation: pack-lift 0.9s cubic-bezier(0.33, 0, 0.2, 1);
+  }
+
+  .pack-card__face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+  }
+
+  .pack-card__back {
+    border-radius: var(--za-card-radius);
+    box-shadow: 0 10px 20px rgb(0 0 0 / 50%);
+    transition: box-shadow 1.2s ease-in;
+  }
+
+  .pack-card__front {
+    border-radius: var(--za-card-radius);
+    transform: rotateY(180deg);
+    transition: box-shadow 0.8s var(--za-ease-out);
+  }
+
+  /* La Stella: la luce del suo tier cresce piano e la carta si stacca dal tavolo */
+  .pack-card[data-anticipation='true'] {
+    animation: pack-rise 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .pack-card[data-anticipation='true'] .pack-card__back {
+    box-shadow:
+      0 0 0 2px var(--pack-glow),
+      0 0 48px var(--pack-glow),
+      0 24px 34px rgb(0 0 0 / 55%);
+  }
+  /* …poi gira partendo da dove si era alzata, e la sua luce si apre in un lampo */
+  .pack-card[data-star='true'][data-revealed='true'] {
+    animation: pack-lift-star 1s cubic-bezier(0.33, 0, 0.2, 1);
+  }
+  .pack-card::after {
+    position: absolute;
+    z-index: -1;
+    inset: -35%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--pack-glow), transparent 70%);
+    opacity: 0;
+    pointer-events: none;
+    content: '';
+  }
+  .pack-card[data-star='true'][data-revealed='true']::after {
+    animation: pack-flash 1.3s ease-out;
+  }
+
+  /* Riepilogo: le nuove hanno la luce del loro tier. Se ce n'è una sola tra i doppioni si
+     distingue anche per misura (224 contro 184, alzata di 20), con una scala che non sposta la fila */
+  .pack-card[data-hero='true'] {
+    translate: 0 -1.25rem;
+    scale: 1.217;
+  }
+  .pack-card[data-new='true'] .pack-card__front {
+    box-shadow:
+      0 0 0 2px var(--pack-glow),
+      0 0 32px var(--pack-glow),
+      0 18px 30px rgb(0 0 0 / 55%);
+  }
+
+  /* Titoli e didascalie entrano in dissolvenza */
+  .pack-fade {
+    animation: pack-fade 0.55s var(--za-ease-out) both;
+  }
+
+  /* Il riepilogo è già al suo posto: appare in dissolvenza, salendo appena */
+  .pack-summary {
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 1rem;
+    transition:
+      opacity 0.7s var(--za-ease-out) 0.2s,
+      translate 0.7s var(--za-ease-out) 0.2s,
+      visibility 0s linear 0.9s;
+  }
+  .pack-summary[data-visible='true'] {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity 0.7s var(--za-ease-out) 0.2s,
+      translate 0.7s var(--za-ease-out) 0.2s,
+      visibility 0s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pack-burst,
+    .pack-deal,
+    .pack-fade,
+    .pack-card,
+    .pack-card[data-revealed='true'],
+    .pack-card[data-anticipation='true'],
+    .pack-card[data-star='true'][data-revealed='true'],
+    .pack-card[data-star='true'][data-revealed='true']::after {
+      animation: none;
+    }
+    .pack-card,
+    .pack-card__inner,
+    .pack-summary,
+    .pack-summary[data-visible='true'] {
+      transition: none;
+    }
+    .pack-card__face {
+      transition: opacity var(--za-dur-base) ease;
+    }
+    .pack-card[data-revealed='true'] .pack-card__inner {
+      transform: none;
+    }
+    .pack-card__front {
+      transform: none;
+      opacity: 0;
+    }
+    .pack-card[data-revealed='true'] .pack-card__front {
+      opacity: 1;
+    }
+    .pack-card[data-revealed='true'] .pack-card__back {
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes pack-burst-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes pack-deal {
+  from {
+    opacity: 0;
+    translate: 0 3rem;
+    rotate: -3deg;
+    scale: 0.92;
+  }
+}
+
+@keyframes pack-lift {
+  45% {
+    translate: 0 -1.1rem;
+    scale: 1.06;
+  }
+}
+
+@keyframes pack-rise {
+  to {
+    translate: 0 -0.6rem;
+    scale: 1.04;
+  }
+}
+
+@keyframes pack-lift-star {
+  from {
+    translate: 0 -0.6rem;
+    scale: 1.04;
+  }
+  45% {
+    translate: 0 -1.5rem;
+    scale: 1.09;
+  }
+}
+
+@keyframes pack-flash {
+  0% {
+    opacity: 0;
+    scale: 0.6;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.5;
+  }
+}
+
+@keyframes pack-fade {
+  from {
+    opacity: 0;
+    translate: 0 0.4rem;
+  }
+}

@@ -24,4 +24,6 @@ export const BACKEND_READY = {
   myDeck: true,
   /** `GET /api/matches/{id}` (§8.2): una partita giocata. */
   match: true,
+  /** `GET /api/shop/packs` e `POST /api/shop/packs/{code}/purchase` (§6): il Negozio e le aperture. */
+  shop: false,
 } as const
