@@ -41,10 +41,21 @@ export function ChallengesSentPage() {
 
   const section = (title: string, items: Challenge[]) =>
     items.length > 0 && (
-      <TilePanel glass aria-label={title}>
-        <div className="px-6 pt-5 pb-2">
-          <LineTitle stretch>{title}</LineTitle>
-          <ul className="mt-2">
+      // Alto quanto il contenuto; se le sfide sono tante si ferma al bordo dello schermo e la lista
+      // scorre dentro il pannello, con il titolo fermo (catena flex: niente altezze in percentuale)
+      <TilePanel
+        glass
+        aria-label={title}
+        className="flex min-h-0 flex-[0_1_auto] flex-col [&>.tile-panel\_\_content]:flex [&>.tile-panel\_\_content]:min-h-0 [&>.tile-panel\_\_content]:flex-1 [&>.tile-panel\_\_content]:flex-col"
+      >
+        <div className="flex min-h-0 flex-1 flex-col px-6 pt-5 pb-2">
+          {/* Il titolo a linea con stretch ha flex-1: in una colonna crescerebbe in altezza */}
+          <div className="flex shrink-0">
+            <LineTitle stretch>{title}</LineTitle>
+          </div>
+          {/* La lista entra nei margini del pannello con un'imbottitura uguale: a destra la barra di
+              scorrimento sta verso la cornice, staccata dai pulsanti; a sinistra l'anello dell'avatar non si taglia */}
+          <ul className="mt-2 -mr-3 -ml-2 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-3 pl-2">
             {items.map((challenge) => (
               <SentChallengeRow
                 key={challenge.id}
@@ -60,7 +71,7 @@ export function ChallengesSentPage() {
     )
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-h-0 flex-1 flex-col gap-4">
       {launchedTo && (
         <output className="flex items-center gap-2 text-success type-meta-strong">
           <Icon name="conferma" size={18} />

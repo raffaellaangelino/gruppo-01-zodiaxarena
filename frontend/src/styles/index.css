@@ -9,6 +9,36 @@
     color-scheme: dark; /* moduli, barre di scorrimento e controlli nativi in versione scura */
   }
 
+  /* Barra di scorrimento del gioco: niente barra grigia del browser, un filo sottile nell'oro del
+     design system su binario trasparente, che si schiarisce al passaggio. Lo scorrimento resta
+     (serve a chi usa tastiera o mouse senza rotella): cambia solo come si vede. */
+  /* Firefox: le proprietà standard. Chrome, Safari ed Edge le avrebbero la precedenza sullo stile
+     webkit qui sotto (e "thin" in Chrome è 11 px), quindi valgono solo dove il webkit non c'è. */
+  @supports not selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgb(217 185 124 / 45%) transparent;
+    }
+    *:hover {
+      scrollbar-color: rgb(217 185 124 / 75%) transparent;
+    }
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    margin-block: 8px; /* il binario non arriva agli angoli del contenitore */
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: rgb(217 185 124 / 45%);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(217 185 124 / 75%);
+  }
+
   body {
     min-height: 100dvh; /* altezza reale anche su mobile, con le barre del browser */
     background: var(--za-bg);
