@@ -16,7 +16,7 @@ export function ChallengesLayout() {
   const pending = toPlay.filter((c) => c.status === 'PENDING').length
 
   return (
-    <main className="mx-auto w-full max-w-[90rem] px-4 pt-(--shell-top) pb-(--shell-bottom) xl:px-8">
+    <main className="mx-auto flex h-dvh w-full max-w-[90rem] flex-col px-4 pt-(--shell-top) pb-(--shell-bottom) xl:px-8">
       <title>Sfide · Zodiax Arena</title>
       <PorticoBackdrop />
       <header className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4 pt-6 xl:pt-8">
@@ -34,7 +34,8 @@ export function ChallengesLayout() {
           {CHALLENGES_COPY.newChallenge}
         </GoldLink>
       </header>
-      <div className="mt-6 pb-10">
+      {/* La sezione sta in uno schermo: le liste lunghe scorrono dentro i loro pannelli */}
+      <div className="mt-6 flex min-h-0 flex-1 flex-col pb-4 xl:pb-8">
         <Outlet />
       </div>
     </main>
