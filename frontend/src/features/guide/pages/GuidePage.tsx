@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { PorticoBackdrop } from '@/components/layout/PorticoBackdrop'
 import { Icon } from '@/components/ui/Icon'
 import { GuideBattle } from '@/features/guide/components/GuideBattle'
@@ -8,12 +8,38 @@ import { GuideExample } from '@/features/guide/components/GuideExample'
 import { GuideFaq } from '@/features/guide/components/GuideFaq'
 import { GuideGlossary } from '@/features/guide/components/GuideGlossary'
 import { GUIDE_CHAPTERS } from '@/features/guide/chapters'
-import soleCard from '@/assets/cards/sole.webp'
+import { cardArtUrl } from '@/components/game/cardArt'
+import { GameCard } from '@/components/game/GameCard'
 import './guide.css'
 
-export function GuidePage() {
+/** Proprietà di {@link GuidePage}. */
+export interface GuidePageProps {
+  /**
+   * `game`: dentro il gioco, sul portico, aperta sulla carta. `public`: pagina pubblica del sito
+   * (`/regolamento`), sul cielo della landing e aperta dal primo capitolo, per chi parte da zero.
+   */
+  variant?: 'game' | 'public'
+  /** Sopra la testata: il percorso delle pagine pubbliche ("Zodiax Arena › Guida"). */
+  trail?: ReactNode
+}
+
+/**
+ * Guida (S14, S15): Regolamento a capitoli, Glossario e FAQ, con la ricerca. La stessa pagina nel
+ * gioco e sul sito pubblico, che cambia solo sfondo, percorso e capitolo di partenza.
+ */
+/** Dove stanno i numeri sulla carta, in % (rarità, nome, ATK, DEF, elemento): come nella tavola. */
+const CARD_PINS = [
+  { n: 1, x: 40, y: 4.5 },
+  { n: 2, x: 50, y: 66 },
+  { n: 3, x: 15.5, y: 55.5 },
+  { n: 4, x: 84.5, y: 55.5 },
+  { n: 5, x: 74, y: 4.5 },
+]
+
+export function GuidePage({ variant = 'game', trail }: GuidePageProps) {
+  const isPublic = variant === 'public'
   const [search, setSearch] = useState('')
-  const [chapterId, setChapterId] = useState('la-carta')
+  const [chapterId, setChapterId] = useState(isPublic ? GUIDE_CHAPTERS[0].id : 'la-carta')
   const [activeTab, setActiveTab] = useState<'regolamento' | 'glossario' | 'faq'>('regolamento')
   const chapterIndex = GUIDE_CHAPTERS.findIndex((chapter) => chapter.id === chapterId)
   const chapter = GUIDE_CHAPTERS[chapterIndex]
@@ -25,9 +51,10 @@ export function GuidePage() {
   return (
     <main className="guide-page">
       <title>Guida · Zodiax Arena</title>
-      <PorticoBackdrop variant="reading" />
+      {!isPublic && <PorticoBackdrop variant="reading" />}
 
       <div className="guide-page__inner">
+        {trail}
         <header className="guide-header">
           <h1>Guida</h1>
           <nav className="guide-tabs" aria-label="Sezioni della guida">
@@ -86,8 +113,24 @@ export function GuidePage() {
               {chapter.id === 'la-carta' ? (
                 <>
                   <div className="guide-card-overview">
+                    {/* La carta vera del catalogo con i numeri della legenda appoggiati accanto agli
+                        elementi, senza coprirli (posizioni misurate sulla carta, tavola gen_gd) */}
                     <figure className="guide-card">
-                      <img src={soleCard} alt="Carta Sole in Leone" />
+                      <GameCard
+                        size="fluid"
+                        imageUrl={cardArtUrl('za-005-sole-leone')}
+                        label="Sole in Leone, carta di esempio"
+                      />
+                      {CARD_PINS.map(({ n, x, y }) => (
+                        <span
+                          key={n}
+                          aria-hidden="true"
+                          className="guide-number guide-card__pin"
+                          style={{ left: `${x}%`, top: `${y}%` }}
+                        >
+                          <span>{n}</span>
+                        </span>
+                      ))}
                     </figure>
                     <CardFacts />
                   </div>
@@ -126,39 +169,36 @@ export function GuidePage() {
                 </ul>
               )}
 
+              {/* Precedente / Successivo (tavola gen_gd.pager): ci sono solo i lati che esistono */}
               <nav className="guide-pagination" aria-label="Navigazione capitoli">
-                <div>
-                  <span className="guide-eyebrow">Precedente</span>
-                  {chapterIndex > 0 ? (
-                    <button
-                      type="button"
-                      className="guide-pagination__chapter"
-                      onClick={() => selectChapter(chapterIndex - 1)}
-                    >
-                      ‹ &nbsp;{GUIDE_CHAPTERS[chapterIndex - 1].title}
-                    </button>
-                  ) : (
-                    <button type="button" className="guide-pagination__chapter" disabled>
-                      ‹ &nbsp;—
-                    </button>
-                  )}
-                </div>
-                <div className="guide-pagination__next">
-                  <span className="guide-eyebrow">Successivo</span>
-                  {chapterIndex < GUIDE_CHAPTERS.length - 1 ? (
-                    <button
-                      type="button"
-                      className="guide-pagination__chapter"
-                      onClick={() => selectChapter(chapterIndex + 1)}
-                    >
-                      {GUIDE_CHAPTERS[chapterIndex + 1].title}&nbsp; ›
-                    </button>
-                  ) : (
-                    <button type="button" className="guide-pagination__chapter" disabled>
-                      — &nbsp;›
-                    </button>
-                  )}
-                </div>
+                {chapterIndex > 0 ? (
+                  <button
+                    type="button"
+                    className="guide-pagination__side"
+                    onClick={() => selectChapter(chapterIndex - 1)}
+                  >
+                    <span className="guide-eyebrow">Precedente</span>
+                    <span className="guide-pagination__chapter">
+                      <Icon name="indietro" size={18} />
+                      {GUIDE_CHAPTERS[chapterIndex - 1].title}
+                    </span>
+                  </button>
+                ) : (
+                  <span />
+                )}
+                {chapterIndex < GUIDE_CHAPTERS.length - 1 && (
+                  <button
+                    type="button"
+                    className="guide-pagination__side guide-pagination__next"
+                    onClick={() => selectChapter(chapterIndex + 1)}
+                  >
+                    <span className="guide-eyebrow">Successivo</span>
+                    <span className="guide-pagination__chapter">
+                      {GUIDE_CHAPTERS[chapterIndex + 1].title}
+                      <Icon name="avanti" size={18} />
+                    </span>
+                  </button>
+                )}
               </nav>
             </article>
           </div>

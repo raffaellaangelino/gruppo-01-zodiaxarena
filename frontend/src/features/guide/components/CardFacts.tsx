@@ -27,7 +27,7 @@ export function CardFacts() {
     <ol className="guide-facts">
       {FACTS.map((fact, index) => (
         <li className="guide-fact" key={fact.title}>
-          <span className="guide-fact__number" aria-hidden="true">
+          <span className="guide-number" aria-hidden="true">
             <span>{index + 1}</span>
           </span>
           <div>

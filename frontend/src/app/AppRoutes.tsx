@@ -16,6 +16,7 @@ import { MatchReplayPage } from '@/features/matches/pages/MatchReplayPage'
 import { MatchVerdictPage } from '@/features/matches/pages/MatchVerdictPage'
 import { HomePage } from '@/features/home/pages/HomePage'
 import { GuidePage } from '@/features/guide/pages/GuidePage'
+import { PublicGuidePage } from '@/features/landing/pages/PublicGuidePage'
 import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
 import { OnboardingGate } from '@/features/onboarding/components/OnboardingGate'
 import { FactionPage } from '@/features/onboarding/pages/FactionPage'
@@ -35,6 +36,7 @@ const PLACEHOLDERS: { path: string; title: string }[] = [
 
 /**
  * Mappa delle pagine.
+ * - Pubbliche: privacy, regolamento e, sulla radice senza sessione, la landing (`RequireAuth`).
  * - Solo per chi non ha una sessione: accesso e registrazione.
  * - Riservate: prima `BootGate` carica i dati essenziali. Chi deve ancora scegliere la Fazione
  *   va alla scelta (`OnboardingGate`); gli altri entrano nel guscio con le barre, Home e sezioni.
@@ -44,6 +46,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path={PATHS.privacy} element={<PrivacyPage />} />
+      <Route path={PATHS.rules} element={<PublicGuidePage />} />
       <Route element={<GuestOnly />}>
         <Route path={PATHS.login} element={<LoginPage />} />
         <Route path={PATHS.register} element={<RegisterPage />} />
