@@ -23,8 +23,29 @@ const PACKS = [
     guarantee: '—',
   },
   {
+    // Economia del 12/11 (DECISIONS): 300 crediti, 4 Stelle, nessuna garanzia
     name: 'Zenit',
-    price: 250,
+    price: 300,
+    rarities: [
+      'common',
+      'common',
+      'common',
+      'rare',
+      'rare',
+      'rare',
+      'star',
+      'star',
+      'star',
+      'star',
+    ],
+    summary: '3 Comuni · 3 Rare · 4 Stelle',
+    guarantee: '—',
+  },
+  {
+    // 12 carte con un Ascendente garantito, una volta per ciclo lunare (composizione della tela,
+    // da confermare con il team)
+    name: 'Luna Piena',
+    price: 600,
     rarities: [
       'common',
       'common',
@@ -34,17 +55,12 @@ const PACKS = [
       'common',
       'rare',
       'rare',
+      'rare',
       'epic',
       'star',
+      'ascendant',
     ],
-    summary: '6 Comuni · 2 Rare · 1 Epica · 1 Stella',
-    guarantee: '1 Epica garantita',
-  },
-  {
-    name: 'Luna Piena',
-    price: 600,
-    rarities: ['common', 'common', 'common', 'rare', 'rare', 'rare', 'epic', 'ascendant', 'star'],
-    summary: '3 Comuni · 3 Rare · 1 Epica · 1 Ascendente · 1 Stella',
+    summary: '6 Comuni · 3 Rare · 1 Epica · 1 Ascendente · 1 Stella',
     guarantee: '1 Ascendente garantito',
   },
 ]
