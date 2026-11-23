@@ -5,7 +5,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query'
-import { BACKEND_READY, USE_MOCKS } from '@/config/env'
+import { BACKEND_READY, shouldUseMocks } from '@/config/env'
 import { catalogQuery } from '@/features/cards/queries'
 import { fetchDeck, saveDeck, type DeckSaveBody } from '@/features/decks/api'
 import type { DeckDto } from '@/features/decks/dto'
@@ -48,7 +48,7 @@ export function useMyDeck(): MyDeckState {
       ])
       return toDeck(dto, catalog)
     },
-    enabled: deckId !== null && (USE_MOCKS || BACKEND_READY.myDeck),
+    enabled: deckId !== null && (shouldUseMocks() || BACKEND_READY.myDeck),
   })
   return {
     deck: query.data ?? null,

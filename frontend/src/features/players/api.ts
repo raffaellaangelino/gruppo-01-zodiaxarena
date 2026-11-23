@@ -1,4 +1,4 @@
-import { USE_MOCKS } from '@/config/env'
+import { shouldUseMocks } from '@/config/env'
 import { request } from '@/lib/http'
 import { mockResponse } from '@/mocks/mockResponse'
 import { playersSearchMock } from '@/mocks/players'
@@ -26,7 +26,7 @@ export async function searchPlayers(
   signal?: AbortSignal,
 ): Promise<PlayerSearchResult[]> {
   const params = new URLSearchParams({ q: query })
-  const { items } = USE_MOCKS
+  const { items } = shouldUseMocks()
     ? await mockResponse(playersSearchMock(query), signal)
     : await request<PlayerSearchDto>(`/players/search?${params}`, { signal })
   return items.map(({ id, nickname, pendingChallengeId }) => ({

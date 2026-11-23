@@ -9,6 +9,20 @@
  */
 export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
 
+/**
+ * Decide se usare i dati di esempio per la richiesta corrente.
+ * Dopo il login il JWT identifica l'account: carte, crediti e mazzi devono venire dal backend,
+ * non dalla collezione demo condivisa.
+ */
+export function shouldUseMocks(): boolean {
+  if (!USE_MOCKS) return false
+  try {
+    return localStorage.getItem('za.auth.token') === null
+  } catch {
+    return true
+  }
+}
+
 /** Login e registrazione sono attivi. */
 export const AUTH_ENABLED = true
 

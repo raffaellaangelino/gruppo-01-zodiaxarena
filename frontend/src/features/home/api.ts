@@ -1,4 +1,4 @@
-import { BACKEND_READY, USE_MOCKS } from '@/config/env'
+import { BACKEND_READY, shouldUseMocks } from '@/config/env'
 import { request } from '@/lib/http'
 import { homeSummaryMock } from '@/mocks/home'
 import { mockResponse } from '@/mocks/mockResponse'
@@ -12,6 +12,6 @@ import type { HomeSummary } from '@/features/home/types'
  * @returns Sfide premiate, "Ti aspettano", Cielo, missioni, pacchetti e luna piena.
  */
 export async function fetchHomeSummary(signal?: AbortSignal): Promise<HomeSummary> {
-  if (USE_MOCKS || !BACKEND_READY.home) return mockResponse(homeSummaryMock(), signal)
+  if (shouldUseMocks() || !BACKEND_READY.home) return mockResponse(homeSummaryMock(), signal)
   return request<HomeSummary>('/home', { signal })
 }

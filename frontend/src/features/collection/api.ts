@@ -1,4 +1,4 @@
-import { USE_MOCKS } from '@/config/env'
+import { shouldUseMocks } from '@/config/env'
 import { request } from '@/lib/http'
 import { collectionMock } from '@/mocks/collection'
 import { mockResponse } from '@/mocks/mockResponse'
@@ -13,7 +13,7 @@ import type { Collection } from '@/features/collection/types'
  * @returns La collezione.
  */
 export async function fetchCollection(signal?: AbortSignal): Promise<Collection> {
-  const dto = USE_MOCKS
+  const dto = shouldUseMocks()
     ? await mockResponse(collectionMock(), signal)
     : await request<CollectionDto>('/collection', { signal })
   return toCollection(dto)

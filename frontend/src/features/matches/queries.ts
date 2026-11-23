@@ -1,6 +1,6 @@
 import { queryOptions, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { BACKEND_READY, USE_MOCKS } from '@/config/env'
+import { BACKEND_READY, shouldUseMocks } from '@/config/env'
 import { refreshChallenges } from '@/features/challenges/queries'
 import { fetchMatch, markMatchSeen } from '@/features/matches/api'
 import type { Match } from '@/features/matches/types'
@@ -45,4 +45,4 @@ export function useMarkMatchSeen(id: number): void {
 }
 
 /** La partita mostrata è quella di esempio (dati finti o endpoint ancora assente): va detto. */
-export const MATCH_IS_SAMPLE = USE_MOCKS || !BACKEND_READY.match
+export const MATCH_IS_SAMPLE = shouldUseMocks() || !BACKEND_READY.match

@@ -1,4 +1,4 @@
-import { USE_MOCKS } from '@/config/env'
+import { shouldUseMocks } from '@/config/env'
 import { request } from '@/lib/http'
 import { catalogMock } from '@/mocks/catalog'
 import { mockResponse } from '@/mocks/mockResponse'
@@ -13,7 +13,7 @@ import type { CardDefinition } from '@/features/cards/types'
  * @returns Le 96 carte (84 Creature e 12 Ascendenti).
  */
 export async function fetchCatalog(signal?: AbortSignal): Promise<CardDefinition[]> {
-  const dtos = USE_MOCKS
+  const dtos = shouldUseMocks()
     ? await mockResponse(catalogMock(), signal)
     : await request<CardDefinitionDto[]>('/cards', { signal })
   return dtos.map(toCardDefinition)

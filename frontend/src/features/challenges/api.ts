@@ -1,4 +1,4 @@
-import { USE_MOCKS } from '@/config/env'
+import { shouldUseMocks } from '@/config/env'
 import { request } from '@/lib/http'
 import { challengesMock } from '@/mocks/challenges'
 import { mockResponse } from '@/mocks/mockResponse'
@@ -17,7 +17,7 @@ export async function fetchChallenges(
   box: ChallengeBox,
   signal?: AbortSignal,
 ): Promise<Challenge[]> {
-  const { items } = USE_MOCKS
+  const { items } = shouldUseMocks()
     ? await mockResponse(challengesMock(box), signal)
     : await request<ChallengeListDto>(`/challenges/me?box=${box}`, { signal })
   return items.map(toChallenge)
@@ -30,7 +30,7 @@ export async function fetchChallenges(
  * @throws {import('@/lib/http').ApiError} 409 `CHALLENGE_NOT_PENDING` se non è più in attesa.
  */
 export async function declineChallenge(id: number): Promise<void> {
-  if (USE_MOCKS) return mockResponse(undefined)
+  if (shouldUseMocks()) return mockResponse(undefined)
   await request<void>(`/challenges/${id}/decline`, { method: 'POST' })
 }
 
@@ -41,7 +41,7 @@ export async function declineChallenge(id: number): Promise<void> {
  * @throws {import('@/lib/http').ApiError} 409 `CHALLENGE_NOT_PENDING` se non è più in attesa.
  */
 export async function withdrawChallenge(id: number): Promise<void> {
-  if (USE_MOCKS) return mockResponse(undefined)
+  if (shouldUseMocks()) return mockResponse(undefined)
   await request<void>(`/challenges/${id}/withdraw`, { method: 'POST' })
 }
 
@@ -56,7 +56,7 @@ export async function withdrawChallenge(id: number): Promise<void> {
  *   422 `DECK_INVALID`, 404 se l'avversario non esiste, 0 se il server non risponde.
  */
 export async function createChallenge(opponentId: number, deckId: number): Promise<number> {
-  if (USE_MOCKS) return mockResponse(99)
+  if (shouldUseMocks()) return mockResponse(99)
   const { challengeId } = await request<{ challengeId: number }>('/challenges', {
     method: 'POST',
     body: { opponentId, deckId },
@@ -75,7 +75,7 @@ export async function createChallenge(opponentId: number, deckId: number): Promi
  *   503/502 se l'engine non risponde (la sfida resta in attesa), 404, 0 se il server non risponde.
  */
 export async function acceptChallenge(challengeId: number, deckId: number): Promise<number> {
-  if (USE_MOCKS) return mockResponse(88)
+  if (shouldUseMocks()) return mockResponse(88)
   const { matchId } = await request<{ matchId: number }>(`/challenges/${challengeId}/accept`, {
     method: 'POST',
     body: { deckId },

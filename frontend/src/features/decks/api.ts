@@ -1,4 +1,4 @@
-import { USE_MOCKS } from '@/config/env'
+import { shouldUseMocks } from '@/config/env'
 import { request } from '@/lib/http'
 import { deckMock, saveDeckMock } from '@/mocks/decks'
 import { mockResponse } from '@/mocks/mockResponse'
@@ -15,7 +15,7 @@ import type { DeckSlot } from '@/features/decks/types'
  * @throws {import('@/lib/http').ApiError} 404 se il mazzo non esiste o è di un altro giocatore.
  */
 export async function fetchDeck(id: number, signal?: AbortSignal): Promise<DeckDto> {
-  if (USE_MOCKS) return mockResponse(deckMock(id), signal)
+  if (shouldUseMocks()) return mockResponse(deckMock(id), signal)
   return request<DeckDto>(`/decks/${id}`, { signal })
 }
 
@@ -35,6 +35,6 @@ export interface DeckSaveBody {
  * @throws {import('@/lib/http').ApiError} 422 `CARD_NOT_OWNED`, 404 se il mazzo non è suo.
  */
 export async function saveDeck(id: number, body: DeckSaveBody): Promise<DeckDto> {
-  if (USE_MOCKS) return mockResponse(saveDeckMock(id, body))
+  if (shouldUseMocks()) return mockResponse(saveDeckMock(id, body))
   return request<DeckDto>(`/decks/${id}`, { method: 'PUT', body })
 }

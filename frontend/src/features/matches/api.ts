@@ -1,4 +1,4 @@
-import { BACKEND_READY, USE_MOCKS } from '@/config/env'
+import { BACKEND_READY, shouldUseMocks } from '@/config/env'
 import { ApiError, request } from '@/lib/http'
 import { matchMock } from '@/mocks/match'
 import { mockResponse } from '@/mocks/mockResponse'
@@ -16,7 +16,7 @@ import type { Match } from '@/features/matches/types'
  * @throws {ApiError} Per gli altri errori (rete, server).
  */
 export async function fetchMatch(id: number, signal?: AbortSignal): Promise<Match | null> {
-  if (USE_MOCKS || !BACKEND_READY.match) return toMatch(await mockResponse(matchMock(id), signal))
+  if (shouldUseMocks() || !BACKEND_READY.match) return toMatch(await mockResponse(matchMock(id), signal))
   try {
     return toMatch(await request<MatchDto>(`/matches/${id}`, { signal }))
   } catch (error) {
@@ -34,6 +34,6 @@ export async function fetchMatch(id: number, signal?: AbortSignal): Promise<Matc
  * @throws {import('@/lib/http').ApiError} 404 se non esiste o è di altri giocatori.
  */
 export async function markMatchSeen(id: number): Promise<void> {
-  if (USE_MOCKS || !BACKEND_READY.match) return
+  if (shouldUseMocks() || !BACKEND_READY.match) return
   await request<void>(`/matches/${id}/seen`, { method: 'POST' })
 }

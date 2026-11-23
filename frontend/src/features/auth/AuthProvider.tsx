@@ -48,10 +48,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     queryClient.clear() // i dati del giocatore non restano in memoria per chi accede dopo
   }, [queryClient])
 
-  const startSession = useCallback((newToken: string) => {
-    saveToken(newToken)
-    setToken(newToken)
-  }, [])
+  const startSession = useCallback(
+    (newToken: string) => {
+      // Ogni cache usa chiavi globali. Un nuovo account deve partire da dati vuoti,
+      // altrimenti il profilo, le carte, i crediti e i mazzi del precedente restano visibili.
+      queryClient.clear()
+      saveToken(newToken)
+      setToken(newToken)
+    },
+    [queryClient],
+  )
 
   const login = useCallback(
     async (credentials: LoginCredentials) => startSession(await loginRequest(credentials)),
@@ -80,10 +86,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     () =>
       onTokenChangedElsewhere((newToken) => {
         const valid = newToken && isJwtValid(newToken) ? newToken : null
-        if (!valid) queryClient.clear()
+        if (!valid || newToken !== token) queryClient.clear()
         setToken(valid)
       }),
-    [queryClient],
+    [queryClient, token],
   )
 
   const value = useMemo<AuthContextValue>(

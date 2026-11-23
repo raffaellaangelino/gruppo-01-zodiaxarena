@@ -1,4 +1,4 @@
-import { USE_MOCKS } from '@/config/env'
+import { shouldUseMocks } from '@/config/env'
 import { request } from '@/lib/http'
 import { mockResponse } from '@/mocks/mockResponse'
 import { playerSummaryMock } from '@/mocks/player'
@@ -13,6 +13,6 @@ import type { PlayerSummary } from '@/features/player/types'
  * @returns Nickname, segno, crediti, Fazione, notifiche, cose da fare e primi passi.
  */
 export async function fetchPlayerSummary(signal?: AbortSignal): Promise<PlayerSummary> {
-  if (USE_MOCKS) return mockResponse(playerSummaryMock(), signal)
+  if (shouldUseMocks()) return mockResponse(playerSummaryMock(), signal)
   return toPlayerSummary(await request<PlayerDto>('/players/me', { signal }))
 }
