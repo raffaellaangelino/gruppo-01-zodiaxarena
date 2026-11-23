@@ -26,17 +26,24 @@ import { TradesLayout } from '@/features/trades/components/TradesLayout'
 import { TradesReceivedPage } from '@/features/trades/pages/TradesReceivedPage'
 import { TradesSentPage } from '@/features/trades/pages/TradesSentPage'
 import { NewTradePage } from '@/features/trades/pages/NewTradePage'
-import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 import { ProfilePage } from '@/features/player/pages/ProfilePage'
 import { FriendProfilePage } from '@/features/player/pages/FriendProfilePage'
+import { FactionPage as ProfileFactionPage } from '@/features/player/pages/FactionPage'
+import { MissionsPage } from '@/features/missions/pages/MissionsPage'
+import { NotificationsPage } from '@/features/notifications/pages/NotificationsPage'
+import { SettingsPage } from '@/features/settings/pages/SettingsPage'
+import { FriendsPage } from '@/features/friends/pages/FriendsPage'
+import { EditCardPage } from '@/features/collection/pages/EditCardPage'
+import { ShopPage } from '@/features/shop/pages/ShopPage'
+import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 import { AUTH_ENABLED } from '@/config/env'
 
 /** Sezioni non ancora costruite: tengono il posto finché arriva la loro issue. */
 const PLACEHOLDERS: { path: string; title: string }[] = [
-  { path: PATHS.shop, title: 'Negozio' },
-  { path: PATHS.missions, title: 'Missioni' },
-  { path: PATHS.faction, title: 'La tua Fazione' },
-  { path: PATHS.notifications, title: 'Notifiche' },
+  { path: PATHS.deck, title: 'Il tuo Cielo' },
+  { path: PATHS.challenges, title: 'Sfide' },
+  { path: PATHS.newChallenge, title: 'Nuova sfida' },
+  { path: PATHS.trades, title: 'Scambi' },
 ]
 
 /**
@@ -82,6 +89,7 @@ export function AppRoutes() {
               <Route path={PATHS.home} element={<HomePage />} />
               <Route path={PATHS.guide} element={<GuidePage />} />
               <Route path={PATHS.collection} element={<CollectionPage />} />
+              <Route path={PATHS.editCard} element={<EditCardPage />} />
               <Route path={PATHS.deck} element={<SkyPage />} />
               <Route element={<ChallengesLayout />}>
                 <Route path={PATHS.challenges} element={<ChallengesToPlayPage />} />
@@ -93,6 +101,11 @@ export function AppRoutes() {
                 <Route path={PATHS.tradesSent} element={<TradesSentPage />} />
                 <Route path={PATHS.newTrade} element={<NewTradePage />} />
               </Route>
+              <Route path={PATHS.notifications} element={<NotificationsPage />} />
+              <Route path={PATHS.missions} element={<MissionsPage />} />
+              <Route path={PATHS.settings} element={<SettingsPage />} />
+              <Route path={PATHS.groups} element={<FriendsPage />} />
+              <Route path={PATHS.shop} element={<ShopPage />} />
               {PLACEHOLDERS.map(({ path, title }) => (
                 <Route key={path} path={path} element={<SectionPlaceholder title={title} />} />
               ))}
@@ -104,6 +117,7 @@ export function AppRoutes() {
                 path={PATHS.playerProfile}
                 element={<FriendProfilePage />}
               />
+              <Route path={PATHS.faction} element={<ProfileFactionPage />} />
             </Route>
           </Route>
         </Route>

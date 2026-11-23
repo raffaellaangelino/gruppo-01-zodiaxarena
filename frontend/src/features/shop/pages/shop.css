@@ -1,0 +1,718 @@
+.shop-page {
+  min-height: 100dvh;
+  padding: calc(var(--shell-top) + 0.5rem) 2rem 2rem;
+}
+
+.shop-page__inner {
+  width: min(100%, 88rem);
+  margin-inline: auto;
+}
+
+.shop-tabs {
+  display: flex;
+  gap: 1.1rem;
+  border-bottom: 1px solid var(--za-line-soft);
+}
+
+.shop-tabs__link {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  padding: 0 0.25rem 0.35rem;
+  border-bottom: 2px solid transparent;
+  color: var(--za-text-muted);
+  font: var(--za-type-label);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.shop-tabs__link:hover,
+.shop-tabs__link--active {
+  border-bottom-color: var(--za-gold-bright);
+  color: var(--za-gold-bright);
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.75rem 0 1.1rem;
+}
+
+.shop-header h1 {
+  color: var(--za-text);
+  font: var(--za-type-h2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shop-header p {
+  margin-top: 0.2rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.shop-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.shop-layout {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.8fr) minmax(28rem, 2fr) minmax(15rem, 0.9fr);
+  align-items: start;
+  gap: 1rem;
+}
+
+.shop-list-panel .tile-panel__content,
+.shop-editor-panel .tile-panel__content,
+.shop-preview-panel .tile-panel__content {
+  padding: 1rem;
+}
+
+.shop-list-panel h2,
+.shop-preview__eyebrow {
+  color: var(--za-gold);
+  font: var(--za-type-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shop-pack-list {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.7rem;
+}
+
+.shop-pack-option {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3.5rem;
+  padding: 0.4rem 0.45rem;
+  border: 1px solid var(--za-line-soft);
+  border-radius: 4px;
+  color: var(--za-text-soft);
+  background: rgba(8, 13, 30, 0.65);
+  text-align: left;
+  cursor: pointer;
+}
+
+.shop-pack-option:hover,
+.shop-pack-option--active {
+  border-color: var(--za-gold);
+  background: rgba(45, 37, 73, 0.7);
+}
+
+.shop-pack-option__copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.shop-pack-option__copy strong {
+  overflow: hidden;
+  color: var(--za-text);
+  font: var(--za-type-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shop-pack-option__copy > span {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--za-gold-bright);
+  font: var(--za-type-caption);
+}
+
+.shop-pack-option__state {
+  grid-column: 2;
+  color: var(--za-success);
+  font: var(--za-type-caption);
+}
+
+.shop-pack-badge {
+  display: grid;
+  width: 2.35rem;
+  height: 2.65rem;
+  grid-row: span 2;
+  place-items: center;
+  border: 1px solid var(--za-line);
+  border-radius: 4px;
+  color: var(--za-gold-bright);
+  background: linear-gradient(150deg, #342653, #11182f);
+  box-shadow: inset 0 0 0 2px rgba(245, 204, 117, 0.08);
+}
+
+.shop-pack-badge--rare {
+  color: var(--za-tier-rara-text);
+}
+
+.shop-pack-badge--epic {
+  color: var(--za-tier-epica-text);
+}
+
+.shop-pack-badge--ascendant {
+  color: var(--za-tier-ascendente-text);
+}
+
+.shop-editor {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.shop-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.shop-field,
+.shop-rarity-field,
+.shop-probability-field {
+  display: grid;
+  min-width: 0;
+  gap: 0.25rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.shop-field input,
+.shop-field select,
+.shop-rarity-field input,
+.shop-probability-field input {
+  width: 100%;
+  min-width: 0;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--za-field-border);
+  border-radius: 4px;
+  color: var(--za-text-soft);
+  background: rgba(10, 15, 34, 0.84);
+  font: var(--za-type-caption);
+}
+
+.shop-field input:focus-visible,
+.shop-field select:focus-visible,
+.shop-rarity-field input:focus-visible,
+.shop-probability-field input:focus-visible {
+  border-color: var(--za-gold-bright);
+  outline: 1px solid var(--za-gold-bright);
+}
+
+.shop-editor-section {
+  display: grid;
+  gap: 0.55rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--za-line-soft);
+}
+
+.shop-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.shop-section-heading h2 {
+  color: var(--za-gold-bright);
+  font: var(--za-type-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.shop-section-heading > span {
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.shop-rarity-fields {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.shop-rarity-field {
+  text-align: center;
+}
+
+.shop-rarity-field input {
+  height: 1.7rem;
+  padding-inline: 0.2rem;
+  text-align: center;
+}
+
+.shop-rarity-label {
+  overflow: hidden;
+  color: var(--za-text-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shop-rarity-label--common {
+  color: var(--za-tier-comune-text);
+}
+
+.shop-rarity-label--rare {
+  color: var(--za-tier-rara-text);
+}
+
+.shop-rarity-label--epic {
+  color: var(--za-tier-epica-text);
+}
+
+.shop-rarity-label--legendary {
+  color: var(--za-tier-leggendaria-text);
+}
+
+.shop-rarity-label--ascendant {
+  color: var(--za-tier-ascendente-text);
+}
+
+.shop-rarity-label--star {
+  color: var(--za-gold-bright);
+}
+
+.shop-card-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.shop-card-slot {
+  display: grid;
+  width: 1.25rem;
+  height: 1.65rem;
+  flex: none;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  color: var(--za-tier-comune-text);
+  background: linear-gradient(150deg, rgba(102, 117, 137, 0.4), rgba(17, 24, 47, 0.9));
+  font: var(--za-type-caption);
+}
+
+.shop-card-slot--rare {
+  color: var(--za-tier-rara-text);
+  background: linear-gradient(150deg, rgba(45, 119, 220, 0.48), rgba(17, 24, 47, 0.9));
+}
+
+.shop-card-slot--epic {
+  color: var(--za-tier-epica-text);
+  background: linear-gradient(150deg, rgba(150, 67, 206, 0.5), rgba(17, 24, 47, 0.9));
+}
+
+.shop-card-slot--legendary {
+  color: var(--za-tier-leggendaria-text);
+  background: linear-gradient(150deg, rgba(227, 151, 41, 0.5), rgba(17, 24, 47, 0.9));
+}
+
+.shop-card-slot--ascendant {
+  color: var(--za-tier-ascendente-text);
+  background: linear-gradient(150deg, rgba(235, 88, 158, 0.52), rgba(17, 24, 47, 0.9));
+}
+
+.shop-card-slot--star {
+  color: var(--za-gold-bright);
+  background: linear-gradient(150deg, rgba(235, 193, 91, 0.52), rgba(17, 24, 47, 0.9));
+}
+
+.shop-probability-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.shop-probability-field > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.shop-probability-field input {
+  height: 1.7rem;
+  padding-inline: 0.35rem;
+}
+
+.shop-probability-field input[aria-invalid='true'] {
+  border-color: var(--za-danger-soft);
+  color: var(--za-danger-soft);
+}
+
+.shop-probability-field b {
+  color: var(--za-text-muted);
+  font-weight: 400;
+}
+
+.shop-probability-bar {
+  display: flex;
+  height: 0.55rem;
+  overflow: hidden;
+  border: 1px solid rgba(248, 226, 176, 0.22);
+  border-radius: 999px;
+  background: rgba(8, 13, 30, 0.75);
+}
+
+.shop-probability-bar__rare {
+  background: var(--za-tier-rara-text);
+}
+
+.shop-probability-bar__epic {
+  background: var(--za-tier-epica-text);
+}
+
+.shop-probability-bar__legendary {
+  background: var(--za-tier-leggendaria-text);
+}
+
+.shop-probability-bar__ascendant {
+  background: var(--za-tier-ascendente-text);
+}
+
+.shop-probability-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  color: var(--za-danger-soft);
+  font: var(--za-type-caption);
+  text-align: center;
+}
+
+.shop-guarantee {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--za-line-soft);
+  color: var(--za-text-soft);
+  font: var(--za-type-caption);
+}
+
+.shop-guarantee > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.shop-guarantee strong {
+  color: var(--za-gold-bright);
+}
+
+.shop-guarantee > div > span {
+  color: var(--za-text-muted);
+}
+
+.shop-guarantee__badge {
+  padding: 0.2rem 0.45rem;
+  border: 1px solid var(--za-line);
+  border-radius: 999px;
+  color: var(--za-tier-epica-text);
+  white-space: nowrap;
+}
+
+.shop-preview {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+
+.shop-preview__eyebrow {
+  justify-self: stretch;
+}
+
+.shop-artwork {
+  position: relative;
+  display: grid;
+  width: min(100%, 11rem);
+  aspect-ratio: 0.69;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--za-gold);
+  border-radius: 0.65rem;
+  background:
+    radial-gradient(ellipse at 50% 43%, rgba(251, 121, 61, 0.28), transparent 49%),
+    radial-gradient(ellipse at 50% 46%, #423084 0%, #211844 48%, #10152b 100%);
+  box-shadow: inset 0 0 0 4px rgba(234, 187, 98, 0.12), 0 0 1rem rgba(114, 55, 202, 0.3);
+}
+
+.shop-artwork::before,
+.shop-artwork::after {
+  position: absolute;
+  inset: 9%;
+  border: 1px solid rgba(245, 209, 137, 0.68);
+  border-radius: 50%;
+  content: '';
+}
+
+.shop-artwork::after {
+  inset: 18%;
+  border-color: rgba(152, 120, 236, 0.78);
+  transform: rotate(45deg) scaleX(0.7);
+}
+
+.shop-artwork__orbit {
+  position: absolute;
+  top: 21%;
+  left: 18%;
+  width: 64%;
+  aspect-ratio: 1;
+  border: 1px dashed rgba(250, 215, 142, 0.72);
+  border-radius: 50%;
+}
+
+.shop-artwork__orbit--outer {
+  border: 0;
+  background: conic-gradient(
+    var(--za-tier-rara-text) 0deg 62deg,
+    #f0bf68 62deg 118deg,
+    var(--za-tier-epica-text) 118deg 176deg,
+    #db697b 176deg 232deg,
+    var(--za-tier-leggendaria-text) 232deg 296deg,
+    #5a91d4 296deg 360deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 0 55%, #000 58%);
+  mask: radial-gradient(circle, transparent 0 55%, #000 58%);
+}
+
+.shop-artwork__orbit--inner {
+  top: 30%;
+  left: 27%;
+  width: 46%;
+  border-style: solid;
+  border-color: rgba(221, 110, 117, 0.85);
+  transform: rotate(32deg) scaleX(0.78);
+}
+
+.shop-artwork__center {
+  z-index: 1;
+  display: grid;
+  width: 29%;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid #f4cb76;
+  border-radius: 50%;
+  color: #ffe294;
+  background: radial-gradient(circle, #a84856, #593068 74%);
+  box-shadow: 0 0 0.8rem rgba(250, 197, 104, 0.45);
+}
+
+.shop-artwork__star {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  width: 1.3rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(246, 209, 135, 0.8);
+  border-radius: 50%;
+  color: #ffe294;
+  background: #281e4f;
+}
+
+.shop-artwork__star--top {
+  top: 15%;
+}
+
+.shop-artwork__star--right {
+  right: 12%;
+  top: 43%;
+}
+
+.shop-artwork__star--bottom {
+  bottom: 23%;
+}
+
+.shop-artwork__star--left {
+  left: 12%;
+  top: 43%;
+}
+
+.shop-artwork__name {
+  position: absolute;
+  right: 7%;
+  bottom: 8%;
+  left: 7%;
+  padding: 0.3rem 0.15rem;
+  border: 1px solid rgba(244, 203, 118, 0.8);
+  color: #ffe294;
+  background: linear-gradient(90deg, #312047, #58314b, #312047);
+  font: var(--za-type-caption);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.shop-preview__name {
+  color: var(--za-text);
+  font: var(--za-type-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.shop-preview__slots {
+  display: flex;
+  justify-content: center;
+  gap: 0.14rem;
+}
+
+.shop-preview__slots .shop-card-slot {
+  width: 0.85rem;
+  height: 1.15rem;
+}
+
+.shop-preview__price {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--za-gold-bright);
+}
+
+.shop-preview__price strong {
+  font: var(--za-type-h3);
+}
+
+.shop-preview__price span {
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.shop-preview__buy {
+  width: min(100%, 11rem);
+}
+
+.shop-preview__message {
+  color: var(--za-gold-bright);
+  font: var(--za-type-caption);
+}
+
+.shop-preview__message:empty {
+  display: none;
+}
+
+.shop-preview__footnote {
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.shop-save-message {
+  display: block;
+  min-height: 1.4rem;
+  margin-top: 0.4rem;
+  color: var(--za-gold-bright);
+  font: var(--za-type-caption);
+  text-align: right;
+}
+
+.shop-save-message:empty {
+  display: none;
+}
+
+@media (width <= 75rem) {
+  .shop-layout {
+    grid-template-columns: minmax(12rem, 0.75fr) minmax(24rem, 1.8fr);
+  }
+
+  .shop-preview-panel {
+    grid-column: 1 / -1;
+  }
+
+  .shop-preview {
+    grid-template-columns: auto auto 1fr auto auto;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .shop-preview__eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .shop-artwork {
+    grid-row: span 4;
+    width: 7rem;
+  }
+}
+
+@media (width <= 52rem) {
+  .shop-page {
+    padding: calc(var(--shell-top) + 1rem) 1rem calc(var(--shell-bottom) + 1rem);
+  }
+
+  .shop-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shop-pack-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .shop-pack-option {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.35rem;
+  }
+
+  .shop-pack-badge {
+    width: 1.9rem;
+    height: 2.2rem;
+  }
+
+  .shop-pack-option__state {
+    display: none;
+  }
+
+  .shop-preview-panel {
+    grid-column: auto;
+  }
+
+  .shop-preview {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .shop-preview__eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .shop-artwork {
+    grid-row: span 5;
+    width: min(100%, 9rem);
+  }
+}
+
+@media (width <= 36rem) {
+  .shop-page {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
+  .shop-header {
+    align-items: flex-start;
+  }
+
+  .shop-header__actions {
+    gap: 0.2rem;
+  }
+
+  .shop-header__actions .tertiary {
+    padding-inline: 0.45rem;
+  }
+
+  .shop-pack-list {
+    grid-template-columns: 1fr;
+  }
+
+  .shop-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .shop-rarity-fields {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .shop-preview {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,418 @@
+.edit-card-page {
+  min-height: 100dvh;
+  padding: calc(var(--shell-top) + 3.5rem) 2rem 2rem;
+}
+
+.edit-card-page__inner {
+  width: min(100%, 88rem);
+  margin-inline: auto;
+}
+
+.edit-card-tabs {
+  display: flex;
+  gap: 1.1rem;
+  border-bottom: 1px solid var(--za-line-soft);
+}
+
+.edit-card-tabs__link {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  padding: 0 0.25rem 0.35rem;
+  border-bottom: 2px solid transparent;
+  color: var(--za-text-muted);
+  font: var(--za-type-label);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.edit-card-tabs__link:hover,
+.edit-card-tabs__link--active {
+  border-bottom-color: var(--za-gold-bright);
+  color: var(--za-gold-bright);
+}
+
+.edit-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.5rem 0 1.9rem;
+}
+
+.edit-card-header h1 {
+  color: var(--za-text);
+  font: var(--za-type-h2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.edit-card-header p {
+  margin-top: 0.18rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.edit-card-header .edit-card-eyebrow {
+  margin: 0 0 0.2rem;
+  color: var(--za-gold);
+  font: var(--za-type-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.edit-card-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.edit-card-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(15rem, 1fr);
+  align-items: start;
+  gap: 2.5rem;
+}
+
+.edit-card-form {
+  min-width: 0;
+}
+
+.edit-card-panel .tile-panel__content {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.15rem;
+}
+
+.edit-card-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem 1rem;
+}
+
+.edit-card-field {
+  display: grid;
+  min-width: 0;
+  gap: 0.25rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.edit-card-field input,
+.edit-card-field select,
+.edit-card-description textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--za-field-border);
+  border-radius: 4px;
+  color: var(--za-text-soft);
+  background: rgba(10, 15, 34, 0.84);
+  font: var(--za-type-caption);
+}
+
+.edit-card-field input,
+.edit-card-field select {
+  height: 2.15rem;
+  padding: 0 0.55rem;
+}
+
+.edit-card-field select {
+  cursor: pointer;
+}
+
+.edit-card-field input:focus-visible,
+.edit-card-field select:focus-visible,
+.edit-card-description textarea:focus-visible {
+  border-color: var(--za-gold-bright);
+  outline: 1px solid var(--za-gold-bright);
+}
+
+.card-conflict {
+  padding: 0.75rem 0.8rem;
+  border: 1px solid var(--za-line);
+  border-radius: 5px;
+  background: rgba(18, 26, 53, 0.8);
+}
+
+.card-conflict__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.card-conflict h2 {
+  color: var(--za-gold-bright);
+  font: var(--za-type-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.card-conflict__warning {
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--za-atk);
+  border-radius: 999px;
+  color: var(--za-atk);
+  font: var(--za-type-caption);
+  white-space: nowrap;
+}
+
+.card-conflict__comparison {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+}
+
+.card-conflict__set h3 {
+  min-height: 2em;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.card-conflict__stats {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.card-conflict__stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.45rem;
+  border: 1px solid var(--za-line-soft);
+  border-radius: 999px;
+  color: var(--za-text);
+  background: rgba(7, 12, 27, 0.75);
+  font: var(--za-type-label);
+}
+
+.card-conflict__stats i {
+  color: var(--za-text-muted);
+  font-size: 0.62rem;
+  font-style: normal;
+}
+
+.card-conflict__versus {
+  color: var(--za-atk);
+  font: var(--za-type-label);
+  font-weight: 800;
+}
+
+.card-conflict__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+  min-width: 0;
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+}
+
+.edit-card-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.card-conflict__choices button {
+  min-height: 1.85rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--za-line);
+  border-radius: 4px;
+  color: var(--za-text-muted);
+  background: rgba(7, 12, 27, 0.55);
+  font: var(--za-type-caption);
+  cursor: pointer;
+}
+
+.card-conflict__choices button:hover,
+.card-conflict__choices button.is-selected {
+  border-color: var(--za-gold);
+  color: var(--za-gold-bright);
+}
+
+.edit-card-fields--stats {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.edit-card-description {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.edit-card-description textarea {
+  min-height: 3.2rem;
+  padding: 0.5rem 0.55rem;
+  resize: vertical;
+}
+
+.edit-card-message {
+  display: block;
+  min-height: 1.4rem;
+  margin: 0.35rem 0 0 0.8rem;
+  color: var(--za-gold-bright);
+  font: var(--za-type-caption);
+}
+
+.edit-card-message:empty {
+  display: none;
+}
+
+.edit-card-preview {
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+  padding-top: 0.1rem;
+}
+
+.edit-card-preview > h2 {
+  justify-self: stretch;
+  color: var(--za-gold);
+  font: var(--za-type-label);
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.edit-card-preview__frame {
+  width: min(100%, 17.5rem);
+  padding: 0.45rem;
+  border: 1px solid var(--za-gold);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #281b56, #0d1028 72%);
+  box-shadow: 0 0 1rem rgba(103, 55, 202, 0.3);
+}
+
+.edit-card-preview__frame img {
+  display: block;
+  width: 100%;
+  border-radius: 0.65rem;
+}
+
+.edit-card-preview__summary {
+  display: flex;
+  width: min(100%, 17.5rem);
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.edit-card-preview__summary img {
+  width: 3rem;
+  height: 4.1rem;
+  border: 1px solid var(--za-line);
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.edit-card-preview__summary p {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.edit-card-preview__summary strong {
+  color: var(--za-text);
+}
+
+.edit-card-preview__stats {
+  display: flex;
+  width: min(100%, 17.5rem);
+  justify-content: space-between;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.edit-card-preview__stats strong {
+  margin-left: 0.25rem;
+  color: var(--za-gold-bright);
+}
+
+.edit-card-preview__toggle {
+  display: flex;
+  width: min(100%, 17.5rem);
+  align-items: flex-start;
+  gap: 0.4rem;
+  color: var(--za-text-soft);
+  font: var(--za-type-caption);
+}
+
+.edit-card-preview__toggle input {
+  margin: 0.1rem 0 0;
+  accent-color: var(--za-gold);
+}
+
+@media (width <= 64rem) {
+  .edit-card-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.65fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (width <= 48rem) {
+  .edit-card-page {
+    padding: calc(var(--shell-top) + 1rem) 1rem calc(var(--shell-bottom) + 1rem);
+  }
+
+  .edit-card-header {
+    align-items: flex-start;
+  }
+
+  .edit-card-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-card-preview {
+    grid-row: 1;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    gap: 0.5rem 1rem;
+  }
+
+  .edit-card-preview > h2 {
+    grid-column: 1 / -1;
+  }
+
+  .edit-card-preview__frame {
+    grid-row: span 3;
+    width: min(100%, 10rem);
+  }
+}
+
+@media (width <= 36rem) {
+  .edit-card-page {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
+  .edit-card-header {
+    flex-direction: column;
+  }
+
+  .edit-card-fields {
+    gap: 0.55rem;
+  }
+
+  .edit-card-panel .tile-panel__content {
+    padding: 0.85rem;
+  }
+
+  .card-conflict__comparison {
+    gap: 0.3rem;
+  }
+
+  .card-conflict__choices button {
+    flex: 1;
+  }
+}

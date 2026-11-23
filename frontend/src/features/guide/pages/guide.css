@@ -342,6 +342,10 @@
   background: var(--za-tier-epica);
 }
 
+.guide-pack-card--legendary {
+  background: var(--za-tier-leggendaria);
+}
+
 .guide-pack-card--ascendant {
   background: var(--za-tier-ascendente-aura);
 }

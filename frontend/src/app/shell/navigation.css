@@ -108,6 +108,111 @@
     box-shadow: inset 0 0 0 2px var(--za-line);
   }
 
+  /* ---------------- Menu profilo desktop e mobile ---------------- */
+  .profile-menu {
+    position: relative;
+  }
+
+  .profile-menu__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0;
+    border: 0;
+    color: var(--za-text);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .profile-menu__trigger:focus-visible {
+    outline: 2px solid var(--za-line);
+    outline-offset: 3px;
+  }
+
+  .profile-menu .profile-menu__panel {
+    position: absolute;
+    z-index: 60;
+    top: calc(100% + 0.5rem);
+    right: -5.375rem;
+    width: min(20rem, calc(100vw - 1.5rem));
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.45);
+  }
+
+  .profile-menu__content {
+    padding: 0.5rem;
+  }
+
+  .profile-menu__section {
+    display: grid;
+  }
+
+  .profile-menu__item {
+    display: flex;
+    min-height: 2rem;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.35rem 0.6rem;
+    border: 0;
+    color: var(--za-text-soft);
+    background: transparent;
+    font: var(--za-type-label);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      color 0.18s ease,
+      background-color 0.18s ease;
+  }
+
+  .profile-menu__item > svg {
+    flex: none;
+    color: var(--za-gold);
+  }
+
+  .profile-menu__item > span {
+    min-width: 0;
+  }
+
+  .profile-menu__item[aria-current='page'],
+  .profile-menu__item:hover {
+    color: var(--za-gold-bright);
+    background: rgba(217, 185, 124, 0.08);
+  }
+
+  .profile-menu__item:focus-visible {
+    outline: 1px solid var(--za-line);
+    outline-offset: -1px;
+  }
+
+  .profile-menu__detail {
+    overflow: hidden;
+    margin-left: auto;
+    color: var(--za-text-muted);
+    font: var(--za-type-caption);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .profile-menu__divider {
+    height: 1px;
+    margin: 0.35rem 0.55rem;
+    background: var(--za-line-soft);
+  }
+
+  .profile-menu__logout {
+    width: 100%;
+    color: var(--za-danger-soft);
+  }
+
+  .profile-menu__logout > svg {
+    color: var(--za-danger-soft);
+  }
+
+  .profile-menu--mobile .profile-menu__panel {
+    right: 0;
+  }
+
   /* ---------------- Desktop: il filo è sotto, il chiarore sale ---------------- */
   .nav-item {
     position: relative;

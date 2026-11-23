@@ -10,7 +10,7 @@ export interface TilePanelProps {
    */
   glass?: boolean
   /** Elemento HTML del pannello (predefinito `section`). */
-  as?: 'section' | 'div' | 'article'
+  as?: 'section' | 'div' | 'article' | 'aside'
   /** Nome accessibile del pannello, se non ha un titolo visibile collegato. */
   'aria-label'?: string
   /**

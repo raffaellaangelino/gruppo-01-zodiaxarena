@@ -9,6 +9,7 @@ export const PATHS = {
   rules: '/regolamento',
   privacy: '/privacy',
   collection: '/collezione',
+  editCard: '/collezione/modifica-carta',
   deck: '/collezione/cielo',
   challenges: '/sfide',
   challengesSent: '/sfide/inviate',
@@ -24,9 +25,11 @@ export const PATHS = {
   newTrade: '/scambi/nuovo',
   shop: '/negozio',
   missions: '/missioni',
+  groups: '/gruppi',
   faction: '/fazione',
   profile: '/profilo',
   playerProfile: '/profilo/giocatore/:playerId',
+  settings: '/impostazioni',
   notifications: '/notifiche',
 } as const
 

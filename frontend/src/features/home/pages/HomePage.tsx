@@ -7,11 +7,15 @@ import { usePlayerSummary } from '@/features/player/queries'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { useDashboardSummary } from '@/features/home/dashboardQueries'
 
+interface HomePageProps {
+  pageTitle?: string | null
+}
+
 /**
  * Home del giocatore (S03, D-021, tavole Home scenica e Home mobile).
  * I dati arrivano già pronti (`BootGate`): la pagina sceglie solo l'impaginazione.
  */
-export function HomePage() {
+export function HomePage({ pageTitle = 'Home' }: HomePageProps) {
   const isDesktop = useMediaQuery(MEDIA.desktop)
   const player = usePlayerSummary()
   const home = useHomeSummary()
@@ -19,7 +23,7 @@ export function HomePage() {
 
   return (
     <main className="relative min-h-dvh bg-scene-base">
-      <title>Home · Zodiax Arena</title>
+      {pageTitle && <title>{pageTitle} · Zodiax Arena</title>}
       <HomeBackdrop desktop={isDesktop} />
       {isDesktop ? (
         <HomeDesktop home={home} player={player} dashboard={dashboard} />

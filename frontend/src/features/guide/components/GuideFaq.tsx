@@ -3,7 +3,8 @@ import { TilePanel } from '@/components/panels/TilePanel'
 import { Coin } from '@/components/ui/Coin'
 import { Icon } from '@/components/ui/Icon'
 import { SecondaryButton } from '@/components/ui/SecondaryButton'
-
+import { PACKS, type PackRarity } from '@/features/shop/packs'
+ 
 const FAQ_TOPICS = [
   'Account e accesso',
   'Pacchetti e probabilità',
@@ -14,61 +15,11 @@ const FAQ_TOPICS = [
   'Problemi tecnici',
 ]
 
-const PACKS = [
-  {
-    name: 'Costellazione',
-    price: 100,
-    rarities: ['common', 'common', 'common', 'rare', 'star'],
-    summary: '3 Comuni · 1 Rara · 1 Stella',
-    guarantee: '—',
-  },
-  {
-    // Economia del 12/11 (DECISIONS): 300 crediti, 4 Stelle, nessuna garanzia
-    name: 'Zenit',
-    price: 300,
-    rarities: [
-      'common',
-      'common',
-      'common',
-      'rare',
-      'rare',
-      'rare',
-      'star',
-      'star',
-      'star',
-      'star',
-    ],
-    summary: '3 Comuni · 3 Rare · 4 Stelle',
-    guarantee: '—',
-  },
-  {
-    // 12 carte con un Ascendente garantito, una volta per ciclo lunare (composizione della tela,
-    // da confermare con il team)
-    name: 'Luna Piena',
-    price: 600,
-    rarities: [
-      'common',
-      'common',
-      'common',
-      'common',
-      'common',
-      'common',
-      'rare',
-      'rare',
-      'rare',
-      'epic',
-      'star',
-      'ascendant',
-    ],
-    summary: '6 Comuni · 3 Rare · 1 Epica · 1 Ascendente · 1 Stella',
-    guarantee: '1 Ascendente garantito',
-  },
-]
-
-const RARITY_CLASS: Record<string, string> = {
+const RARITY_CLASS: Record<PackRarity, string> = {
   common: 'guide-pack-card--common',
   rare: 'guide-pack-card--rare',
   epic: 'guide-pack-card--epic',
+  legendary: 'guide-pack-card--legendary',
   ascendant: 'guide-pack-card--ascendant',
   star: 'guide-pack-card--star',
 }

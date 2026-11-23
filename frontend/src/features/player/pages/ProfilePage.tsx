@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { LogoutButton } from '@/features/auth/components/LogoutButton'
 import { PorticoBackdrop } from '@/components/layout/PorticoBackdrop'
 import { ElementEmblem } from '@/components/game/ElementEmblem'
@@ -8,7 +9,6 @@ import { useCollectionEntries } from '@/features/collection/queries'
 import { usePlayerSummary } from '@/features/player/queries'
 import { profileStatsMock } from '@/mocks/profile'
 import { GOD_LABELS, SIGN_LABELS } from '@/domain/labels'
-import { Link } from 'react-router'
 import { PROFILE_FRIENDS } from '@/features/player/profileFriends'
 
 export function ProfilePage() {

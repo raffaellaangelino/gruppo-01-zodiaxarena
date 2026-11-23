@@ -16,7 +16,7 @@ export interface NavItem {
 
 /**
  * Le cinque destinazioni del regolamento (FOUNDATIONS §6b): le stesse su desktop e su mobile.
- * Gruppi, Profilo, Missioni e Fazione non sono nella barra: si raggiungono dal profilo e dalla Home.
+ * Amici, Profilo, Missioni e Fazione non sono nella barra: si raggiungono dal profilo e dalla Home.
  */
 export const NAV_ITEMS: readonly NavItem[] = [
   { label: 'Home', to: PATHS.home, icon: 'home' },

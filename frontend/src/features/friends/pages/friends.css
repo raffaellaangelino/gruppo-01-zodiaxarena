@@ -1,0 +1,229 @@
+.friends-page {
+  min-height: 100dvh;
+  padding: calc(var(--shell-top) + 3.5rem) 2rem 2rem;
+}
+
+.friends-page__inner {
+  width: min(100%, 88rem);
+  margin-inline: auto;
+}
+
+.friends-header {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.friends-header h1 {
+  color: var(--za-text);
+  font: var(--za-type-h2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.friends-tabs {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  gap: 1rem;
+}
+
+.friends-tabs__link {
+  display: inline-flex;
+  height: 100%;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.friends-tabs__link:hover,
+.friends-tabs__link--active {
+  border-bottom-color: var(--za-gold-bright);
+  color: var(--za-gold-bright);
+}
+
+.friends-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem);
+  align-items: start;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.friends-empty {
+  display: flex;
+  min-height: 21rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.friends-empty__slots {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  margin-bottom: 3rem;
+  transform: translateY(1.1rem);
+}
+
+.friends-empty__leader {
+  box-shadow: var(--za-avatar-ring), 0 0 16px rgba(219, 74, 73, 0.3);
+}
+
+.friends-empty__slot {
+  border: 1px solid rgba(112, 127, 210, 0.35);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(86, 102, 190, 0.25), transparent 70%),
+    var(--za-medallion-core);
+  box-shadow: 0 0 10px rgba(70, 87, 181, 0.15);
+}
+
+.friends-empty h2 {
+  color: var(--za-gold-bright);
+  font: var(--za-type-panel-title);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.friends-empty > p {
+  max-width: 35rem;
+  margin-top: 0.8rem;
+  color: var(--za-text-soft);
+  font: var(--za-type-caption);
+  line-height: 1.5;
+}
+
+.friends-empty__create {
+  min-width: 12rem;
+  margin-top: 2.5rem;
+}
+
+.friends-message,
+.friends-invite-panel__message {
+  display: block;
+  min-height: 1rem;
+  margin-top: 0.45rem;
+  color: var(--za-gold);
+  font: var(--za-type-caption);
+}
+
+.friends-panel__content {
+  height: 100%;
+  padding: 1rem 1rem 1.5rem;
+}
+
+.friends-panel__title {
+  color: var(--za-gold-bright);
+  font: var(--za-type-panel-title);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.friends-panel__description {
+  margin-top: 0.65rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+  line-height: 1.45;
+}
+
+.friends-invite__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.friends-invite__label {
+  grid-column: 1 / -1;
+  color: var(--za-text-soft);
+  font: var(--za-type-caption);
+}
+
+.friends-invite__form input {
+  min-width: 0;
+  height: 2rem;
+  padding: 0 0.55rem;
+  border: 1px solid var(--za-field-border);
+  border-radius: 4px;
+  color: var(--za-text);
+  background: var(--za-field-bg);
+  font: var(--za-type-caption);
+}
+
+.friends-invite__form input:focus-visible {
+  border-color: var(--za-gold-bright);
+  outline: 1px solid var(--za-gold-bright);
+}
+
+.friends-share-link {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1.2rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.friends-share-link input {
+  accent-color: var(--za-gold-bright);
+}
+
+@media (width <= 80rem) {
+  .friends-page {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .friends-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.8fr);
+  }
+}
+
+@media (width <= 40rem) {
+  .friends-page {
+    padding: calc(var(--shell-top) + 1rem) 1rem calc(var(--shell-bottom) + 1rem);
+  }
+
+  .friends-header {
+    gap: 1rem;
+  }
+
+  .friends-tabs {
+    gap: 0.65rem;
+  }
+
+  .friends-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .friends-empty {
+    min-height: 17rem;
+  }
+
+  .friends-empty__slots {
+    gap: 1.25rem;
+  }
+
+  .friends-empty__leader {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
+
+  .friends-empty__slot {
+    width: 3rem !important;
+    height: 3rem !important;
+  }
+
+  .friends-empty__slots {
+    margin-bottom: 2rem;
+    transform: none;
+  }
+}
