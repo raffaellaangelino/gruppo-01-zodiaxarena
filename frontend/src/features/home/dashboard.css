@@ -63,7 +63,7 @@
       grid-column: span 5;
     }
 
-    .dashboard-card--match {
+    .dashboard-card--deck {
       grid-column: span 4;
     }
 

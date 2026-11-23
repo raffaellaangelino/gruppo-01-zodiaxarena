@@ -1,5 +1,5 @@
 import { queryOptions, useSuspenseQuery, type QueryClient } from '@tanstack/react-query'
-import { BACKEND_READY, USE_MOCKS } from '@/config/env'
+import { BACKEND_READY } from '@/config/env'
 import { catalogQuery, useCatalog } from '@/features/cards/queries'
 import { challengesQuery, useChallenges } from '@/features/challenges/queries'
 import type { DeckDto } from '@/features/decks/dto'
@@ -10,8 +10,8 @@ import { composeHome } from '@/features/home/compose'
 import type { HomeSummary } from '@/features/home/types'
 import { playerSummaryQuery, usePlayerSummary } from '@/features/player/queries'
 
-/** Senza `GET /api/home` e con il backend vero, la Home si compone dalle API che esistono. */
-const COMPOSED = !USE_MOCKS && !BACKEND_READY.home
+/** Senza `GET /api/home`, la Home si compone dalle API disponibili per l'account corrente. */
+const COMPOSED = !BACKEND_READY.home
 
 /** Il mazzo della Home: il primo del giocatore, oppure nessuno. */
 const homeDeckQuery = (deckId: number | null) =>

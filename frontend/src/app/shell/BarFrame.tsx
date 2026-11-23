@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
-import goldLogoUrl from '@/assets/images/logo-gold.webp'
+import logoUrl from '@/assets/images/logo.webp'
 
-/** Proporzione del logo dorato usato nelle barre (536 × 160). */
-const BAR_LOGO_RATIO = 536 / 160
+/** Proporzione del logo colorato usato nelle barre (400 × 185). */
+const BAR_LOGO_RATIO = 400 / 185
 
 /** Proprietà delle cornici della barra. */
 export interface BarFrameProps {
@@ -20,7 +20,7 @@ export interface BarFrameProps {
 function BarLogo({ height, to, className }: { height: number; to?: string; className?: string }) {
   const logo = (
     <img
-      src={goldLogoUrl}
+      src={logoUrl}
       alt="Zodiax Arena"
       width={Math.round(height * BAR_LOGO_RATIO)}
       height={height}

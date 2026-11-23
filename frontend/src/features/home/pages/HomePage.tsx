@@ -5,7 +5,6 @@ import { HomeMobile } from '@/features/home/components/HomeMobile'
 import { useHomeSummary } from '@/features/home/queries'
 import { usePlayerSummary } from '@/features/player/queries'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { useDashboardSummary } from '@/features/home/dashboardQueries'
 
 interface HomePageProps {
   pageTitle?: string | null
@@ -19,16 +18,15 @@ export function HomePage({ pageTitle = 'Home' }: HomePageProps) {
   const isDesktop = useMediaQuery(MEDIA.desktop)
   const player = usePlayerSummary()
   const home = useHomeSummary()
-  const dashboard = useDashboardSummary()
 
   return (
     <main className="relative min-h-dvh bg-scene-base">
       {pageTitle && <title>{pageTitle} · Zodiax Arena</title>}
       <HomeBackdrop desktop={isDesktop} />
       {isDesktop ? (
-        <HomeDesktop home={home} player={player} dashboard={dashboard} />
+        <HomeDesktop home={home} player={player} />
       ) : (
-        <HomeMobile home={home} player={player} dashboard={dashboard} />
+        <HomeMobile home={home} player={player} />
       )}
     </main>
   )
