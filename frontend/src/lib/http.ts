@@ -52,6 +52,8 @@ export class ApiError extends Error {
 export interface RequestOptions {
   /** Metodo HTTP (predefinito GET). */
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+  /** Header aggiuntivi richiesti da alcuni endpoint. */
+  headers?: Record<string, string>
   /** Corpo della richiesta, inviato come JSON. */
   body?: unknown
   /**
@@ -101,9 +103,9 @@ export function setUnauthorizedHandler(handler: UnauthorizedHandler | null): voi
  * @throws {ApiError} Se la risposta non è 2xx o se il server non è raggiungibile.
  */
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { method = 'GET', body, signal } = options
+  const { method = 'GET', headers: extraHeaders, body, signal } = options
   const token = options.token === undefined ? tokenProvider() : options.token
-  const headers: Record<string, string> = { Accept: 'application/json' }
+  const headers: Record<string, string> = { Accept: 'application/json', ...extraHeaders }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
   if (token) headers.Authorization = `Bearer ${token}`
 

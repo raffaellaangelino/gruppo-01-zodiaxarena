@@ -1,358 +1,445 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { PATHS } from '@/app/paths'
 import { PorticoBackdrop } from '@/components/layout/PorticoBackdrop'
-import { TilePanel } from '@/components/panels/TilePanel'
+import { GameCard } from '@/components/game/GameCard'
+import { CARD_BACK } from '@/components/game/cardBack'
+import { Dialog } from '@/components/overlay/Dialog'
 import { Coin } from '@/components/ui/Coin'
-import { GoldButton } from '@/components/ui/GoldButton'
+import { GoldButton, GoldLink } from '@/components/ui/GoldButton'
 import { Icon } from '@/components/ui/Icon'
-import { TertiaryLink } from '@/components/ui/TertiaryButton'
-import { PACKS, STAR_PROBABILITIES, type PackDefinition, type PackRarity } from '@/features/shop/packs'
+import { SecondaryButton } from '@/components/ui/SecondaryButton'
+import { ApiError } from '@/lib/http'
+import { useCatalog } from '@/features/cards/queries'
+import type { CardDefinition } from '@/features/cards/types'
+import {
+  type PackGuarantee,
+  type PackSlotType,
+  type ShopPack,
+  type PackOpeningResponse,
+} from '@/features/shop/api'
+import { useShop } from '@/features/shop/queries'
+import packArtworkCostellazione from '@/assets/images/shop/pacchetto-costellazione.jpg'
+import packArtworkLunaPiena from '@/assets/images/shop/pacchetto-luna-piena.jpg'
+import packArtworkZenit from '@/assets/images/shop/pacchetto-zenit.jpg'
 import './shop.css'
 
-const RARITY_ORDER: PackRarity[] = ['common', 'rare', 'epic', 'legendary', 'ascendant', 'star']
-
-const RARITY_LABELS: Record<PackRarity, string> = {
-  common: 'Comuni',
-  rare: 'Rare',
-  epic: 'Epiche',
-  legendary: 'Leggendarie',
-  ascendant: 'Ascendenti',
-  star: 'Stella',
+const PACK_ARTWORK: Readonly<Record<string, string>> = {
+  COSTELLAZIONE: packArtworkCostellazione,
+  LUNA_PIENA: packArtworkLunaPiena,
+  ZENIT: packArtworkZenit,
 }
 
-const RARITY_CLASSES: Record<PackRarity, string> = {
-  common: 'shop-card-slot--common',
-  rare: 'shop-card-slot--rare',
-  epic: 'shop-card-slot--epic',
-  legendary: 'shop-card-slot--legendary',
-  ascendant: 'shop-card-slot--ascendant',
-  star: 'shop-card-slot--star',
+const SLOT_LABELS: Record<PackSlotType, string> = {
+  COMMON: 'Comune',
+  RARE: 'Rara',
+  EPIC: 'Epica',
+  LEGENDARY: 'Leggendaria',
+  ASCENDANT: 'Ascendente',
+  STAR: 'Stella',
 }
 
-interface StarProbability {
-  rarity: Exclude<PackRarity, 'common' | 'star'>
-  label: string
-  probability: number
+const SLOT_PLURALS: Record<PackSlotType, string> = {
+  COMMON: 'Comuni',
+  RARE: 'Rare',
+  EPIC: 'Epiche',
+  LEGENDARY: 'Leggendarie',
+  ASCENDANT: 'Ascendenti',
+  STAR: 'Stelle',
 }
 
+const GUARANTEE_LABELS: Record<PackGuarantee, string> = {
+  SUN_WITHIN_10_STARS: 'Sole garantito entro 10 Stelle',
+  NO_DUPLICATE_EPIC_LEGENDARY: 'Niente doppioni Epici e Leggendari',
+  EPIC: 'Epica garantita',
+  LEGENDARY: 'Leggendaria garantita',
+  ASCENDANT: 'Ascendente garantito',
+}
+
+function slotCounts(slots: PackSlotType[]): string {
+  const counts = new Map<PackSlotType, number>()
+  for (const slot of slots) counts.set(slot, (counts.get(slot) ?? 0) + 1)
+  return [...counts]
+    .map(([slot, count]) => `${count} ${count === 1 ? SLOT_LABELS[slot] : SLOT_PLURALS[slot]}`)
+    .join(' · ')
+}
+
+function formatOdds(pack: ShopPack): string {
+  return Object.entries(pack.starOdds)
+    .filter(([, chance]) => typeof chance === 'number' && chance > 0)
+    .map(
+      ([rarity, chance]) =>
+        `${Math.round((chance ?? 0) * 100)}% ${SLOT_LABELS[rarity as PackSlotType]}`,
+    )
+    .join(' · ')
+}
+
+function unavailableMessage(pack: ShopPack): string {
+  switch (pack.unavailableReason) {
+    case 'INSUFFICIENT_CREDITS':
+      return 'Crediti insufficienti'
+    case 'LIMIT_REACHED':
+      return pack.availableAgainAt
+        ? `Disponibile dal ${new Date(pack.availableAgainAt).toLocaleDateString('it-IT')}`
+        : 'Limite di acquisto raggiunto'
+    case 'NOT_YET_RELEASED':
+      return pack.availableAgainAt
+        ? `Disponibile dal ${new Date(pack.availableAgainAt).toLocaleDateString('it-IT')}`
+        : 'Non ancora disponibile'
+    default:
+      return 'Non disponibile'
+  }
+}
+
+function purchaseErrorMessage(error: unknown): string {
+  if (!(error instanceof ApiError)) return 'Non è stato possibile completare l’acquisto. Riprova.'
+  if (error.isNetworkError) return 'Connessione non disponibile. Controlla la rete e riprova.'
+  switch (error.code) {
+    case 'INSUFFICIENT_CREDITS':
+      return 'Non hai abbastanza crediti per questo pacchetto.'
+    case 'LIMIT_REACHED':
+      return 'Hai già acquistato questo pacchetto nel ciclo attuale.'
+    case 'NOT_YET_RELEASED':
+      return 'Questo pacchetto non è ancora disponibile.'
+    case 'CONFLICT':
+      return 'La richiesta è in conflitto con un acquisto precedente. Aggiorna lo shop e riprova.'
+    default:
+      return 'Il server non ha completato l’acquisto. Riprova tra poco.'
+  }
+}
+
+/** Negozio giocatore: prezzi e composizione arrivano dal backend, le illustrazioni dal catalogo. */
 export function ShopPage() {
-  const [packDrafts, setPackDrafts] = useState(PACKS)
-  const [selectedId, setSelectedId] = useState('zenit')
-  const [probabilities, setProbabilities] = useState<StarProbability[]>(() =>
-    STAR_PROBABILITIES.map((probability) => ({
-      ...probability,
-      probability: probability.rarity === 'ascendant' ? 8 : probability.probability,
-    })),
-  )
-  const [saveMessage, setSaveMessage] = useState('')
-  const [buyMessage, setBuyMessage] = useState('')
-  const selectedPack = packDrafts.find(({ id }) => id === selectedId) ?? packDrafts[0]
-  const counts = getRarityCounts(selectedPack.rarities)
-  const probabilityTotal = probabilities.reduce((total, item) => total + item.probability, 0)
-  const hasProbabilityError = probabilityTotal !== 100
+  const { shop, purchase } = useShop()
+  const { byId } = useCatalog()
+  const [selectedPack, setSelectedPack] = useState<ShopPack | null>(null)
+  const [opening, setOpening] = useState<PackOpeningResponse | null>(null)
+  const idempotency = useRef<{ code: string; key: string } | null>(null)
+  const oddsPack = shop.packs.find((pack) => Object.keys(pack.starOdds).length > 0)
+  const starOdds = oddsPack ? formatOdds(oddsPack) : ''
 
-  const updateSelectedPack = (update: (pack: PackDefinition) => PackDefinition) => {
-    setPackDrafts((current) =>
-      current.map((pack) => (pack.id === selectedId ? update(pack) : pack)),
+  const confirmPurchase = () => {
+    if (!selectedPack || !selectedPack.available || purchase.isPending) return
+    if (!idempotency.current || idempotency.current.code !== selectedPack.code) {
+      idempotency.current = { code: selectedPack.code, key: crypto.randomUUID() }
+    }
+    purchase.mutate(
+      { code: selectedPack.code, idempotencyKey: idempotency.current.key },
+      {
+        onSuccess: (result) => {
+          setSelectedPack(null)
+          setOpening(result)
+          idempotency.current = null
+        },
+      },
     )
-    setSaveMessage('')
-  }
-
-  const updateCount = (rarity: PackRarity, rawValue: string) => {
-    const value = Number.parseInt(rawValue, 10)
-    if (!Number.isFinite(value)) return
-
-    updateSelectedPack((pack) => {
-      const withoutRarity = pack.rarities.filter((item) => item !== rarity)
-      const nextRarities = [
-        ...withoutRarity,
-        ...Array.from({ length: Math.max(0, Math.min(20, value)) }, () => rarity),
-      ].sort((a, b) => RARITY_ORDER.indexOf(a) - RARITY_ORDER.indexOf(b))
-      return { ...pack, rarities: nextRarities }
-    })
-  }
-
-  const updateProbability = (rarity: PackRarity, rawValue: string) => {
-    const probability = Number.parseInt(rawValue, 10)
-    if (!Number.isFinite(probability)) return
-
-    setProbabilities((current) =>
-      current.map((item) =>
-        item.rarity === rarity
-          ? { ...item, probability: Math.max(0, Math.min(100, probability)) }
-          : item,
-      ),
-    )
-    setSaveMessage('')
-  }
-
-  const selectPack = (id: string) => {
-    setSelectedId(id)
-    setSaveMessage('')
-    setBuyMessage('')
   }
 
   return (
     <main className="shop-page">
-      <title>Pacchetti · Zodiax Arena</title>
+      <title>Negozio · Zodiax Arena</title>
       <PorticoBackdrop />
 
       <div className="shop-page__inner">
-        <nav className="shop-tabs" aria-label="Sezioni collezione">
-          <Link to={PATHS.collection} className="shop-tabs__link">Carte</Link>
-          <Link to={PATHS.deck} className="shop-tabs__link">Archivio</Link>
-          <Link to={PATHS.shop} className="shop-tabs__link shop-tabs__link--active">
-            Pacchetti
-          </Link>
-        </nav>
-
-        <header className="shop-header">
-          <div>
-            <h1>Pacchetti</h1>
-            <p>Struttura, probabilità della Stella e anteprima.</p>
-          </div>
-          <div className="shop-header__actions">
-            <TertiaryLink to={PATHS.collection} size="s">
-              Annulla
-            </TertiaryLink>
-            <GoldButton
-              size="m"
-              onClick={() =>
-                setSaveMessage(
-                  hasProbabilityError
-                    ? `Le probabilità devono sommare a 100% (totale: ${probabilityTotal}%).`
-                    : 'Salvataggio non disponibile offline.',
-                )
-              }
-            >
-              Salva
-            </GoldButton>
-          </div>
-        </header>
-
-        <div className="shop-layout">
-          <TilePanel as="aside" aria-label="Elenco pacchetti" className="shop-list-panel">
-            <h2>Pacchetti</h2>
-            <div className="shop-pack-list">
-              {packDrafts.map((pack) => (
-                <button
-                  type="button"
-                  key={pack.id}
-                  className={`shop-pack-option ${pack.id === selectedId ? 'shop-pack-option--active' : ''}`}
-                  aria-pressed={pack.id === selectedId}
-                  onClick={() => selectPack(pack.id)}
-                >
-                  <PackBadge rarity={pack.rarities[pack.rarities.length - 1] ?? 'star'} />
-                  <span className="shop-pack-option__copy">
-                    <strong>{pack.name}</strong>
-                    <span><Coin size={13} /> {pack.price}</span>
-                  </span>
-                  <span className="shop-pack-option__state">Disponibile</span>
-                </button>
-              ))}
-            </div>
-          </TilePanel>
-
-          <TilePanel as="section" aria-label={`Modifica pacchetto ${selectedPack.name}`} className="shop-editor-panel">
-            <div className="shop-editor">
-              <div className="shop-fields">
-                <label className="shop-field shop-field--name">
-                  <span>Nome</span>
-                  <input
-                    value={selectedPack.name}
-                    onChange={(event) =>
-                      updateSelectedPack((pack) => ({ ...pack, name: event.target.value }))
-                    }
-                  />
-                </label>
-                <label className="shop-field">
-                  <span>Prezzo (crediti)</span>
-                  <input
-                    type="number"
-                    min="0"
-                    value={selectedPack.price}
-                    onChange={(event) => {
-                      const price = Number.parseInt(event.target.value, 10)
-                      if (Number.isFinite(price) && price >= 0) {
-                        updateSelectedPack((pack) => ({ ...pack, price }))
-                      }
-                    }}
-                  />
-                </label>
-                <label className="shop-field">
-                  <span>Disponibilità</span>
-                  <select defaultValue="Sempre">
-                    <option>Sempre</option>
-                    <option>Temporanea</option>
-                  </select>
-                </label>
-                <label className="shop-field">
-                  <span>Categoria</span>
-                  <select defaultValue="Generale">
-                    <option>Generale</option>
-                    <option>Speciale</option>
-                  </select>
-                </label>
+        {opening ? (
+          <PackOpening opening={opening} catalog={byId} onBack={() => setOpening(null)} />
+        ) : (
+          <>
+            <header className="shop-heading">
+              <div>
+                <p className="shop-heading__eyebrow">Il tuo viaggio continua</p>
+                <h1>Negozio</h1>
+                <p className="shop-heading__copy">
+                  Ogni pacchetto custodisce nuove carte per il tuo Cielo.
+                </p>
               </div>
+              <div className="shop-balance" aria-label={`${shop.balance} crediti disponibili`}>
+                <Coin size={24} />
+                <span>
+                  <small>Il tuo saldo</small>
+                  <strong>{shop.balance.toLocaleString('it-IT')}</strong>
+                </span>
+                <span className="shop-balance__label">crediti</span>
+              </div>
+            </header>
 
-              <section className="shop-editor-section" aria-labelledby="shop-contents-title">
-                <div className="shop-section-heading">
-                  <h2 id="shop-contents-title">Carte nel pacchetto</h2>
-                  <span>{selectedPack.rarities.length} carte</span>
-                </div>
-                <div className="shop-rarity-fields">
-                  {RARITY_ORDER.map((rarity) => (
-                    <label className="shop-rarity-field" key={rarity}>
-                      <span className={`shop-rarity-label shop-rarity-label--${rarity}`}>
-                        {RARITY_LABELS[rarity]}
-                      </span>
-                      <input
-                        type="number"
-                        min="0"
-                        max="20"
-                        value={counts[rarity]}
-                        aria-label={`Numero di carte ${RARITY_LABELS[rarity]}`}
-                        onChange={(event) => updateCount(rarity, event.target.value)}
-                      />
-                    </label>
-                  ))}
-                </div>
-                <div className="shop-card-slots" aria-label="Sequenza delle carte nel pacchetto">
-                  {selectedPack.rarities.map((rarity, index) => (
-                    <span
-                      key={`${selectedPack.id}-${rarity}-${index}`}
-                      className={`shop-card-slot ${RARITY_CLASSES[rarity]}`}
-                      title={`${RARITY_LABELS[rarity]} ${index + 1}`}
-                    >
-                      {rarity === 'star' ? <Icon name="sole" size={14} /> : index + 1}
-                    </span>
-                  ))}
-                </div>
-              </section>
+            <nav className="shop-tabs" aria-label="Sezioni collezione">
+              <Link to={PATHS.collection} className="shop-tabs__link">
+                Collezione
+              </Link>
+              <Link to={PATHS.deck} className="shop-tabs__link">
+                Il tuo Cielo
+              </Link>
+              <span className="shop-tabs__link shop-tabs__link--active" aria-current="page">
+                Pacchetti
+              </span>
+            </nav>
 
-              <section className="shop-editor-section shop-star-section" aria-labelledby="shop-star-title">
+            {shop.packs.length > 0 ? (
+              <section className="shop-packs" aria-labelledby="shop-packs-title">
                 <div className="shop-section-heading">
-                  <h2 id="shop-star-title">Probabilità della Stella</h2>
-                  <span>Ultima carta del pacchetto</span>
+                  <div>
+                    <p className="shop-heading__eyebrow">Scegli il tuo destino</p>
+                    <h2 id="shop-packs-title">Pacchetti disponibili</h2>
+                  </div>
+                  <span>{shop.packs.length} pacchetti</span>
                 </div>
-                <div className="shop-probability-fields">
-                  {probabilities.map(({ rarity, label, probability }) => (
-                    <label className="shop-probability-field" key={rarity}>
-                      <span className={`shop-rarity-label shop-rarity-label--${rarity}`}>{label}</span>
-                      <span>
-                        <input
-                          type="number"
-                          value={probability}
-                          min="0"
-                          max="100"
-                          aria-invalid={hasProbabilityError}
-                          aria-label={`${label} percentuale`}
-                          onChange={(event) => updateProbability(rarity, event.target.value)}
-                        />
-                        <b>%</b>
-                      </span>
-                    </label>
-                  ))}
-                </div>
-                <div
-                  className="shop-probability-bar"
-                  aria-label={probabilities.map(({ label, probability }) => `${probability}% ${label}`).join(', ')}
-                >
-                  {probabilities.map(({ rarity, probability }) => (
-                    <span
-                      key={rarity}
-                      className={`shop-probability-bar__${rarity}`}
-                      style={{ width: `${probability}%` }}
+
+                <div className="shop-pack-grid">
+                  {shop.packs.map((pack) => (
+                    <PackCard
+                      key={pack.code}
+                      pack={pack}
+                      onBuy={() => {
+                        idempotency.current = null
+                        purchase.reset()
+                        setSelectedPack(pack)
+                      }}
                     />
                   ))}
                 </div>
-                {hasProbabilityError && (
-                  <p className="shop-probability-error" role="alert">
-                    <Icon name="avviso" size={14} />
-                    Le probabilità devono sommare a 100% (totale: {probabilityTotal}%).
-                  </p>
-                )}
               </section>
+            ) : (
+              <section className="shop-empty">
+                <Icon name="pacchetto" size={32} />
+                <h2>Nessun pacchetto disponibile</h2>
+                <p>Torna più tardi: nuovi pacchetti arriveranno presto.</p>
+              </section>
+            )}
 
-              <div className="shop-guarantee">
+            <section className="shop-promises" aria-label="Regole del Negozio">
+              <article>
+                <span className="shop-promises__icon" aria-hidden="true">
+                  ✦
+                </span>
                 <div>
                   <strong>Sole garantito entro 10 Stelle</strong>
-                  <span>Avanzamento attuale: 6 su 10</span>
+                  <span>
+                    {shop.sunCounter.done} su {shop.sunCounter.total} Stelle verso la prossima
+                    Leggendaria
+                  </span>
                 </div>
-                <span className="shop-guarantee__badge">{selectedPack.guarantee}</span>
-              </div>
-            </div>
-          </TilePanel>
-
-          <TilePanel as="aside" aria-label="Anteprima pacchetto" className="shop-preview-panel">
-            <div className="shop-preview">
-              <p className="shop-preview__eyebrow">Anteprima pacchetto</p>
-              <PackArtwork name={selectedPack.name} />
-              <p className="shop-preview__name">{selectedPack.name}</p>
-              <div className="shop-preview__slots" aria-label={`${selectedPack.rarities.length} carte`}>
-                {selectedPack.rarities.map((rarity, index) => (
-                  <span
-                    key={`preview-${selectedPack.id}-${rarity}-${index}`}
-                    className={`shop-card-slot ${RARITY_CLASSES[rarity]}`}
-                  />
-                ))}
-              </div>
-              <div className="shop-preview__price">
-                <Coin size={24} />
-                <strong>{selectedPack.price}</strong>
-                <span>crediti</span>
-              </div>
-              <GoldButton
-                size="m"
-                className="shop-preview__buy"
-                onClick={() => setBuyMessage('Acquisto non disponibile offline.')}
-              >
-                Acquista
-              </GoldButton>
-              <output className="shop-preview__message" aria-live="polite">
-                {buyMessage}
-              </output>
-              <p className="shop-preview__footnote">Le carte doppie seguono le regole del gioco.</p>
-            </div>
-          </TilePanel>
-        </div>
-
-        <output className="shop-save-message" aria-live="polite">{saveMessage}</output>
+              </article>
+              <article>
+                <span className="shop-promises__icon" aria-hidden="true">
+                  ✧
+                </span>
+                <div>
+                  <strong>Niente doppioni di Epiche e Leggendarie</strong>
+                  <span>Finché non avrai completato la raccolta di queste rarità.</span>
+                </div>
+              </article>
+              <article>
+                <span className="shop-promises__icon" aria-hidden="true">
+                  ☼
+                </span>
+                <div>
+                  <strong>La Stella</strong>
+                  <span>{starOdds || 'Le probabilità sono indicate su ogni pacchetto.'}</span>
+                </div>
+              </article>
+            </section>
+          </>
+        )}
       </div>
+
+      {selectedPack && (
+        <Dialog
+          label={`Conferma acquisto ${selectedPack.name}`}
+          onClose={() => {
+            if (!purchase.isPending) {
+              setSelectedPack(null)
+              purchase.reset()
+            }
+          }}
+          className="max-w-[35rem]"
+        >
+          <div className="shop-confirm">
+            <p className="shop-heading__eyebrow">Conferma dell’acquisto</p>
+            <h2>Aprire {selectedPack.name}?</h2>
+            <p className="shop-confirm__copy">{selectedPack.role}</p>
+            <div className="shop-confirm__pack">
+              <PackArtwork
+                code={selectedPack.code}
+                name={selectedPack.name}
+                cardCount={selectedPack.cardCount}
+              />
+              <div>
+                <strong>{selectedPack.cardCount} carte</strong>
+                <span>{slotCounts(selectedPack.slots)}</span>
+                <span className="shop-confirm__cost">
+                  <Coin size={18} /> {selectedPack.price} crediti
+                </span>
+                <span className="shop-confirm__remaining">
+                  Saldo dopo l’acquisto: {Math.max(0, shop.balance - selectedPack.price)} crediti
+                </span>
+              </div>
+            </div>
+            {purchase.isError && (
+              <p className="shop-error" role="alert">
+                {purchaseErrorMessage(purchase.error)}
+              </p>
+            )}
+            <div className="shop-confirm__actions">
+              <SecondaryButton
+                onClick={() => {
+                  setSelectedPack(null)
+                  purchase.reset()
+                }}
+                disabled={purchase.isPending}
+              >
+                Annulla
+              </SecondaryButton>
+              <GoldButton onClick={confirmPurchase} disabled={purchase.isPending}>
+                {purchase.isPending ? 'Apertura…' : 'Apri il pacchetto'}
+              </GoldButton>
+            </div>
+          </div>
+        </Dialog>
+      )}
     </main>
   )
 }
 
-function getRarityCounts(rarities: PackRarity[]): Record<PackRarity, number> {
-  return RARITY_ORDER.reduce(
-    (counts, rarity) => {
-      counts[rarity] = rarities.filter((item) => item === rarity).length
-      return counts
-    },
-    { common: 0, rare: 0, epic: 0, legendary: 0, ascendant: 0, star: 0 },
+function PackCard({ pack, onBuy }: { pack: ShopPack; onBuy: () => void }) {
+  const odds = formatOdds(pack)
+
+  return (
+    <article className={`shop-pack-card ${pack.available ? '' : 'shop-pack-card--unavailable'}`}>
+      <div className="shop-pack-card__frame">
+        <PackArtwork code={pack.code} name={pack.name} cardCount={pack.cardCount} />
+        <div className="shop-pack-card__body">
+          <p className="shop-pack-card__role">{pack.role}</p>
+          <h3>{pack.name}</h3>
+          <div className="shop-slot-row" aria-hidden="true">
+            {pack.slots.map((slot, index) => (
+              <span
+                key={`${pack.code}-${index}`}
+                className={`shop-slot shop-slot--${slot.toLowerCase()}`}
+                title={`${index + 1}. ${SLOT_LABELS[slot]}`}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+          <p className="shop-pack-card__contents">{slotCounts(pack.slots)}</p>
+          {pack.guarantees.length > 0 && (
+            <p className="shop-pack-card__guarantee">
+              {pack.guarantees.map((guarantee) => GUARANTEE_LABELS[guarantee]).join(' · ')}
+            </p>
+          )}
+          {odds && <p className="shop-pack-card__odds">La Stella: {odds}</p>}
+          <div className="shop-pack-card__footer">
+            <span className="shop-pack-card__price">
+              <Coin size={20} />
+              <strong>{pack.price.toLocaleString('it-IT')}</strong>
+              <small>crediti</small>
+            </span>
+            <GoldButton
+              size="m"
+              className="shop-pack-card__buy"
+              onClick={onBuy}
+              disabled={!pack.available}
+            >
+              {pack.available ? 'Acquista' : unavailableMessage(pack)}
+            </GoldButton>
+          </div>
+        </div>
+      </div>
+    </article>
   )
 }
 
-function PackBadge({ rarity }: { rarity: PackRarity }) {
-  return (
-    <span className={`shop-pack-badge shop-pack-badge--${rarity}`} aria-hidden="true">
-      <Icon name="pacchetto" size={20} />
-    </span>
-  )
-}
+function PackArtwork({ code, name, cardCount }: { code: string; name: string; cardCount: number }) {
+  const artwork = PACK_ARTWORK[code]
+  if (artwork) {
+    return (
+      <div className={`shop-pack-art shop-pack-art--${code.toLowerCase()}`}>
+        <img
+          className="shop-pack-art__image"
+          src={artwork}
+          alt={`Pacchetto ${name}, ${cardCount} carte`}
+        />
+      </div>
+    )
+  }
 
-function PackArtwork({ name }: { name: string }) {
   return (
-    <div className="shop-artwork" aria-hidden="true">
-      <span className="shop-artwork__orbit shop-artwork__orbit--outer" />
-      <span className="shop-artwork__orbit shop-artwork__orbit--inner" />
-      <span className="shop-artwork__star shop-artwork__star--top"><Icon name="luna" size={16} /></span>
-      <span className="shop-artwork__star shop-artwork__star--right"><Icon name="sole" size={16} /></span>
-      <span className="shop-artwork__star shop-artwork__star--bottom"><Icon name="ascendente" size={16} /></span>
-      <span className="shop-artwork__star shop-artwork__star--left"><Icon name="luna-piena" size={16} /></span>
-      <span className="shop-artwork__center"><Icon name="sole" size={32} /></span>
-      <span className="shop-artwork__name">{name}</span>
+    <div className={`shop-pack-art shop-pack-art--${code.toLowerCase()}`}>
+      <span className="shop-pack-art__card shop-pack-art__card--left">
+        <img src={CARD_BACK} alt="" />
+      </span>
+      <span className="shop-pack-art__card shop-pack-art__card--right">
+        <img src={CARD_BACK} alt="" />
+      </span>
+      <span className="shop-pack-art__card shop-pack-art__card--center">
+        <img src={CARD_BACK} alt="" />
+      </span>
+      <span className="shop-pack-art__name">{name}</span>
+      <span className="shop-pack-art__count">{cardCount} carte</span>
     </div>
+  )
+}
+
+function PackOpening({
+  opening,
+  catalog,
+  onBack,
+}: {
+  opening: PackOpeningResponse
+  catalog: ReadonlyMap<number, CardDefinition>
+  onBack: () => void
+}) {
+  const newCards = opening.cards.filter((card) => card.isNew).length
+  const duplicateCards = opening.cards.length - newCards
+
+  return (
+    <section className="shop-opening" aria-labelledby="shop-opening-title">
+      <header className="shop-opening__header">
+        <p className="shop-heading__eyebrow">Il destino ha parlato</p>
+        <h1 id="shop-opening-title">
+          {newCards > 0 ? 'Una carta nuova per il tuo Cielo' : 'Il pacchetto è stato aperto'}
+        </h1>
+        <p>Le carte sono state aggiunte alla tua collezione.</p>
+      </header>
+
+      <ul className="shop-opening__cards">
+        {opening.cards.map((opened) => {
+          const card = catalog.get(opened.cardId)
+          const label = card?.name ?? `Carta ${opened.cardId}`
+          return (
+            <li key={`${opening.openingId}-${opened.slot}`} className="shop-opening-card">
+              <GameCard
+                size="m"
+                imageUrl={card?.imageUrl ?? null}
+                label={label}
+                aura={card?.tier}
+                isNew={opened.isNew}
+              />
+              <strong>{label}</strong>
+              <span>{SLOT_LABELS[opened.slotType]}</span>
+              {!opened.isNew && <small>Doppione</small>}
+            </li>
+          )
+        })}
+      </ul>
+
+      <div className="shop-opening__summary">
+        <span>{opening.cards.length} carte aperte</span>
+        <span>
+          {newCards} nuove · {duplicateCards} doppioni
+        </span>
+        {opening.sunFound && <strong>Il Sole è sorto: Stella Leggendaria!</strong>}
+        <span className="shop-opening__balance">
+          Saldo aggiornato: <Coin size={18} /> {opening.balance.toLocaleString('it-IT')}
+        </span>
+      </div>
+
+      <div className="shop-opening__actions">
+        <SecondaryButton onClick={onBack}>Torna al negozio</SecondaryButton>
+        <GoldLink to={PATHS.collection} size="m">
+          Vai alla collezione
+        </GoldLink>
+      </div>
+    </section>
   )
 }
