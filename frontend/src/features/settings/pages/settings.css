@@ -1,0 +1,418 @@
+.settings-page {
+  min-height: 100dvh;
+  padding: calc(var(--shell-top) + 3.75rem) 3.75rem 2rem;
+}
+
+.settings-page__inner {
+  width: min(100%, 88rem);
+  margin-inline: auto;
+}
+
+.settings-page__header {
+  margin-bottom: 0.9rem;
+}
+
+.settings-page__header h1 {
+  color: var(--za-text);
+  font: var(--za-type-h1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr) 25.5rem;
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.settings-navigation {
+  display: grid;
+  gap: 1rem;
+  padding-top: 0.15rem;
+}
+
+.settings-navigation__group h2 {
+  margin-bottom: 0.35rem;
+  color: var(--za-gold);
+  font: var(--za-type-eyebrow);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.settings-navigation__group ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.settings-navigation__link {
+  display: block;
+  min-height: 1.6rem;
+  padding: 0.3rem 0.5rem;
+  border-left: 1px solid var(--za-line-soft);
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+  text-decoration: none;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.settings-navigation__link:hover,
+.settings-navigation__link--active {
+  border-left-color: var(--za-gold-bright);
+  color: var(--za-gold-bright);
+  background: linear-gradient(90deg, rgba(217, 185, 124, 0.1), transparent);
+}
+
+.settings-content {
+  min-width: 0;
+}
+
+.settings-section + .settings-section {
+  margin-top: 1.1rem;
+}
+
+.settings-section__title,
+.settings-session__title {
+  color: var(--za-gold-bright);
+  font: var(--za-type-panel-title);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.settings-section__items {
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--za-line-soft);
+}
+
+.settings-item {
+  display: grid;
+  min-height: 3.1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--za-line-soft);
+}
+
+.settings-item__copy {
+  min-width: 0;
+}
+
+.settings-item__copy h3 {
+  color: var(--za-text);
+  font: var(--za-type-meta-strong);
+}
+
+.settings-item__copy p {
+  margin-top: 0.12rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+  line-height: 1.35;
+}
+
+.settings-item__control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.settings-item__value {
+  color: var(--za-text-soft);
+  font: var(--za-type-caption);
+}
+
+.settings-item__action {
+  padding: 0.25rem 0.1rem;
+  border: 0;
+  color: var(--za-gold);
+  background: transparent;
+  font: var(--za-type-caption);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.settings-item__action:hover {
+  color: var(--za-gold-bright);
+}
+
+.settings-switch {
+  position: relative;
+  width: 2rem;
+  height: 1.1rem;
+  flex: none;
+  padding: 0.12rem;
+  border: 1px solid var(--za-line);
+  border-radius: var(--za-radius-pill);
+  background: var(--za-bg-deep);
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.settings-switch span {
+  display: block;
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 50%;
+  background: var(--za-text-muted);
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.settings-switch--on {
+  border-color: var(--za-gold);
+  background: rgba(217, 185, 124, 0.22);
+}
+
+.settings-switch--on span {
+  background: var(--za-gold-bright);
+  transform: translateX(0.82rem);
+}
+
+.settings-switch:focus-visible {
+  outline: 2px solid var(--za-gold-bright);
+  outline-offset: 2px;
+}
+
+.settings-session {
+  margin-top: 0.1rem;
+}
+
+.settings-session__content {
+  padding: 1rem;
+}
+
+.settings-session__description {
+  margin-top: 0.75rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+  line-height: 1.5;
+}
+
+.settings-session__description strong {
+  color: var(--za-text);
+  font-weight: 700;
+}
+
+.settings-session .tertiary {
+  width: 100%;
+  height: 2.25rem;
+  margin-top: 0.85rem;
+}
+
+.settings-session__delete {
+  display: inline-flex;
+  width: 100%;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid rgba(222, 113, 113, 0.55);
+  color: var(--za-danger-soft);
+  background: rgba(120, 35, 44, 0.1);
+  font: var(--za-type-caption);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.settings-session__delete:hover {
+  border-color: var(--za-danger-soft);
+  background: rgba(120, 35, 44, 0.2);
+}
+
+.settings-session__message,
+.settings-content__message {
+  display: block;
+  min-height: 1.1rem;
+  margin-top: 0.45rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.settings-content__message {
+  color: var(--za-gold);
+}
+
+.settings-delete-dialog {
+  width: min(38rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  color: var(--za-text);
+  background: transparent;
+}
+
+.settings-delete-dialog::backdrop {
+  background: var(--za-scrim);
+  backdrop-filter: blur(1px);
+}
+
+.settings-delete-dialog__content {
+  display: flex;
+  min-height: 20rem;
+  flex-direction: column;
+  padding: 2rem 2.25rem 2.375rem;
+}
+
+.settings-delete-dialog__title {
+  color: var(--za-text);
+  font: var(--za-type-h2);
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.settings-delete-dialog__description {
+  margin-top: 2.5rem;
+  color: var(--za-text-soft);
+  font: var(--za-type-caption);
+  line-height: 1.5;
+}
+
+.settings-delete-dialog__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.settings-delete-dialog__input {
+  width: 100%;
+  height: 2.25rem;
+  margin-top: 2.875rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--za-field-border);
+  border-radius: 4px;
+  color: var(--za-text);
+  background: var(--za-field-bg);
+  font: var(--za-type-caption);
+}
+
+.settings-delete-dialog__input::placeholder {
+  color: var(--za-text-muted);
+  opacity: 1;
+}
+
+.settings-delete-dialog__input:focus-visible {
+  border-color: var(--za-gold-bright);
+  outline: 1px solid var(--za-gold-bright);
+  outline-offset: 1px;
+}
+
+.settings-delete-dialog__actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.settings-delete-dialog__cancel {
+  min-width: 8.5rem;
+}
+
+.settings-delete-dialog__confirm {
+  min-width: 10.5rem;
+}
+
+.settings-delete-dialog__confirm:disabled {
+  color: var(--za-text-disabled);
+  cursor: not-allowed;
+}
+
+.settings-delete-dialog__confirm:disabled .tertiary__edge {
+  stroke: var(--za-text-disabled);
+}
+
+@media (width <= 80rem) {
+  .settings-page {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+
+  .settings-layout {
+    grid-template-columns: 9rem minmax(0, 1fr);
+  }
+
+  .settings-session {
+    grid-column: 2;
+  }
+}
+
+@media (width <= 40rem) {
+  .settings-page {
+    padding: calc(var(--shell-top) + 1rem) 1rem calc(var(--shell-bottom) + 1rem);
+  }
+
+  .settings-page__header h1 {
+    font: var(--za-type-h1-m);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .settings-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .settings-navigation {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .settings-navigation__group h2 {
+    font-size: 0.58rem;
+  }
+
+  .settings-navigation__link {
+    padding-inline: 0.35rem;
+  }
+
+  .settings-session {
+    grid-column: auto;
+  }
+
+  .settings-item {
+    gap: 0.5rem;
+    padding-inline: 0.25rem;
+  }
+
+  .settings-delete-dialog__content {
+    display: block;
+    min-height: 0;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .settings-delete-dialog__description {
+    margin-top: 0.85rem;
+  }
+
+  .settings-delete-dialog__input {
+    margin-top: 0.7rem;
+  }
+
+  .settings-delete-dialog__actions {
+    flex-direction: column;
+    margin-top: 1.25rem;
+  }
+
+  .settings-delete-dialog__actions .tertiary {
+    width: 100%;
+  }
+}

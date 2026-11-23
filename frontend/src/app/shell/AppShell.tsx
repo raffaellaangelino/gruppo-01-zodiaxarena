@@ -39,7 +39,17 @@ export function AppShell() {
           <Outlet />
         </Suspense>
       </PageErrorBoundary>
-      {USE_MOCKS && pathname !== PATHS.guide && <MockDataNotice />}
+      {USE_MOCKS &&
+        pathname !== PATHS.guide &&
+        pathname !== PATHS.missions &&
+        pathname !== PATHS.notifications &&
+        pathname !== PATHS.profile &&
+        pathname !== PATHS.groups &&
+        pathname !== PATHS.collection &&
+        pathname !== PATHS.editCard &&
+        pathname !== PATHS.faction &&
+        pathname !== PATHS.settings &&
+        pathname !== PATHS.shop && <MockDataNotice />}
     </div>
   )
 }

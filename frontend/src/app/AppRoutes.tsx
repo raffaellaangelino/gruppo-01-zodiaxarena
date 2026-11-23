@@ -3,25 +3,28 @@ import { BootGate } from '@/app/boot/BootGate'
 import { PATHS } from '@/app/paths'
 import { AppShell } from '@/app/shell/AppShell'
 import { GuestOnly } from '@/features/auth/components/GuestOnly'
-import { LogoutButton } from '@/features/auth/components/LogoutButton'
 import { RequireAuth } from '@/features/auth/components/RequireAuth'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { HomePage } from '@/features/home/pages/HomePage'
 import { GuidePage } from '@/features/guide/pages/GuidePage'
 import { PrivacyPage } from '@/features/legal/pages/PrivacyPage'
+import { ProfilePage } from '@/features/player/pages/ProfilePage'
+import { FactionPage } from '@/features/player/pages/FactionPage'
+import { MissionsPage } from '@/features/missions/pages/MissionsPage'
+import { NotificationsPage } from '@/features/notifications/pages/NotificationsPage'
+import { SettingsPage } from '@/features/settings/pages/SettingsPage'
+import { FriendsPage } from '@/features/friends/pages/FriendsPage'
+import { CatalogPage } from '@/features/collection/pages/CatalogPage'
+import { EditCardPage } from '@/features/collection/pages/EditCardPage'
+import { ShopPage } from '@/features/shop/pages/ShopPage'
 import { SectionPlaceholder } from '@/pages/SectionPlaceholder'
 
 /** Sezioni non ancora costruite: tengono il posto finché arriva la loro issue. */
 const PLACEHOLDERS: { path: string; title: string }[] = [
-  { path: PATHS.collection, title: 'Collezione' },
   { path: PATHS.deck, title: 'Il tuo Cielo' },
   { path: PATHS.challenges, title: 'Sfide' },
   { path: PATHS.newChallenge, title: 'Nuova sfida' },
   { path: PATHS.trades, title: 'Scambi' },
-  { path: PATHS.shop, title: 'Negozio' },
-  { path: PATHS.missions, title: 'Missioni' },
-  { path: PATHS.faction, title: 'La tua Fazione' },
-  { path: PATHS.notifications, title: 'Notifiche' },
 ]
 
 /**
@@ -46,18 +49,19 @@ export function AppRoutes() {
           }
         >
           <Route path={PATHS.home} element={<HomePage />} />
+          <Route path={PATHS.notifications} element={<NotificationsPage />} />
           <Route path={PATHS.guide} element={<GuidePage />} />
+          <Route path={PATHS.missions} element={<MissionsPage />} />
+          <Route path={PATHS.settings} element={<SettingsPage />} />
+          <Route path={PATHS.groups} element={<FriendsPage />} />
+          <Route path={PATHS.collection} element={<CatalogPage />} />
+          <Route path={PATHS.editCard} element={<EditCardPage />} />
+          <Route path={PATHS.shop} element={<ShopPage />} />
           {PLACEHOLDERS.map(({ path, title }) => (
             <Route key={path} path={path} element={<SectionPlaceholder title={title} />} />
           ))}
-          <Route
-            path={PATHS.profile}
-            element={
-              <SectionPlaceholder title="Profilo">
-                <LogoutButton />
-              </SectionPlaceholder>
-            }
-          />
+          <Route path={PATHS.profile} element={<ProfilePage />} />
+          <Route path={PATHS.faction} element={<FactionPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to={PATHS.home} replace />} />

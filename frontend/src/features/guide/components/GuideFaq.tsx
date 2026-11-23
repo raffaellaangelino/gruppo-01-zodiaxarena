@@ -3,6 +3,7 @@ import { BandPanel } from '@/components/panels/BandPanel'
 import { Coin } from '@/components/ui/Coin'
 import { Icon } from '@/components/ui/Icon'
 import { TertiaryButton } from '@/components/ui/TertiaryButton'
+import { PACKS, type PackRarity } from '@/features/shop/packs'
 
 const FAQ_TOPICS = [
   'Account e accesso',
@@ -14,45 +15,11 @@ const FAQ_TOPICS = [
   'Problemi tecnici',
 ]
 
-const PACKS = [
-  {
-    name: 'Costellazione',
-    price: 100,
-    rarities: ['common', 'common', 'common', 'rare', 'star'],
-    summary: '3 Comuni · 1 Rara · 1 Stella',
-    guarantee: '—',
-  },
-  {
-    name: 'Zenit',
-    price: 250,
-    rarities: [
-      'common',
-      'common',
-      'common',
-      'common',
-      'common',
-      'common',
-      'rare',
-      'rare',
-      'epic',
-      'star',
-    ],
-    summary: '6 Comuni · 2 Rare · 1 Epica · 1 Stella',
-    guarantee: '1 Epica garantita',
-  },
-  {
-    name: 'Luna Piena',
-    price: 600,
-    rarities: ['common', 'common', 'common', 'rare', 'rare', 'rare', 'epic', 'ascendant', 'star'],
-    summary: '3 Comuni · 3 Rare · 1 Epica · 1 Ascendente · 1 Stella',
-    guarantee: '1 Ascendente garantito',
-  },
-]
-
-const RARITY_CLASS: Record<string, string> = {
+const RARITY_CLASS: Record<PackRarity, string> = {
   common: 'guide-pack-card--common',
   rare: 'guide-pack-card--rare',
   epic: 'guide-pack-card--epic',
+  legendary: 'guide-pack-card--legendary',
   ascendant: 'guide-pack-card--ascendant',
   star: 'guide-pack-card--star',
 }

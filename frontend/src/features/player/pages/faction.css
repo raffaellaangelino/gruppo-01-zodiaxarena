@@ -1,0 +1,393 @@
+.faction-page {
+  min-height: 100dvh;
+  padding: calc(var(--shell-top) + 2.5rem) 4rem 2rem;
+}
+
+.faction-page__inner {
+  display: flex;
+  width: min(100%, 88rem);
+  min-height: calc(100dvh - var(--shell-top) - 6rem);
+  flex-direction: column;
+  margin-inline: auto;
+}
+
+.faction-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.faction-page__header h1 {
+  color: var(--za-text);
+  font: var(--za-type-h1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.faction-page__intro {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  color: var(--za-text-soft);
+  font: var(--za-type-body);
+}
+
+.faction-page__intro svg {
+  color: var(--za-gold-bright);
+}
+
+.faction-page__hint {
+  padding-bottom: 0.2rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+  text-align: right;
+}
+
+.faction-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.faction-card {
+  height: 26.75rem;
+  min-width: 0;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.faction-card--selected {
+  filter: drop-shadow(0 0 0.8rem rgba(227, 188, 99, 0.22));
+  transform: translateY(-0.2rem);
+}
+
+.faction-card__button {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  color: var(--za-text);
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+}
+
+.faction-card__button:focus-visible {
+  outline: 2px solid var(--za-gold-bright);
+  outline-offset: -5px;
+}
+
+.faction-card__art {
+  position: relative;
+  display: block;
+  height: 7.5rem;
+  flex: none;
+  overflow: hidden;
+  background: var(--za-bg-deep);
+}
+
+.faction-card__art > img,
+.faction-card__art-shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.faction-card__art > img {
+  object-fit: cover;
+  object-position: center 46%;
+  transform: scale(1.05);
+  transition: transform 0.35s ease;
+}
+
+.faction-card__button:hover .faction-card__art > img,
+.faction-card--selected .faction-card__art > img {
+  transform: scale(1.12);
+}
+
+.faction-card__art-shade {
+  background: linear-gradient(180deg, rgba(7, 10, 25, 0.04), rgba(7, 10, 25, 0.46));
+}
+
+.faction-card__art--era .faction-card__art-shade {
+  background: linear-gradient(180deg, rgba(16, 63, 135, 0.28), rgba(7, 10, 25, 0.66));
+}
+
+.faction-card__tag {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.65rem;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid rgba(226, 190, 113, 0.55);
+  color: var(--za-gold-bright);
+  background: rgba(8, 12, 31, 0.82);
+  font: var(--za-type-caption);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.faction-card__medallion {
+  position: absolute;
+  z-index: 1;
+  top: 7.5rem;
+  left: 50%;
+  filter: drop-shadow(0 0 0.5rem rgba(237, 199, 110, 0.2));
+  transform: translate(-50%, -50%);
+}
+
+.faction-card__body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.15rem 1rem 0.9rem;
+}
+
+.faction-card__name {
+  color: var(--za-gold-bright);
+  font: var(--za-type-h3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.faction-card__epithet {
+  margin-top: 0.15rem;
+  color: var(--za-text);
+  font: var(--za-type-label);
+}
+
+.faction-card__description {
+  min-height: 2.4rem;
+  margin-top: 0.55rem;
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+  line-height: 1.35;
+}
+
+.faction-card__element {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  color: var(--za-gold);
+  font: var(--za-type-label);
+}
+
+.faction-card__bonus-label {
+  width: 100%;
+  margin-top: 0.55rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--za-line-soft);
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.faction-card__effect {
+  margin-top: 0.2rem;
+  color: var(--za-text);
+  font: var(--za-type-body-strong);
+}
+
+.faction-card__state {
+  margin-top: auto;
+  padding-top: 0.45rem;
+  color: var(--za-gold);
+  font: var(--za-type-caption);
+}
+
+.faction-summary {
+  margin-top: auto;
+}
+
+.faction-summary__content {
+  position: relative;
+  display: flex;
+  min-height: 6.875rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.faction-summary__close {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.35rem;
+  display: flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  color: var(--za-text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.faction-summary__close:hover {
+  color: var(--za-gold-bright);
+}
+
+.faction-summary__close:focus-visible {
+  outline: 1px solid var(--za-line);
+  outline-offset: 1px;
+}
+
+.faction-summary__emblem {
+  display: flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.faction-summary__copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.faction-summary__eyebrow {
+  color: var(--za-gold);
+  font: var(--za-type-caption);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.faction-summary__copy h2 {
+  color: var(--za-text);
+  font: var(--za-type-label);
+  text-transform: uppercase;
+}
+
+.faction-summary__effect,
+.faction-summary__feedback {
+  color: var(--za-text-muted);
+  font: var(--za-type-caption);
+}
+
+.faction-summary__effect {
+  color: var(--za-text-soft);
+}
+
+.faction-summary__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.faction-summary__actions .gold-button {
+  min-width: 10.5rem;
+  font-size: 0.7rem;
+}
+
+@media (width <= 80rem) {
+  .faction-page {
+    padding-right: 3.75rem;
+    padding-left: 3.75rem;
+  }
+
+  .faction-grid {
+    gap: 0.8rem;
+  }
+
+  .faction-card__body {
+    padding-right: 0.65rem;
+    padding-left: 0.65rem;
+  }
+
+  .faction-card__name {
+    font-size: 1rem;
+  }
+
+  .faction-card__description {
+    font-size: 0.68rem;
+  }
+}
+
+@media (width <= 64rem) {
+  .faction-page__inner {
+    min-height: auto;
+  }
+
+  .faction-page__header {
+    align-items: flex-start;
+  }
+
+  .faction-page__hint {
+    max-width: 16rem;
+  }
+
+  .faction-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .faction-card {
+    height: 26rem;
+  }
+
+  .faction-summary {
+    margin-top: 1.25rem;
+  }
+}
+
+@media (width <= 40rem) {
+  .faction-page {
+    padding: calc(var(--shell-top) + 1rem) 1rem calc(var(--shell-bottom) + 1rem);
+  }
+
+  .faction-page__header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .faction-page__hint {
+    text-align: left;
+  }
+
+  .faction-page__intro {
+    font: var(--za-type-caption);
+  }
+
+  .faction-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .faction-card {
+    height: 25rem;
+  }
+
+  .faction-card__art {
+    height: 8rem;
+  }
+
+  .faction-card__medallion {
+    top: 8rem;
+  }
+
+  .faction-summary__content {
+    flex-wrap: wrap;
+    padding: 1rem;
+  }
+
+  .faction-summary__copy {
+    flex-basis: calc(100% - 3.5rem);
+  }
+
+  .faction-summary__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
