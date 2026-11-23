@@ -28,7 +28,7 @@ export function GuideChapters({ search, selectedId, onSelect }: GuideChaptersPro
                 <span aria-hidden="true">{active ? '◆' : '◇'}</span>
                 {chapter.title}
               </button>
-          </li>
+            </li>
           )
         })}
         {chapters.length === 0 && <li className="guide-no-results">Nessun capitolo trovato</li>}

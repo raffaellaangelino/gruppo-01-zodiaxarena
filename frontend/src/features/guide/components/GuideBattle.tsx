@@ -27,7 +27,13 @@ function BattleColumn({ number, title, children }: BattleColumnProps) {
   )
 }
 
-function StatPill({ children, tone = 'blue' }: { children: string; tone?: 'blue' | 'red' | 'purple' }) {
+function StatPill({
+  children,
+  tone = 'blue',
+}: {
+  children: string
+  tone?: 'blue' | 'red' | 'purple'
+}) {
   return <span className={`guide-stat-pill guide-stat-pill--${tone}`}>{children}</span>
 }
 
@@ -128,7 +134,10 @@ export function GuideBattle() {
 
       <BandPanel className="guide-scroll-note" aria-label="Rotolo di Lachesi">
         <Icon name="rotolo" size={18} />
-        <p>Nel Rotolo di Lachesi ogni numero ha la sua spiegazione: tocca un valore per vedere da dove viene.</p>
+        <p>
+          Nel Rotolo di Lachesi ogni numero ha la sua spiegazione: tocca un valore per vedere da
+          dove viene.
+        </p>
         <Link to={PATHS.challenges}>Le tue partite ›</Link>
       </BandPanel>
     </>
