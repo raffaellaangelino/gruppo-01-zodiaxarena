@@ -340,7 +340,7 @@ function PackCard({ pack, onBuy }: { pack: ShopPack; onBuy: () => void }) {
               onClick={onBuy}
               disabled={!pack.available}
             >
-              {pack.available ? 'Acquista' : unavailableMessage(pack)}
+              {pack.available ? 'Apriti cielo' : unavailableMessage(pack)}
             </GoldButton>
           </div>
         </div>
