@@ -1,9 +1,15 @@
 import { shouldUseMocks } from '@/config/env'
 import { request } from '@/lib/http'
-import { deckMock, saveDeckMock } from '@/mocks/decks'
+import { createDeckMock, deckListMock, deckMock, saveDeckMock } from '@/mocks/decks'
 import { mockResponse } from '@/mocks/mockResponse'
-import type { DeckDto } from '@/features/decks/dto'
+import type { DeckDto, DeckListDto } from '@/features/decks/dto'
 import type { DeckSlot } from '@/features/decks/types'
+
+/** Mazzi del giocatore autenticato, con il limite di creazione del backend. */
+export async function fetchDecks(signal?: AbortSignal): Promise<DeckListDto> {
+  if (shouldUseMocks()) return mockResponse(deckListMock(), signal)
+  return request<DeckListDto>('/decks', { signal })
+}
 
 /**
  * Un mazzo del giocatore: `GET /api/decks/{id}` (contratto API §5.1, con più mazzi per giocatore).
@@ -23,6 +29,12 @@ export async function fetchDeck(id: number, signal?: AbortSignal): Promise<DeckD
 export interface DeckSaveBody {
   name: string
   slots: Record<DeckSlot, number | null>
+}
+
+/** Crea un mazzo (anche incompleto) del giocatore autenticato. */
+export async function createDeck(body: DeckSaveBody): Promise<DeckDto> {
+  if (shouldUseMocks()) return mockResponse(createDeckMock(body))
+  return request<DeckDto>('/decks', { method: 'POST', body })
 }
 
 /**

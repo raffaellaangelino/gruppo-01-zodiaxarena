@@ -3,6 +3,16 @@ import { plural } from '@/lib/plural'
 /** Testi del Cielo (tavole Collezione-Cielo, Collezione-Cielo-Problemi, Collezione-Cielo-Errore). */
 export const SKY_COPY = {
   title: 'Il tuo Cielo',
+  deckChoiceLabel: 'Cieli salvati',
+  deckChoicePlaceholder: 'Scegli un Cielo',
+  deckCount: (current: number, max: number) => `${current} di ${max} Cieli`,
+  createDeck: 'Crea un Cielo',
+  creatingDeck: 'Creazione…',
+  newDeckName: 'Nuovo Cielo',
+  createDeckFailed:
+    'Non è stato possibile creare il Cielo. Se la connessione è caduta, aggiorna l’elenco prima di riprovare.',
+  deckLimitReached: (max: number) => `Hai già raggiunto il limite di ${max} Cieli.`,
+  deckLimitHint: 'Hai raggiunto il numero massimo di Cieli.',
   rename: 'Rinomina il Cielo',
   nameLabel: 'Nome del Cielo',
   valid: 'Valido',
@@ -87,6 +97,6 @@ export const SKY_COPY = {
   },
   noDeck: {
     title: 'Non hai ancora un Cielo',
-    text: 'Il Cielo arriva con la registrazione. Se non lo vedi, ricarica la pagina.',
+    text: 'Crea il tuo primo Cielo e scegli le carte per i sette pianeti e l’Ascendente.',
   },
 } as const

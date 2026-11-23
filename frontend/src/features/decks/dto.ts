@@ -24,6 +24,18 @@ export interface DeckDto {
   effectiveStats: Record<string, unknown>
 }
 
+/** Elenco dei mazzi posseduti e limite restituito da `GET /api/decks`. */
+export interface DeckListDto {
+  items: {
+    id: number
+    name: string
+    valid: boolean
+    problemCount: number
+    updatedAt: string
+  }[]
+  max: number
+}
+
 /**
  * Traduce un mazzo del backend nella forma dell'interfaccia, con le carte prese dal catalogo.
  *

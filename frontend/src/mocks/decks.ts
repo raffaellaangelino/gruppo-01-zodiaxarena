@@ -1,9 +1,41 @@
-import type { DeckDto } from '@/features/decks/dto'
+import type { DeckDto, DeckListDto } from '@/features/decks/dto'
 import type { DeckSlot } from '@/features/decks/types'
+import { ApiError } from '@/lib/http'
 import { catalogMock } from '@/mocks/catalog'
 
 /** Cieli salvati durante la sessione con i dati di esempio (si perdono ricaricando). */
 const SAVED = new Map<number, DeckDto>()
+const CREATED_IDS = new Set<number>()
+let nextDeckId = 2
+
+/** Elenco di esempio: il mazzo iniziale e quelli creati durante la sessione. */
+export function deckListMock(): DeckListDto {
+  const items = [1, ...CREATED_IDS].map((id) => {
+    const deck = deckMock(id)
+    return {
+      id: deck.id,
+      name: deck.name,
+      valid: deck.valid,
+      problemCount: deck.problems.length,
+      updatedAt: deck.updatedAt,
+    }
+  })
+  return { items, max: 3 }
+}
+
+/** Crea una bozza in memoria, rispettando il limite dell'API. */
+export function createDeckMock(body: {
+  name: string
+  slots: Record<DeckSlot, number | null>
+}): DeckDto {
+  const { items, max } = deckListMock()
+  if (items.length >= max) {
+    throw new ApiError(409, 'Limite di mazzi raggiunto', { code: 'DECK_LIMIT_REACHED' })
+  }
+  const id = nextDeckId++
+  CREATED_IDS.add(id)
+  return saveDeckMock(id, body)
+}
 
 /** Il Cielo di esempio delle tavole ("Cielo di Fuoco"): segno di ogni casella. */
 const SKY: Record<DeckSlot, string> = {

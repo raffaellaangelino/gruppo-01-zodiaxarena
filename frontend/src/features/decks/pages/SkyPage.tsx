@@ -5,6 +5,7 @@ import { MEDIA } from '@/config/breakpoints'
 import { GoldButton } from '@/components/ui/GoldButton'
 import { Icon } from '@/components/ui/Icon'
 import { InlineError } from '@/components/ui/InlineError'
+import { SelectField } from '@/components/ui/SelectField'
 import { SecondaryButton } from '@/components/ui/SecondaryButton'
 import type { Element, Faction, PlanetCode } from '@/domain/game'
 import { PLANET_LABELS } from '@/domain/labels'
@@ -17,7 +18,7 @@ import { SkyPicker } from '@/features/decks/components/SkyPicker'
 import { SkySlotTile } from '@/features/decks/components/SkySlotTile'
 import { SkyWarnings } from '@/features/decks/components/SkyWarnings'
 import { SKY_COPY } from '@/features/decks/messages'
-import { useDeckToEdit, useSaveDeck } from '@/features/decks/queries'
+import { useCreateDeck, useDeckList, useDeckToEdit, useSaveDeck } from '@/features/decks/queries'
 import {
   SKY_LAYOUT,
   elementCounts,
@@ -33,20 +34,86 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { ApiError } from '@/lib/http'
 
 const COPY = SKY_COPY
+const EMPTY_SKY_SLOTS: SkySlots = {
+  SOLE: null,
+  LUNA: null,
+  MARTE: null,
+  GIOVE: null,
+  SATURNO: null,
+  MERCURIO: null,
+  VENERE: null,
+  ASCENDANT: null,
+}
 
 /**
- * Collezione · Il tuo Cielo (S07, tavole Collezione-Cielo, -Problemi, -Errore): si compone il
- * mazzo casella per casella. Per il SAL è il primo Cielo del giocatore; la scelta tra più Cieli
- * (fino a 3) arriva dopo.
+ * Collezione · Il tuo Cielo: elenca i mazzi del giocatore e consente di crearne fino al limite
+ * comunicato dal backend. Un nuovo Cielo parte come bozza vuota.
  */
 export function SkyPage() {
-  const { deckIds, faction } = usePlayerSummary()
-  const deckId = deckIds[0] ?? null
+  const { faction } = usePlayerSummary()
+  const decks = useDeckList()
+  const createDeck = useCreateDeck()
+  const [selectedDeckId, setSelectedDeckId] = useState<number | null>(null)
+  const deckId = selectedDeckId ?? decks.items[0]?.id ?? null
+  const createError =
+    createDeck.error instanceof ApiError && createDeck.error.code === 'DECK_LIMIT_REACHED'
+      ? COPY.deckLimitReached(decks.max)
+      : createDeck.error
+        ? COPY.createDeckFailed
+        : null
+
+  const createNewDeck = () => {
+    if (decks.items.length >= decks.max || createDeck.isPending) return
+    createDeck.reset()
+    createDeck.mutate(
+      {
+        name: `${COPY.newDeckName} ${decks.items.length + 1}`,
+        slots: EMPTY_SKY_SLOTS,
+      },
+      { onSuccess: (created) => setSelectedDeckId(created.id) },
+    )
+  }
+
   return (
     <main className="mx-auto w-full max-w-[90rem] px-4 pt-(--shell-top) pb-(--shell-bottom) xl:px-8">
       <title>{`${COPY.title} · Zodiax Arena`}</title>
       <PorticoBackdrop />
       <CollectionHeader />
+      <div className="mt-8 flex flex-wrap items-end justify-between gap-4">
+        <div className="flex flex-wrap items-end gap-3">
+          {decks.items.length > 0 && (
+            <SelectField
+              label={COPY.deckChoiceLabel}
+              placeholder={COPY.deckChoicePlaceholder}
+              value={deckId?.toString() ?? ''}
+              options={decks.items.map((deck) => ({ value: deck.id.toString(), label: deck.name }))}
+              onChange={(event) => {
+                createDeck.reset()
+                setSelectedDeckId(Number(event.target.value))
+              }}
+              className="w-full max-w-sm min-w-56"
+            />
+          )}
+          <span className="pb-3 text-text-muted type-meta">
+            {COPY.deckCount(decks.items.length, decks.max)}
+          </span>
+        </div>
+        <GoldButton
+          onClick={createNewDeck}
+          disabled={decks.items.length >= decks.max || createDeck.isPending}
+          busy={createDeck.isPending}
+        >
+          {createDeck.isPending ? COPY.creatingDeck : COPY.createDeck}
+        </GoldButton>
+      </div>
+      {decks.items.length >= decks.max && (
+        <p className="mt-3 text-text-muted type-meta">{COPY.deckLimitHint}</p>
+      )}
+      {createError && (
+        <p className="mt-3 text-warning type-meta-strong" role="alert">
+          {createError}
+        </p>
+      )}
       {deckId === null ? (
         <section className="flex flex-col items-center gap-3 py-16 text-center">
           <h2 className="type-h2 tracking-[0.08em] text-text uppercase">{COPY.noDeck.title}</h2>

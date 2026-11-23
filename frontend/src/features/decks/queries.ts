@@ -7,8 +7,14 @@ import {
 } from '@tanstack/react-query'
 import { BACKEND_READY, shouldUseMocks } from '@/config/env'
 import { catalogQuery } from '@/features/cards/queries'
-import { fetchDeck, saveDeck, type DeckSaveBody } from '@/features/decks/api'
-import type { DeckDto } from '@/features/decks/dto'
+import {
+  createDeck,
+  fetchDeck,
+  fetchDecks,
+  saveDeck,
+  type DeckSaveBody,
+} from '@/features/decks/api'
+import type { DeckDto, DeckListDto } from '@/features/decks/dto'
 import { playerSummaryQuery } from '@/features/player/queries'
 import { toDeck } from '@/features/decks/dto'
 import type { Deck } from '@/features/decks/types'
@@ -16,6 +22,17 @@ import { usePlayerSummary } from '@/features/player/queries'
 
 /** Chiave della cache dei mazzi: dopo un salvataggio si invalida tutto da qui. */
 export const DECKS_KEY = ['decks'] as const
+
+/** Elenco dei mazzi del giocatore autenticato. */
+export const deckListQuery = queryOptions({
+  queryKey: [...DECKS_KEY, 'list'],
+  queryFn: ({ signal }) => fetchDecks(signal),
+})
+
+/** Elenco e limite dei mazzi, già caricati. */
+export function useDeckList(): DeckListDto {
+  return useSuspenseQuery(deckListQuery).data
+}
 
 /** Stato del Cielo in uso. */
 export interface MyDeckState {
@@ -69,6 +86,45 @@ export const deckQuery = (id: number) =>
     queryKey: [...DECKS_KEY, 'raw', id],
     queryFn: ({ signal }) => fetchDeck(id, signal),
   })
+
+/** Crea un Cielo e aggiorna le viste che dipendono dai mazzi del giocatore. */
+export function useCreateDeck() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: createDeck,
+    onSuccess: async (created) => {
+      queryClient.setQueryData(deckQuery(created.id).queryKey, created)
+      queryClient.setQueryData<DeckListDto>(deckListQuery.queryKey, (current) =>
+        current
+          ? {
+              ...current,
+              items: [
+                {
+                  id: created.id,
+                  name: created.name,
+                  valid: created.valid,
+                  problemCount: created.problems.length,
+                  updatedAt: created.updatedAt,
+                },
+                ...current.items.filter((item) => item.id !== created.id),
+              ],
+            }
+          : current,
+      )
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: DECKS_KEY }),
+        queryClient.invalidateQueries({ queryKey: ['collection'] }),
+        queryClient.invalidateQueries({ queryKey: playerSummaryQuery.queryKey }),
+      ])
+    },
+    onError: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: deckListQuery.queryKey }),
+        queryClient.invalidateQueries({ queryKey: playerSummaryQuery.queryKey }),
+      ])
+    },
+  })
+}
 
 /**
  * Il mazzo da comporre, già pronto (la pagina aspetta con la Suspense).
