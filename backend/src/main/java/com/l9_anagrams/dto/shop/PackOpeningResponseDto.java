@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Risposta dell'acquisto (201) e del riepilogo GET /api/shop/openings/{openingId}: stessa forma.
- * recycleValue è sempre 0 finché il riciclo non è implementato.
+ * recycleValue è il valore di riciclo della rarità della carta (CardRarity#getRecycleValue).
  */
 @Schema(description = "A pack opening: the drawn cards and the player's state after the purchase")
 public record PackOpeningResponseDto(
@@ -27,7 +27,7 @@ public record PackOpeningResponseDto(
 			// Esplicito: senza, Jackson potrebbe esporlo come "new" togliendo il prefisso "is"
 			@Schema(description = "False if the player already owned it, or it already came out in this pack", example = "false")
 			@JsonProperty("isNew") boolean isNew,
-			@Schema(description = "Credits obtained by recycling the card. Always 0: recycling is not implemented yet", example = "0")
+			@Schema(description = "Credits obtained by recycling one copy of the card (by rarity: 5/10/25/60/100)", example = "10")
 			int recycleValue) {
 	}
 }

@@ -98,6 +98,10 @@ public class DeckServiceImpl implements DeckService {
 	@Transactional
 	public DeckResponse updateDeck(String email, Long deckId, DeckSaveRequest request) {
 		Player player = currentPlayer(email);
+		// TODO riciclo (§4.4): qui il giocatore non viene bloccato, a differenza di createDeck e di
+		// PlayerCardServiceImpl.recycle. Se un salvataggio e un riciclo arrivano insieme, il riciclo
+		// può scegliere una copia che questo salvataggio sta mettendo nel Cielo: il mazzo finirebbe
+		// per puntare a una copia riciclata. Soluzione: chiamare lockPlayer(player) prima di resolveSlots.
 		Deck deck = ownedDeck(deckId, player);
 		apply(deck, request, resolveSlots(player, request.slots()));
 		// saveAndFlush: version e updatedAt aggiornati prima di costruire la risposta

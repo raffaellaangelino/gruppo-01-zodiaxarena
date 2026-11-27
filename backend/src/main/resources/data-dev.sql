@@ -171,13 +171,16 @@ WHERE NOT EXISTS (SELECT 1 FROM player_card pc WHERE pc.player_id = p.id);
 -- -----------------------------------------------------------------------------
 -- 4) Mazzi (con l'Ascendente) e le loro 7 creature
 --    Per ogni carta si usa la copia più vecchia (id più basso), come fa il backend.
+--    Le copie riciclate (recycled_at valorizzato, @SQLRestriction su PlayerCard) si saltano:
+--    questo è SQL nativo e il filtro di Hibernate qui non vale.
 -- -----------------------------------------------------------------------------
 INSERT INTO deck (player_id, name, ascendant_card_id, version, updated_at)
 SELECT p.id, x.deck_name,
        (SELECT MIN(pc.id)
         FROM player_card pc
         JOIN card_definition cd ON cd.id = pc.card_definition_id
-        WHERE pc.player_id = p.id AND cd.type = 'ASCENDANT' AND cd.sign_id = s.id),
+        WHERE pc.player_id = p.id AND pc.recycled_at IS NULL
+          AND cd.type = 'ASCENDANT' AND cd.sign_id = s.id),
        0, NOW(6)
 FROM seed_deck_card x
 JOIN app_user u ON u.email = x.email
@@ -189,7 +192,7 @@ WHERE x.planet_name IS NULL
 INSERT INTO deck_card (deck_id, player_card_id)
 SELECT d.id,
        (SELECT MIN(pc.id) FROM player_card pc
-        WHERE pc.player_id = p.id AND pc.card_definition_id = cd.id)
+        WHERE pc.player_id = p.id AND pc.card_definition_id = cd.id AND pc.recycled_at IS NULL)
 FROM seed_deck_card x
 JOIN app_user u ON u.email = x.email
 JOIN player p ON p.id = u.id

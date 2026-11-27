@@ -37,6 +37,7 @@ import com.l9_anagrams.entity.CardDefinition;
 import com.l9_anagrams.entity.PackDefinition;
 import com.l9_anagrams.entity.PackOpening;
 import com.l9_anagrams.entity.Player;
+import com.l9_anagrams.enums.CardRarity;
 import com.l9_anagrams.enums.PackGuarantee;
 import com.l9_anagrams.enums.PackUnavailableReason;
 import com.l9_anagrams.enums.PlanetTier;
@@ -97,8 +98,11 @@ class ShopServiceTest {
 		assertEquals(350, player.getCredits());
 		assertEquals(response.sunCounter().done(), player.getPityCounter());
 		assertEquals(10, response.sunCounter().total());
-		// Riciclo non ancora implementato: il campo del contratto c'è e vale 0
-		response.cards().forEach(card -> assertEquals(0, card.recycleValue()));
+		// Ogni carta pescata riporta il valore di riciclo della sua rarità
+		java.util.Map<Long, CardRarity> rarityById = new java.util.HashMap<>();
+		PackTestData.launchCatalog().forEach((rarity, cards) -> cards.forEach(c -> rarityById.put(c.getId(), rarity)));
+		response.cards().forEach(card ->
+				assertEquals(rarityById.get(card.cardId()).getRecycleValue(), card.recycleValue()));
 		verify(playerCardRepo).saveAll(any());
 	}
 

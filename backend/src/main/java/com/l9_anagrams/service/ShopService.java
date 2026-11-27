@@ -262,7 +262,7 @@ public class ShopService {
 						card.getSlotType(),
 						card.getCardDefinition().getId(),
 						card.isNewCard(),
-						0)) // TODO riciclo non ancora implementato: valore fisso come nella collezione
+						CardRarity.of(card.getCardDefinition()).getRecycleValue()))
 				.toList();
 		return new PackOpeningResponseDto(
 				opening.getId(),
